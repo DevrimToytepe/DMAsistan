@@ -327,15 +327,30 @@
     const stepNames = ['Profil Bilgileri', 'Platform Seçimi', 'AI Ayarı', 'Tamamlandı!']
     const stepProgress = [25, 50, 75, 100]
 
+    function showStepError(msg) {
+      let el = document.getElementById('step1_error')
+      if (!el) {
+        el = document.createElement('div')
+        el.id = 'step1_error'
+        el.style.cssText = 'margin-bottom:12px;padding:12px 16px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);border-radius:10px;color:#f43f5e;font-size:0.85rem;text-align:center;'
+        document.getElementById('step1').insertBefore(el, document.querySelector('.btn-next'))
+      }
+      el.textContent = '⚠️ ' + msg
+      el.style.display = 'block'
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+
     function goStep(step) {
       // Step 1 validasyonu
       if (currentStep === 1 && step === 2) {
         const fn = document.getElementById('ob_firstName').value.trim()
         const ln = document.getElementById('ob_lastName').value.trim()
         const bn = document.getElementById('ob_business').value.trim()
-        if (!fn) { alert('Ad alanı zorunludur.'); return }
-        if (!ln) { alert('Soyad alanı zorunludur.'); return }
-        if (!bn) { alert('İşletme / Marka Adı zorunludur.'); return }
+        if (!fn) { showStepError('Ad alanı zorunludur.'); return }
+        if (!ln) { showStepError('Soyad alanı zorunludur.'); return }
+        if (!bn) { showStepError('İşletme / Marka Adı zorunludur.'); return }
+        const errEl = document.getElementById('step1_error')
+        if (errEl) errEl.style.display = 'none'
       }
       // Mevcut adımı kaydet
       if (currentStep === 1) {
