@@ -1,29 +1,42 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DMAsistan — Giriş Yap</title>
+  <meta name="description"
+    content="DMAsistan'a giriş yapın. Instagram, WhatsApp ve Facebook DM'lerini yapay zeka ile otomatikleştirin." />
+  <title>Giriş Yap — DMAsistan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <style>
     :root {
-      --bg:          #0A0E1A;
-      --bg-2:        #0F1428;
-      --purple:      #7C3AED;
-      --purple-light:#9B5CF6;
-      --pink:        #F43F75;
-      --white:       #FFFFFF;
-      --gray:        #A1A1AA;
-      --gray-dark:   #3F3F46;
-      --glass:       rgba(255,255,255,0.04);
-      --glass-border:rgba(255,255,255,0.08);
-      --gradient:    linear-gradient(135deg, var(--purple), var(--pink));
-      --radius:      16px;
-      --transition:  all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --bg: #0A0E1A;
+      --bg-2: #0F1428;
+      --purple: #7C3AED;
+      --purple-light: #9B5CF6;
+      --pink: #F43F75;
+      --white: #FFFFFF;
+      --gray: #A1A1AA;
+      --gray-dark: #3F3F46;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, var(--purple), var(--pink));
+      --radius: 16px;
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg);
@@ -33,8 +46,18 @@
       display: flex;
       flex-direction: column;
     }
-    h1,h2,h3 { font-family: 'Sora', sans-serif; line-height: 1.15; }
-    a { text-decoration: none; color: inherit; }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Sora', sans-serif;
+      line-height: 1.15;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
     /* BLOBS */
     .blob {
@@ -46,14 +69,36 @@
       z-index: 0;
       animation: blobFloat 12s ease-in-out infinite alternate;
     }
-    .blob-1 { width: 500px; height: 500px; background: var(--pink); top: -150px; right: -150px; animation-duration: 13s; }
-    .blob-2 { width: 400px; height: 400px; background: var(--purple); bottom: 0; left: -100px; animation-duration: 10s; }
-    @keyframes blobFloat {
-      from { transform: translate(0,0) scale(1); }
-      to   { transform: translate(25px, 20px) scale(1.07); }
+
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--pink);
+      top: -150px;
+      right: -150px;
+      animation-duration: 13s;
     }
 
-    
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--purple);
+      bottom: 0;
+      left: -100px;
+      animation-duration: 10s;
+    }
+
+    @keyframes blobFloat {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(25px, 20px) scale(1.07);
+      }
+    }
+
+
 
     /* NAVBAR */
     .navbar {
@@ -64,6 +109,7 @@
       align-items: center;
       justify-content: space-between;
     }
+
     .logo {
       display: flex;
       align-items: center;
@@ -72,10 +118,25 @@
       font-weight: 700;
       font-size: 1.25rem;
     }
-    .logo-icon { font-size: 1.4rem; }
-    .nav-right { font-size: 0.9rem; color: var(--gray); }
-    .nav-right a { color: var(--purple-light); font-weight: 500; transition: color 0.25s; }
-    .nav-right a:hover { color: var(--white); }
+
+    .logo-icon {
+      font-size: 1.4rem;
+    }
+
+    .nav-right {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .nav-right a {
+      color: var(--purple-light);
+      font-weight: 500;
+      transition: color 0.25s;
+    }
+
+    .nav-right a:hover {
+      color: var(--white);
+    }
 
     /* WRAPPER */
     .auth-wrapper {
@@ -96,12 +157,20 @@
       border: 1px solid var(--glass-border);
       border-radius: 28px;
       padding: 52px 48px;
-      box-shadow: 0 0 80px rgba(124,58,237,0.12), 0 32px 64px rgba(0,0,0,0.4);
-      animation: fadeUp 0.55s cubic-bezier(0.4,0,0.2,1) both;
+      box-shadow: 0 0 80px rgba(124, 58, 237, 0.12), 0 32px 64px rgba(0, 0, 0, 0.4);
+      animation: fadeUp 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
+
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* LOGO TOP */
@@ -109,23 +178,31 @@
       text-align: center;
       margin-bottom: 28px;
     }
+
     .card-logo .logo-mark {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 56px; height: 56px;
+      width: 56px;
+      height: 56px;
       border-radius: 18px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(244,63,117,0.2));
-      border: 1px solid rgba(124,58,237,0.4);
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(244, 63, 117, 0.2));
+      border: 1px solid rgba(124, 58, 237, 0.4);
       font-size: 1.6rem;
       margin-bottom: 12px;
     }
+
     .card-logo h2 {
       font-size: 1.75rem;
       font-weight: 800;
       margin-bottom: 6px;
     }
-    .card-logo p { color: var(--gray); font-size: 0.9rem; }
+
+    .card-logo p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
     .gradient-text {
       background: var(--gradient);
       -webkit-background-clip: text;
@@ -134,7 +211,12 @@
     }
 
     /* SOCIAL */
-    .social-btns { display: flex; gap: 12px; margin-bottom: 24px; }
+    .social-btns {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
     .social-btn {
       flex: 1;
       display: flex;
@@ -152,12 +234,17 @@
       transition: var(--transition);
       font-family: 'Inter', sans-serif;
     }
+
     .social-btn:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
       transform: translateY(-1px);
     }
-    .social-btn svg { width: 18px; height: 18px; }
+
+    .social-btn svg {
+      width: 18px;
+      height: 18px;
+    }
 
     .divider {
       display: flex;
@@ -167,7 +254,9 @@
       color: var(--gray);
       font-size: 0.82rem;
     }
-    .divider::before, .divider::after {
+
+    .divider::before,
+    .divider::after {
       content: '';
       flex: 1;
       height: 1px;
@@ -175,40 +264,53 @@
     }
 
     /* FORM */
-    .form-group { margin-bottom: 16px; }
+    .form-group {
+      margin-bottom: 16px;
+    }
+
     .form-label-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 7px;
     }
+
     .form-label-row label {
       font-size: 0.82rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.7);
     }
+
     .forgot-link {
       font-size: 0.8rem;
       color: var(--purple-light);
       transition: color 0.25s;
     }
-    .forgot-link:hover { color: var(--white); }
 
-    .input-wrap { position: relative; }
+    .forgot-link:hover {
+      color: var(--white);
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
     .input-wrap svg.field-icon {
       position: absolute;
       left: 14px;
       top: 50%;
       transform: translateY(-50%);
-      width: 16px; height: 16px;
+      width: 16px;
+      height: 16px;
       color: var(--gray);
       pointer-events: none;
     }
+
     .form-group input {
       width: 100%;
       padding: 13px 14px 13px 40px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       color: var(--white);
       font-size: 0.92rem;
@@ -216,11 +318,15 @@
       transition: var(--transition);
       outline: none;
     }
-    .form-group input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
     .form-group input:focus {
       border-color: var(--purple);
-      background: rgba(124,58,237,0.08);
-      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+      background: rgba(124, 58, 237, 0.08);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
     }
 
     .pass-toggle {
@@ -236,8 +342,15 @@
       display: flex;
       transition: color 0.2s;
     }
-    .pass-toggle:hover { color: var(--white); }
-    .pass-toggle svg { width: 17px; height: 17px; }
+
+    .pass-toggle:hover {
+      color: var(--white);
+    }
+
+    .pass-toggle svg {
+      width: 17px;
+      height: 17px;
+    }
 
     /* REMEMBER ME */
     .remember-row {
@@ -246,11 +359,14 @@
       gap: 8px;
       margin-bottom: 24px;
     }
+
     .remember-row input[type="checkbox"] {
-      width: 16px; height: 16px;
+      width: 16px;
+      height: 16px;
       accent-color: var(--purple);
       cursor: pointer;
     }
+
     .remember-row label {
       font-size: 0.85rem;
       color: var(--gray);
@@ -273,24 +389,45 @@
       position: relative;
       overflow: hidden;
     }
+
     .btn-submit:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
     }
-    .btn-submit:active { transform: translateY(0); }
-    .btn-submit.loading { pointer-events: none; opacity: 0.8; }
-    .btn-submit.loading .btn-text { display: none; }
-    .btn-submit.loading .btn-spinner { display: inline-block; }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+
+    .btn-submit.loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .btn-submit.loading .btn-text {
+      display: none;
+    }
+
+    .btn-submit.loading .btn-spinner {
+      display: inline-block;
+    }
+
     .btn-spinner {
       display: none;
-      width: 20px; height: 20px;
-      border: 2px solid rgba(255,255,255,0.3);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
       margin: 0 auto;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* FOOTER */
     .form-footer {
@@ -299,21 +436,32 @@
       font-size: 0.85rem;
       color: var(--gray);
     }
-    .form-footer a { color: var(--purple-light); font-weight: 500; }
-    .form-footer a:hover { color: var(--white); }
+
+    .form-footer a {
+      color: var(--purple-light);
+      font-weight: 500;
+    }
+
+    .form-footer a:hover {
+      color: var(--white);
+    }
 
     /* ERROR STATE */
     .form-group.error input {
       border-color: #f43f5e;
-      background: rgba(244,63,94,0.06);
+      background: rgba(244, 63, 94, 0.06);
     }
+
     .error-msg {
       font-size: 0.78rem;
       color: #f43f5e;
       margin-top: 6px;
       display: none;
     }
-    .form-group.error .error-msg { display: block; }
+
+    .form-group.error .error-msg {
+      display: block;
+    }
 
     /* SECURITY BADGE */
     .security-note {
@@ -323,16 +471,26 @@
       gap: 6px;
       margin-top: 24px;
       font-size: 0.78rem;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255, 255, 255, 0.35);
     }
-    .security-note svg { width: 13px; height: 13px; }
+
+    .security-note svg {
+      width: 13px;
+      height: 13px;
+    }
 
     @media (max-width: 520px) {
-      .login-card { padding: 36px 24px; }
-      .social-btns { flex-direction: column; }
+      .login-card {
+        padding: 36px 24px;
+      }
+
+      .social-btns {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <div class="blob blob-1"></div>
@@ -340,12 +498,12 @@
 
   <!-- NAVBAR -->
   <nav class="navbar">
-    <a href="index.html" class="logo">
+    <a href="/" class="logo">
       <span class="logo-icon">⚡</span>
       DMAsistan
     </a>
     <div class="nav-right">
-      Hesabın yok mu? <a href="kayit.html">Ücretsiz Başla</a>
+      Hesabın yok mu? <a href="/kayit">Ücretsiz Başla</a>
     </div>
   </nav>
 
@@ -362,11 +520,27 @@
       <!-- SOCIAL -->
       <div class="social-btns">
         <button class="social-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              fill="#4285F4" />
+            <path
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              fill="#34A853" />
+            <path
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+              fill="#FBBC05" />
+            <path
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              fill="#EA4335" />
+          </svg>
           Google
         </button>
         <button class="social-btn">
-          <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          <svg viewBox="0 0 24 24" fill="#1877F2">
+            <path
+              d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+          </svg>
           Facebook
         </button>
       </div>
@@ -379,7 +553,10 @@
             <label>E-posta</label>
           </div>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>
             <input type="email" id="emailInput" placeholder="sen@sirket.com" autocomplete="email" />
           </div>
           <div class="error-msg" id="emailError">Geçerli bir e-posta adresi girin.</div>
@@ -391,10 +568,16 @@
             <a href="#" class="forgot-link">Şifreni mi unuttun?</a>
           </div>
           <div class="input-wrap">
-            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
             <input type="password" id="passInput" placeholder="Şifreni gir" autocomplete="current-password" />
             <button type="button" class="pass-toggle" id="passToggle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
             </button>
           </div>
           <div class="error-msg" id="passError">Şifre en az 6 karakter olmalı.</div>
@@ -412,11 +595,13 @@
       </form>
 
       <div class="form-footer">
-        Hesabın yok mu? <a href="kayit.html">Ücretsiz Başla</a>
+        Hesabın yok mu? <a href="/kayit">Ücretsiz Başla</a>
       </div>
 
       <div class="security-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
         256-bit SSL şifrelemesi ile güvenli bağlantı
       </div>
     </div>
@@ -425,7 +610,7 @@
   <script>
     // Password toggle (module dışında kalabilir)
     const passToggleEl = document.getElementById('passToggle');
-    const passInputEl  = document.getElementById('passInput');
+    const passInputEl = document.getElementById('passInput');
     if (passToggleEl && passInputEl) {
       passToggleEl.addEventListener('click', () => {
         passInputEl.type = passInputEl.type === 'password' ? 'text' : 'password';
@@ -445,5 +630,7 @@
 
   <!-- Supabase + Giriş formu -->
   <script type="module" src="giris.js"></script>
+  <script src="/sw-register.js"></script>
 </body>
+
 </html>
