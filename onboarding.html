@@ -227,7 +227,6 @@
 
   <script type="module">
     import { supabase } from './supabase.js'
-    import { upsertProfile, saveAISettings, completeOnboardingStep } from './db.js'
 
     // Auth kontrolü
     const { data: { session } } = await supabase.auth.getSession()
@@ -249,6 +248,8 @@
 
       try {
         const user = window.__user
+        if (!user) { window.location.replace('giris.html'); return }
+
         const firstName = document.getElementById('ob_firstName')?.value?.trim() || ''
         const lastName  = document.getElementById('ob_lastName')?.value?.trim()  || ''
         const business  = document.getElementById('ob_business')?.value?.trim()  || ''
@@ -258,32 +259,62 @@
         const prompt    = document.getElementById('ob_prompt')?.value?.trim()    || ''
         const tone      = document.querySelector('.tone-option.selected')?.dataset.tone || 'Samimi ve Sıcak'
 
-        // Profili kaydet
-        await upsertProfile(user.id, {
-          full_name:     `${firstName} ${lastName}`.trim(),
-          business_name: business,
-          industry,
-          phone,
-          onboarding_completed: true
-        })
+        // Profili kaydet (upsert — zaten varsa güncelle)
+        const { error: profileErr } = await supabase
+          .from('profiles')
+          .upsert({
+            id:                   user.id,
+            full_name:            `${firstName} ${lastName}`.trim(),
+            business_name:        business,
+            industry,
+            phone,
+            onboarding_completed: true,
+            updated_at:           new Date().toISOString()
+          }, { onConflict: 'id' })
+        if (profileErr) throw profileErr
 
-        // AI ayarlarını kaydet
-        await saveAISettings(user.id, {
-          bot_name:      botName,
-          tone,
-          system_prompt: prompt,
-        })
+        // AI ayarlarını kaydet (upsert)
+        const { error: aiErr } = await supabase
+          .from('ai_settings')
+          .upsert({
+            user_id:       user.id,
+            bot_name:      botName,
+            tone,
+            system_prompt: prompt,
+            is_active:     true,
+            updated_at:    new Date().toISOString()
+          }, { onConflict: 'user_id' })
+        if (aiErr) throw aiErr
 
-        // Onboarding adımlarını tamamla
-        await completeOnboardingStep(user.id, 'profile')
-        await completeOnboardingStep(user.id, 'ai_setup')
-        await completeOnboardingStep(user.id, 'complete')
+        // Onboarding adımlarını tamamla (upsert — 409'u önler)
+        const steps = ['profile', 'ai_setup', 'complete']
+        for (const step of steps) {
+          const { error: stepErr } = await supabase
+            .from('onboarding_steps')
+            .upsert({
+              user_id:      user.id,
+              step,
+              completed:    true,
+              completed_at: new Date().toISOString()
+            }, { onConflict: 'user_id,step' })
+          if (stepErr) throw stepErr
+        }
 
-        window.location.href = '/DMAsistan/dashboard.html'
+        window.location.href = 'dashboard.html'
       } catch (err) {
         console.error('Onboarding kayıt hatası:', err)
         btn.classList.remove('loading')
         btn.disabled = false
+        // Kullanıcıya hata mesajı göster
+        const errDiv = document.getElementById('ob_error') || (() => {
+          const d = document.createElement('div')
+          d.id = 'ob_error'
+          d.style.cssText = 'margin-top:12px;padding:12px 16px;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);border-radius:10px;color:#f43f5e;font-size:0.85rem;text-align:center;'
+          document.getElementById('dashboardBtn').after(d)
+          return d
+        })()
+        errDiv.textContent = '⚠️ Bir hata oluştu: ' + (err?.message || 'Lütfen tekrar deneyin.')
+        errDiv.style.display = 'block'
       }
     }
   </script>

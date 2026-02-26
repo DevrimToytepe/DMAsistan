@@ -66,6 +66,8 @@ async function handleRegister(e) {
   const lastName  = document.getElementById('lastName')?.value?.trim()       ?? ''
 
   // ── Client-side validasyon ──
+  if (!firstName) return showError('Ad alanı zorunludur.')
+  if (!lastName)  return showError('Soyad alanı zorunludur.')
   if (!email) return showError('E-posta adresi zorunludur.')
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Geçerli bir e-posta adresi girin.')
   if (!password) return showError('Şifre zorunludur.')
