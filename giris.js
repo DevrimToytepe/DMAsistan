@@ -1,4 +1,3 @@
-// giris.js — giris.html ile tam eşleştirilmiş
 import { supabase } from './supabase.js'
 
 const form      = document.getElementById('loginForm')
@@ -9,7 +8,7 @@ function setLoading(active) {
   submitBtn.disabled = active
   const btnText    = submitBtn.querySelector('.btn-text')
   const btnSpinner = submitBtn.querySelector('.btn-spinner')
-  if (btnText)    btnText.style.display    = active ? 'none'         : 'inline'
+  if (btnText)    btnText.style.display    = active ? 'none' : 'inline'
   if (btnSpinner) btnSpinner.style.display = active ? 'inline-block' : 'none'
 }
 
@@ -27,8 +26,7 @@ const ERROR_MAP = {
 }
 
 function parseError(error) {
-  const match = Object.entries(ERROR_MAP)
-    .find(([key]) => error.message?.includes(key))
+  const match = Object.entries(ERROR_MAP).find(([key]) => error.message?.includes(key))
   return match ? match[1] : 'Giriş yapılamadı: ' + (error.message ?? 'Bilinmeyen hata')
 }
 
@@ -37,18 +35,10 @@ function showFormError(msg) {
   if (!globalErr) {
     globalErr = document.createElement('div')
     globalErr.id = 'globalError'
-    globalErr.style.cssText = `
-      background: rgba(244,63,94,0.1);
-      border: 1px solid rgba(244,63,94,0.4);
-      border-radius: 10px;
-      padding: 12px 16px;
-      color: #f43f5e;
-      font-size: 0.88rem;
-      margin-bottom: 16px;
-    `
+    globalErr.style.cssText = `background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.4);border-radius:10px;padding:12px 16px;color:#f43f5e;font-size:0.88rem;margin-bottom:16px;`
     form.insertBefore(globalErr, form.firstChild)
   }
-  globalErr.textContent  = '⚠️ ' + msg
+  globalErr.textContent = '⚠️ ' + msg
   globalErr.style.display = 'block'
 }
 
@@ -60,7 +50,7 @@ function clearGlobalError() {
 async function handleFacebookLogin() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'facebook',
-    options: { redirectTo: 'https://dm-asistan.vercel.app/onboarding.html' }
+    options: { redirectTo: 'https://dm-asistan.vercel.app/onboarding' }
   })
   if (error) showFormError('Facebook girişi başlatılamadı: ' + error.message)
 }
@@ -68,7 +58,7 @@ async function handleFacebookLogin() {
 async function handleGoogleLogin() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: 'https://dm-asistan.vercel.app/onboarding.html' }
+    options: { redirectTo: 'https://dm-asistan.vercel.app/onboarding' }
   })
   if (error) showFormError('Google girişi başlatılamadı: ' + error.message)
 }
@@ -78,19 +68,15 @@ async function handleLogin(e) {
   clearGlobalError()
 
   const email = document.getElementById('emailInput')?.value?.trim() ?? ''
-  const pass  = document.getElementById('passInput')?.value          ?? ''
+  const pass  = document.getElementById('passInput')?.value ?? ''
 
   let valid = true
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     setFieldError('emailGroup', true); valid = false
-  } else {
-    setFieldError('emailGroup', false)
-  }
+  } else { setFieldError('emailGroup', false) }
   if (!pass || pass.length < 6) {
     setFieldError('passGroup', true); valid = false
-  } else {
-    setFieldError('passGroup', false)
-  }
+  } else { setFieldError('passGroup', false) }
   if (!valid) return
 
   setLoading(true)
@@ -107,17 +93,11 @@ async function handleLogin(e) {
       .eq('step', 'complete')
       .single()
 
-    if (steps?.completed) {
-      window.location.href = 'dashboard.html'
-    } else {
-      window.location.href = 'onboarding.html'
-    }
+    window.location.href = steps?.completed ? 'dashboard' : 'onboarding'
   }
 }
 
-if (form) {
-  form.addEventListener('submit', handleLogin)
-}
+if (form) form.addEventListener('submit', handleLogin)
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.social-btn').forEach(btn => {
