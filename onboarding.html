@@ -328,6 +328,15 @@
     const stepProgress = [25, 50, 75, 100]
 
     function goStep(step) {
+      // Step 1 validasyonu
+      if (currentStep === 1 && step === 2) {
+        const fn = document.getElementById('ob_firstName').value.trim()
+        const ln = document.getElementById('ob_lastName').value.trim()
+        const bn = document.getElementById('ob_business').value.trim()
+        if (!fn) { alert('Ad alanı zorunludur.'); return }
+        if (!ln) { alert('Soyad alanı zorunludur.'); return }
+        if (!bn) { alert('İşletme / Marka Adı zorunludur.'); return }
+      }
       // Mevcut adımı kaydet
       if (currentStep === 1) {
         const fn = document.getElementById('ob_firstName').value.trim()
