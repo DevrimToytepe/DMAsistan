@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMAsistan — AI & Otomasyon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);--sidebar-w:248px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}
+    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.07;pointer-events:none;z-index:0;}
+    .blob-1{width:700px;height:700px;background:var(--purple);top:-300px;left:-100px;}
+    .blob-2{width:500px;height:500px;background:var(--pink);bottom:-200px;right:-50px;}
+    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-2);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;padding:0 12px 20px;}
+    .sidebar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;padding:20px 12px;margin-bottom:8px;border-bottom:1px solid var(--glass-border);}
+    .nav-section{font-family:'Sora',sans-serif;font-size:0.67rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:14px 12px 6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:1px;font-size:0.88rem;color:var(--gray);cursor:pointer;transition:var(--transition);text-decoration:none;}
+    .nav-item:hover{background:var(--glass);color:var(--white);}
+    .nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
+    .nav-item .nav-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0;}
+    .sidebar-divider{height:1px;background:var(--glass-border);margin:10px 0;}
+    .sidebar-bottom{margin-top:auto;}
+    .user-card{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;text-decoration:none;}
+    .user-avatar-sq{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .user-info .name{font-size:0.85rem;font-weight:600;}
+    .user-info .plan{font-size:0.72rem;color:var(--gray);margin-top:1px;}
+    .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;padding:4px;transition:color 0.2s;}
+    .logout-btn:hover{color:var(--pink);}
+    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
+    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--glass-border);background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;}
+    .topbar-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;}
+    .topbar-sub{font-size:0.78rem;color:var(--gray);margin-top:1px;}
+    .topbar-right{display:flex;gap:10px;}
+    .btn-save{padding:9px 22px;background:var(--gradient);border:none;border-radius:10px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:var(--transition);}
+    .btn-save:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,0.35);}
+    .content{padding:28px 32px 40px;flex:1;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+    .panel{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:16px;padding:22px 24px;margin-bottom:16px;}
+    .panel-title{font-family:'Sora',sans-serif;font-size:0.92rem;font-weight:700;margin-bottom:4px;}
+    .panel-desc{font-size:0.78rem;color:var(--gray);margin-bottom:18px;}
+    /* FORM */
+    .field-label{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:7px;}
+    .input-field{width:100%;padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;transition:var(--transition);}
+    .input-field:focus{border-color:var(--purple);background:rgba(124,58,237,0.07);}
+    .input-field::placeholder{color:rgba(255,255,255,0.22);}
+    .textarea-field{width:100%;padding:11px 14px;min-height:100px;resize:vertical;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.88rem;line-height:1.6;outline:none;transition:var(--transition);}
+    .textarea-field:focus{border-color:var(--purple);background:rgba(124,58,237,0.07);}
+    .textarea-field::placeholder{color:rgba(255,255,255,0.22);}
+    .select-field{width:100%;padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;appearance:none;cursor:pointer;transition:var(--transition);}
+    .select-field:focus{border-color:var(--purple);}
+    .select-field option{background:#141828;}
+    .form-row{margin-bottom:16px;}
+    /* TOGGLE ROW */
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:10px;margin-bottom:8px;}
+    .toggle-info .toggle-title{font-size:0.85rem;font-weight:600;}
+    .toggle-info .toggle-sub{font-size:0.75rem;color:var(--gray);margin-top:1px;}
+    .toggle-switch{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
+    .toggle-switch input{opacity:0;width:0;height:0;position:absolute;}
+    .toggle-track{position:absolute;inset:0;background:rgba(255,255,255,0.08);border-radius:100px;transition:background 0.3s;}
+    .toggle-switch input:checked + .toggle-track{background:var(--purple);}
+    .toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;background:white;border-radius:50%;transition:transform 0.3s;pointer-events:none;}
+    .toggle-switch input:checked ~ .toggle-thumb{transform:translateX(20px);}
+    /* SLIDER */
+    .slider-wrap{display:flex;align-items:center;gap:12px;}
+    .slider{flex:1;-webkit-appearance:none;height:4px;border-radius:100px;background:rgba(255,255,255,0.1);outline:none;cursor:pointer;}
+    .slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gradient);cursor:pointer;box-shadow:0 0 8px rgba(124,58,237,0.5);}
+    .slider-val{font-size:0.85rem;font-weight:700;color:var(--purple-light);width:32px;text-align:right;}
+    /* TEMPLATES */
+    .template-list{display:flex;flex-direction:column;gap:8px;}
+    .template-item{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;}
+    .template-cat{font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(124,58,237,0.12);color:var(--purple-light);border:1px solid rgba(124,58,237,0.2);white-space:nowrap;}
+    .template-text{flex:1;font-size:0.82rem;color:rgba(255,255,255,0.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .template-actions{display:flex;gap:6px;}
+    .tpl-btn{background:none;border:none;color:var(--gray);cursor:pointer;font-size:0.82rem;padding:4px 8px;border-radius:6px;transition:var(--transition);}
+    .tpl-btn:hover{background:var(--glass);color:var(--white);}
+    .btn-add-tpl{width:100%;padding:10px;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);border-radius:10px;color:var(--gray);font-size:0.82rem;cursor:pointer;transition:var(--transition);margin-top:8px;}
+    .btn-add-tpl:hover{border-color:rgba(124,58,237,0.4);color:var(--purple-light);}
+    @media(max-width:900px){.grid-2{grid-template-columns:1fr;}}
+    @media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:20px;}}
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
+    <div class="nav-section">Ana Menü</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar</a>
+    <a class="nav-item active" href="automation.html"><span class="nav-icon">🤖</span> AI & Otomasyon</a>
+    <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
+    <a class="nav-item" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
+    <div class="sidebar-divider"></div>
+    <div class="nav-section">Ayarlar</div>
+    <a class="nav-item" href="integrations.html"><span class="nav-icon">🔗</span> Entegrasyonlar</a>
+    <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span> Ayarlar</a>
+    <a class="nav-item" href="billing.html"><span class="nav-icon">💳</span> Faturalama</a>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-bottom">
+      <a class="user-card" href="settings.html">
+        <div class="user-avatar-sq" id="sidebarAvatar">?</div>
+        <div class="user-info"><div class="name" id="sidebarName">Yükleniyor...</div><div class="plan">🆓 Ücretsiz Plan</div></div>
+        <button class="logout-btn" id="logoutBtn">⏻</button>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><div class="topbar-title">AI & Otomasyon</div><div class="topbar-sub">Asistanınızı özelleştirin</div></div>
+      <div class="topbar-right"><button class="btn-save" id="saveBtn">💾 Kaydet</button></div>
+    </div>
+    <div class="content">
+      <div class="grid-2">
+        <!-- AI AYARLARI -->
+        <div>
+          <div class="panel">
+            <div class="panel-title">🤖 AI Asistan Ayarları</div>
+            <div class="panel-desc">Asistanınızın kişiliğini ve davranışını belirleyin</div>
+            <div class="form-row">
+              <div class="field-label">Bot Adı</div>
+              <input class="input-field" type="text" id="botName" placeholder="DMAsistan" />
+            </div>
+            <div class="form-row">
+              <div class="field-label">Ton & Kişilik</div>
+              <select class="select-field" id="tone">
+                <option value="Samimi ve Sıcak">😊 Samimi ve Sıcak</option>
+                <option value="Profesyonel">👔 Profesyonel</option>
+                <option value="Enerjik ve Hevesli">⚡ Enerjik ve Hevesli</option>
+                <option value="Resmi">📋 Resmi</option>
+                <option value="Eğlenceli">🎉 Eğlenceli</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="field-label">Dil</div>
+              <select class="select-field" id="language">
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="en">🇬🇧 İngilizce</option>
+                <option value="ar">🇸🇦 Arapça</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="field-label">Sistem Talimatları</div>
+              <textarea class="textarea-field" id="systemPrompt" placeholder="Müşterilere nazik ve yardımsever davran. Fiyat sorularında önce ürünün faydalarını anlat..."></textarea>
+            </div>
+            <div class="form-row">
+              <div class="field-label">Yaratıcılık Seviyesi — <span id="creativityVal">70</span>%</div>
+              <div class="slider-wrap">
+                <span style="font-size:0.75rem;color:var(--gray);">Tutarlı</span>
+                <input type="range" class="slider" id="creativity" min="0" max="100" value="70" />
+                <span style="font-size:0.75rem;color:var(--gray);">Yaratıcı</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ÇALIŞMA SAATLERİ -->
+          <div class="panel">
+            <div class="panel-title">🕐 Çalışma Saatleri</div>
+            <div class="panel-desc">AI sadece bu saatler arasında otomatik yanıt versin</div>
+            <div class="toggle-row" style="margin-bottom:14px;">
+              <div class="toggle-info">
+                <div class="toggle-title">Sadece çalışma saatlerinde yanıtla</div>
+                <div class="toggle-sub">Kapalı saatlerde mesajlar birikir</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="workingHoursOnly" />
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div class="form-row" style="margin-bottom:0;">
+                <div class="field-label">Başlangıç</div>
+                <input class="input-field" type="time" id="workStart" value="09:00" />
+              </div>
+              <div class="form-row" style="margin-bottom:0;">
+                <div class="field-label">Bitiş</div>
+                <input class="input-field" type="time" id="workEnd" value="18:00" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOGGLE AYARLAR + ŞABLONLAR -->
+        <div>
+          <div class="panel">
+            <div class="panel-title">⚙️ Otomasyon Ayarları</div>
+            <div class="panel-desc">AI davranışını özelleştirin</div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-title">Otomatik Yanıt</div><div class="toggle-sub">AI gelen mesajlara otomatik yanıt versin</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="autoReply" checked /><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-title">Emoji Kullan</div><div class="toggle-sub">Yanıtlara emoji eklensin</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="useEmoji" checked /><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-info"><div class="toggle-title">Satış Odaklı</div><div class="toggle-sub">Konuşmaları satışa yönlendir</div></div>
+              <label class="toggle-switch"><input type="checkbox" id="salesFocused" checked /><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+            </div>
+          </div>
+
+          <!-- ŞABLONLAR -->
+          <div class="panel">
+            <div class="panel-title">📋 Hızlı Yanıt Şablonları</div>
+            <div class="panel-desc">Sık kullanılan yanıtları hazır tutun</div>
+            <div class="template-list" id="templateList">
+              <div style="text-align:center;padding:20px;color:var(--gray);font-size:0.82rem;">⏳ Yükleniyor...</div>
+            </div>
+            <button class="btn-add-tpl" onclick="addTemplate()">+ Yeni Şablon Ekle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:9999;padding:13px 20px;border-radius:12px;font-size:0.85rem;font-weight:600;transform:translateY(100px);transition:transform 0.3s;max-width:320px;"></div>
+
+  <script type="module">
+    import { supabase } from './supabase.js'
+
+    ;(async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { window.location.replace('giris.html'); return }
+      window._supabase = supabase
+      const uid = session.user.id
+      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+      document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
+      document.getElementById('sidebarName').textContent = name
+
+      // AI ayarlarını yükle
+      const { data: ai } = await supabase.from('ai_settings').select('*').eq('user_id', uid).single()
+      if (ai) {
+        document.getElementById('botName').value = ai.bot_name || 'DMAsistan'
+        document.getElementById('tone').value = ai.tone || 'Samimi ve Sıcak'
+        document.getElementById('language').value = ai.language || 'tr'
+        document.getElementById('systemPrompt').value = ai.system_prompt || ''
+        document.getElementById('creativity').value = ai.creativity ?? 70
+        document.getElementById('creativityVal').textContent = ai.creativity ?? 70
+        document.getElementById('autoReply').checked = ai.auto_reply ?? true
+        document.getElementById('useEmoji').checked = ai.use_emoji ?? true
+        document.getElementById('salesFocused').checked = ai.sales_focused ?? true
+        document.getElementById('workingHoursOnly').checked = ai.working_hours_only ?? false
+        document.getElementById('workStart').value = ai.working_start || '09:00'
+        document.getElementById('workEnd').value = ai.working_end || '18:00'
+      }
+
+      // Şablonları yükle
+      const { data: templates } = await supabase.from('templates').select('*').eq('user_id', uid).order('created_at', { ascending: false })
+      renderTemplates(templates || [])
+
+      // Kaydet butonu
+      document.getElementById('saveBtn').addEventListener('click', async () => {
+        const settings = {
+          user_id: uid,
+          bot_name: document.getElementById('botName').value,
+          tone: document.getElementById('tone').value,
+          language: document.getElementById('language').value,
+          system_prompt: document.getElementById('systemPrompt').value,
+          creativity: parseInt(document.getElementById('creativity').value),
+          auto_reply: document.getElementById('autoReply').checked,
+          use_emoji: document.getElementById('useEmoji').checked,
+          sales_focused: document.getElementById('salesFocused').checked,
+          working_hours_only: document.getElementById('workingHoursOnly').checked,
+          working_start: document.getElementById('workStart').value,
+          working_end: document.getElementById('workEnd').value,
+          updated_at: new Date().toISOString()
+        }
+        const { error } = await supabase.from('ai_settings').upsert(settings, { onConflict: 'user_id' })
+        showToast(error ? '❌ Kayıt hatası: ' + error.message : '✅ Ayarlar kaydedildi!', !!error)
+      })
+
+      supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
+    })()
+
+    document.getElementById('creativity').addEventListener('input', function() {
+      document.getElementById('creativityVal').textContent = this.value
+    })
+
+    const CAT_COLORS = { welcome:'rgba(124,58,237,0.12)', sales:'rgba(244,63,117,0.12)', support:'rgba(34,197,94,0.12)', general:'rgba(255,255,255,0.06)' }
+
+    function renderTemplates(templates) {
+      const list = document.getElementById('templateList')
+      if (!templates.length) {
+        list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray);font-size:0.82rem;">Henüz şablon yok. Aşağıdan ekleyin.</div>'
+        return
+      }
+      list.innerHTML = templates.map(t => `
+        <div class="template-item">
+          <span class="template-cat">${t.category}</span>
+          <span class="template-text">${t.content}</span>
+          <div class="template-actions">
+            <button class="tpl-btn" onclick="deleteTemplate('${t.id}')">🗑</button>
+          </div>
+        </div>`).join('')
+    }
+
+    window.addTemplate = async function() {
+      // Native prompt yerine gerçek modal göster
+      showTemplateModal()
+    }
+
+    function showTemplateModal() {
+      const existing = document.getElementById('tplModal')
+      if (existing) existing.remove()
+
+      const modal = document.createElement('div')
+      modal.id = 'tplModal'
+      modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;'
+      modal.innerHTML = `
+        <div style="background:#0F1428;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:28px;max-width:480px;width:100%;box-shadow:0 40px 80px rgba(0,0,0,0.5);">
+          <h3 style="font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:16px;">✏️ Yeni Şablon Ekle</h3>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:0.8rem;color:rgba(255,255,255,0.6);display:block;margin-bottom:6px;">Şablon Adı</label>
+            <input id="tplName" type="text" placeholder="Örn: Hoş Geldiniz Mesajı" style="width:100%;padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;" />
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:0.8rem;color:rgba(255,255,255,0.6);display:block;margin-bottom:6px;">Kategori</label>
+            <select id="tplCategory" style="width:100%;padding:11px 14px;background:#0A0E1A;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;">
+              <option value="greeting">👋 Karşılama</option>
+              <option value="sales">💰 Satış</option>
+              <option value="support">🛠 Destek</option>
+              <option value="followup">📩 Takip</option>
+              <option value="general">📋 Genel</option>
+            </select>
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="font-size:0.8rem;color:rgba(255,255,255,0.6);display:block;margin-bottom:6px;">Şablon İçeriği</label>
+            <textarea id="tplContent" placeholder="Mesaj içeriğini buraya yazın... {{isim}} gibi değişkenler kullanabilirsiniz." rows="4" style="width:100%;padding:11px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem;outline:none;resize:vertical;"></textarea>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button id="tplSaveBtn" style="flex:1;padding:12px;background:linear-gradient(135deg,#7C3AED,#F43F75);border:none;border-radius:10px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;">
+              💾 Kaydet
+            </button>
+            <button onclick="document.getElementById('tplModal').remove()" style="padding:12px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#A1A1AA;font-size:0.85rem;cursor:pointer;">
+              İptal
+            </button>
+          </div>
+        </div>
+      `
+      document.body.appendChild(modal)
+      document.getElementById('tplName').focus()
+
+      document.getElementById('tplSaveBtn').addEventListener('click', async () => {
+        const name     = document.getElementById('tplName').value.trim()
+        const content  = document.getElementById('tplContent').value.trim()
+        const category = document.getElementById('tplCategory').value
+        if (!name) { document.getElementById('tplName').style.borderColor = '#f43f5e'; return }
+        if (!content) { document.getElementById('tplContent').style.borderColor = '#f43f5e'; return }
+
+        document.getElementById('tplSaveBtn').textContent = '⏳ Kaydediliyor...'
+        const { data: { session } } = await window._supabase.auth.getSession()
+        await window._supabase.from('templates').insert({ user_id: session.user.id, name, category, content })
+        const { data } = await window._supabase.from('templates').select('*').eq('user_id', session.user.id).order('created_at', { ascending: false })
+        renderTemplates(data || [])
+        modal.remove()
+        showToast('✅ Şablon eklendi!')
+      })
+
+      modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove() })
+    }
+
+    window.deleteTemplate = async function(id) {
+      if (!confirm('Şablonu silmek istiyor musunuz?')) return
+      await window._supabase.from('templates').delete().eq('id', id)
+      const { data: { session } } = await window._supabase.auth.getSession()
+      const { data } = await window._supabase.from('templates').select('*').eq('user_id', session.user.id).order('created_at', { ascending: false })
+      renderTemplates(data || [])
+    }
+
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast')
+      t.textContent = msg
+      t.style.background = isError ? 'rgba(244,63,94,0.15)' : 'rgba(34,197,94,0.15)'
+      t.style.borderColor = isError ? 'rgba(244,63,94,0.3)' : 'rgba(34,197,94,0.3)'
+      t.style.color = isError ? '#f43f5e' : '#22c55e'
+      t.style.border = '1px solid'
+      t.style.transform = 'translateY(0)'
+      setTimeout(() => { t.style.transform = 'translateY(100px)' }, 3000)
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async e => {
+      e.preventDefault(); e.stopPropagation()
+      await window._supabase.auth.signOut()
+      window.location.href = 'giris.html'
+    })
+  </script>
+  <script type="module" src="mobile-nav.js"></script>
+</body>
+</html>

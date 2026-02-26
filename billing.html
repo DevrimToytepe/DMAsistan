@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMAsistan — Faturalama</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);--sidebar-w:248px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;overflow-x:hidden;}
+    h1,h2,h3{font-family:'Sora',sans-serif;}
+    a{text-decoration:none;color:inherit;}
+    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.07;pointer-events:none;z-index:0;}
+    .blob-1{width:700px;height:700px;background:var(--purple);top:-300px;left:-100px;}
+    .blob-2{width:500px;height:500px;background:var(--pink);bottom:-200px;right:-50px;}
+    /* SIDEBAR */
+    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-2);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;padding:0 12px 20px;}
+    .sidebar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;padding:20px 12px;margin-bottom:8px;border-bottom:1px solid var(--glass-border);}
+    .nav-section{font-family:'Sora',sans-serif;font-size:0.67rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:14px 12px 6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:1px;font-size:0.88rem;color:var(--gray);cursor:pointer;transition:var(--transition);text-decoration:none;}
+    .nav-item:hover{background:var(--glass);color:var(--white);}
+    .nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
+    .nav-item .nav-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0;}
+    .nav-badge{margin-left:auto;background:var(--gradient);border-radius:100px;font-size:0.65rem;font-weight:700;padding:2px 7px;color:white;}
+    .sidebar-divider{height:1px;background:var(--glass-border);margin:10px 0;}
+    .sidebar-bottom{margin-top:auto;}
+    .user-card{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;cursor:pointer;transition:var(--transition);text-decoration:none;}
+    .user-card:hover{background:rgba(255,255,255,0.06);}
+    .user-avatar-sq{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .user-info .name{font-size:0.85rem;font-weight:600;}
+    .user-info .plan{font-size:0.72rem;color:var(--gray);margin-top:1px;}
+    .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;padding:4px;transition:color 0.2s;}
+    .logout-btn:hover{color:var(--pink);}
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
+    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--glass-border);background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;}
+    .topbar-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;}
+    .topbar-sub{font-size:0.78rem;color:var(--gray);margin-top:1px;}
+    .content{padding:28px 32px 40px;flex:1;}
+    /* CURRENT PLAN BANNER */
+    .current-plan{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(244,63,117,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:18px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:28px;}
+    .plan-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:100px;padding:4px 14px;font-size:0.78rem;font-weight:700;color:var(--purple-light);margin-bottom:8px;}
+    .current-plan h2{font-size:1.2rem;font-weight:800;margin-bottom:4px;}
+    .current-plan p{font-size:0.85rem;color:rgba(255,255,255,0.55);}
+    .gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    /* BILLING TOGGLE */
+    .billing-toggle-wrap{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:28px;}
+    .toggle-label{font-size:0.88rem;color:var(--gray);transition:color 0.2s;}
+    .toggle-label.active{color:var(--white);font-weight:600;}
+    .toggle-switch{position:relative;width:48px;height:26px;cursor:pointer;}
+    .toggle-switch input{opacity:0;width:0;height:0;}
+    .toggle-track{position:absolute;inset:0;background:rgba(255,255,255,0.08);border-radius:100px;transition:background 0.3s;}
+    .toggle-switch input:checked + .toggle-track{background:var(--purple);}
+    .toggle-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;background:white;border-radius:50%;transition:transform 0.3s;}
+    .toggle-switch input:checked ~ .toggle-thumb{transform:translateX(22px);}
+    .yearly-save{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:100px;padding:3px 10px;font-size:0.72rem;color:#22c55e;font-weight:700;}
+    /* PLAN CARDS */
+    .plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+    .plan-card{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:18px;padding:24px;transition:var(--transition);position:relative;overflow:hidden;}
+    .plan-card:hover{border-color:rgba(124,58,237,0.3);transform:translateY(-2px);}
+    .plan-card.popular{border-color:rgba(124,58,237,0.45);box-shadow:0 0 40px rgba(124,58,237,0.12);}
+    .plan-card.popular::before{content:'En Popüler';position:absolute;top:0;right:0;background:var(--gradient);font-size:0.68rem;font-weight:700;padding:5px 14px;border-radius:0 18px 0 10px;color:white;}
+    .plan-name{font-family:'Sora',sans-serif;font-size:0.8rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;}
+    .plan-price{font-family:'Sora',sans-serif;font-size:2.4rem;font-weight:800;margin-bottom:4px;}
+    .plan-price span{font-size:1rem;font-weight:400;color:var(--gray);}
+    .plan-desc{font-size:0.8rem;color:var(--gray);margin-bottom:18px;}
+    .plan-features{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+    .plan-feature{display:flex;align-items:center;gap:8px;font-size:0.82rem;color:rgba(255,255,255,0.7);}
+    .plan-feature .check{color:#22c55e;font-size:0.75rem;flex-shrink:0;}
+    .plan-feature .cross{color:rgba(255,255,255,0.2);font-size:0.75rem;flex-shrink:0;}
+    .btn-plan{width:100%;padding:12px;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;transition:var(--transition);border:none;}
+    .btn-plan.current{background:rgba(255,255,255,0.06);border:1px solid var(--glass-border);color:var(--gray);cursor:default;}
+    .btn-plan.upgrade{background:var(--gradient);color:white;}
+    .btn-plan.upgrade:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.35);}
+    .btn-plan.enterprise{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--white);}
+    .btn-plan.enterprise:hover{background:rgba(255,255,255,0.08);}
+    /* USAGE */
+    .panel{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:16px;padding:22px 24px;margin-bottom:16px;}
+    .panel-title{font-family:'Sora',sans-serif;font-size:0.92rem;font-weight:700;margin-bottom:16px;}
+    .usage-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+    .usage-item{background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:12px;padding:14px;}
+    .usage-label{font-size:0.75rem;color:var(--gray);margin-bottom:6px;}
+    .usage-bar-wrap{height:5px;background:rgba(255,255,255,0.06);border-radius:100px;margin-bottom:6px;overflow:hidden;}
+    .usage-bar{height:100%;border-radius:100px;background:var(--gradient);transition:width 0.6s ease;}
+    .usage-bar.warn{background:linear-gradient(135deg,#F59E0B,#f43f5e);}
+    .usage-nums{font-size:0.75rem;color:rgba(255,255,255,0.5);}
+    .usage-nums strong{color:var(--white);}
+    /* INVOICE */
+    .invoice-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-border);}
+    .invoice-row:last-child{border-bottom:none;}
+    .invoice-date{font-size:0.83rem;color:var(--gray);}
+    .invoice-plan{font-size:0.83rem;font-weight:600;}
+    .invoice-status{font-size:0.72rem;padding:3px 10px;border-radius:100px;font-weight:600;}
+    .invoice-status.paid{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
+    .invoice-amount{font-size:0.88rem;font-weight:700;}
+    .invoice-dl{background:none;border:none;color:var(--purple-light);font-size:0.78rem;cursor:pointer;transition:color 0.2s;}
+    .invoice-dl:hover{color:var(--white);}
+    @media(max-width:900px){.plans-grid{grid-template-columns:1fr;}.usage-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:20px;}}
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
+    <div class="nav-section">Ana Menü</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar</a>
+    <a class="nav-item" href="automation.html"><span class="nav-icon">🤖</span> AI & Otomasyon</a>
+    <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
+    <a class="nav-item" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
+    <div class="sidebar-divider"></div>
+    <div class="nav-section">Ayarlar</div>
+    <a class="nav-item" href="integrations.html"><span class="nav-icon">🔗</span> Entegrasyonlar</a>
+    <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span> Ayarlar</a>
+    <a class="nav-item active" href="billing.html"><span class="nav-icon">💳</span> Faturalama</a>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-bottom">
+      <a class="user-card" href="settings.html">
+        <div class="user-avatar-sq" id="sidebarAvatar">?</div>
+        <div class="user-info"><div class="name" id="sidebarName">Yükleniyor...</div><div class="plan" id="sidebarPlan">🆓 Ücretsiz Plan</div></div>
+        <button class="logout-btn" id="logoutBtn">⏻</button>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><div class="topbar-title">Faturalama</div><div class="topbar-sub">Plan ve ödeme yönetimi</div></div>
+    </div>
+    <div class="content">
+      <!-- MEVCUT PLAN -->
+      <div class="current-plan">
+        <div>
+          <div class="plan-badge" id="currentPlanBadge">🆓 Ücretsiz Plan</div>
+          <h2>Mevcut Planınız: <span class="gradient-text" id="currentPlanName">Ücretsiz</span></h2>
+          <p id="currentPlanDesc">500 mesaj/ay · 1 platform · 3 şablon</p>
+        </div>
+        <button class="btn-plan upgrade" id="manageBtn" style="width:auto;padding:12px 24px;" onclick="window.location.href='#plans'">⚡ Planı Yükselt</button>
+      </div>
+
+      <!-- KULLANIM -->
+      <div class="panel">
+        <div class="panel-title">Bu Ayki Kullanım</div>
+        <div class="usage-grid">
+          <div class="usage-item">
+            <div class="usage-label">Mesaj</div>
+            <div class="usage-bar-wrap"><div class="usage-bar" id="barMsg" style="width:0%"></div></div>
+            <div class="usage-nums"><strong id="usedMsg">0</strong> / <span id="limMsg">500</span></div>
+          </div>
+          <div class="usage-item">
+            <div class="usage-label">Platform</div>
+            <div class="usage-bar-wrap"><div class="usage-bar" id="barPlatform" style="width:0%"></div></div>
+            <div class="usage-nums"><strong id="usedPlatform">0</strong> / <span id="limPlatform">1</span></div>
+          </div>
+          <div class="usage-item">
+            <div class="usage-label">Şablon</div>
+            <div class="usage-bar-wrap"><div class="usage-bar" id="barTemplate" style="width:0%"></div></div>
+            <div class="usage-nums"><strong id="usedTemplate">0</strong> / <span id="limTemplate">3</span></div>
+          </div>
+          <div class="usage-item">
+            <div class="usage-label">Kişi</div>
+            <div class="usage-bar-wrap"><div class="usage-bar" id="barContact" style="width:0%"></div></div>
+            <div class="usage-nums"><strong id="usedContact">0</strong> / <span id="limContact">100</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLAN SEÇİMİ -->
+      <div id="plans">
+        <div class="billing-toggle-wrap">
+          <span class="toggle-label active" id="lblMonthly">Aylık</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="billingToggle" />
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+          <span class="toggle-label" id="lblYearly">Yıllık</span>
+          <span class="yearly-save">%30 İndirim</span>
+        </div>
+
+        <div class="plans-grid">
+          <!-- FREE -->
+          <div class="plan-card">
+            <div class="plan-name">Ücretsiz</div>
+            <div class="plan-price">₺0 <span>/ ay</span></div>
+            <div class="plan-desc">Başlamak için ideal</div>
+            <div class="plan-features">
+              <div class="plan-feature"><span class="check">✓</span> 500 mesaj/ay</div>
+              <div class="plan-feature"><span class="check">✓</span> 1 platform</div>
+              <div class="plan-feature"><span class="check">✓</span> 3 şablon</div>
+              <div class="plan-feature"><span class="check">✓</span> 100 kişi</div>
+              <div class="plan-feature"><span class="check">✓</span> AI otomatik yanıt</div>
+              <div class="plan-feature"><span class="cross">✗</span> Gelişmiş analitik</div>
+              <div class="plan-feature"><span class="cross">✗</span> Öncelikli destek</div>
+            </div>
+            <button class="btn-plan current">Mevcut Plan</button>
+          </div>
+          <!-- PRO -->
+          <div class="plan-card popular">
+            <div class="plan-name">Pro</div>
+            <div class="plan-price" id="proPrice">₺499 <span>/ ay</span></div>
+            <div class="plan-desc">Büyüyen işletmeler için</div>
+            <div class="plan-features">
+              <div class="plan-feature"><span class="check">✓</span> 10.000 mesaj/ay</div>
+              <div class="plan-feature"><span class="check">✓</span> 3 platform</div>
+              <div class="plan-feature"><span class="check">✓</span> 50 şablon</div>
+              <div class="plan-feature"><span class="check">✓</span> 10.000 kişi</div>
+              <div class="plan-feature"><span class="check">✓</span> AI otomatik yanıt</div>
+              <div class="plan-feature"><span class="check">✓</span> Gelişmiş analitik</div>
+              <div class="plan-feature"><span class="check">✓</span> Öncelikli destek</div>
+            </div>
+            <button class="btn-plan upgrade" id="btnPro">⚡ Pro'ya Geç</button>
+          </div>
+          <!-- ENTERPRISE -->
+          <div class="plan-card">
+            <div class="plan-name">Kurumsal</div>
+            <div class="plan-price">Özel <span>fiyat</span></div>
+            <div class="plan-desc">Büyük ekipler için</div>
+            <div class="plan-features">
+              <div class="plan-feature"><span class="check">✓</span> Sınırsız mesaj</div>
+              <div class="plan-feature"><span class="check">✓</span> Sınırsız platform</div>
+              <div class="plan-feature"><span class="check">✓</span> Sınırsız şablon</div>
+              <div class="plan-feature"><span class="check">✓</span> Sınırsız kişi</div>
+              <div class="plan-feature"><span class="check">✓</span> API erişimi</div>
+              <div class="plan-feature"><span class="check">✓</span> Özel entegrasyon</div>
+              <div class="plan-feature"><span class="check">✓</span> Dedicated destek</div>
+            </div>
+            <button class="btn-plan enterprise" onclick="window.open('mailto:sales@dmasistan.com')">📩 Bize Yazın</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FATURA GEÇMİŞİ -->
+      <div class="panel">
+        <div class="panel-title">Fatura Geçmişi</div>
+        <div id="invoiceList">
+          <div style="text-align:center;padding:24px;color:var(--gray);font-size:0.85rem;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🧾</div>
+            Henüz fatura yok
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from './supabase.js'
+
+    ;(async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { window.location.replace('giris.html'); return }
+      const uid = session.user.id
+      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+      document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
+      document.getElementById('sidebarName').textContent = name
+
+      // Profil & plan bilgisi
+      const { data: profile } = await supabase.from('profiles').select('plan,plan_expires_at').eq('id', uid).single()
+      const plan = profile?.plan || 'free'
+      const planNames = { free: 'Ücretsiz', pro: 'Pro', enterprise: 'Kurumsal' }
+      document.getElementById('currentPlanName').textContent = planNames[plan] || 'Ücretsiz'
+      document.getElementById('currentPlanBadge').textContent = plan === 'free' ? '🆓 Ücretsiz Plan' : plan === 'pro' ? '🚀 Pro Plan' : '🏢 Kurumsal'
+      if (plan === 'pro') {
+        document.getElementById('currentPlanDesc').textContent = '10.000 mesaj/ay · 3 platform · 50 şablon'
+        document.getElementById('sidebarPlan').textContent = '🚀 Pro Plan'
+        document.getElementById('btnPro').textContent = '✓ Mevcut Plan'
+        document.getElementById('btnPro').className = 'btn-plan current'
+        document.getElementById('manageBtn').textContent = '⚙️ Aboneliği Yönet'
+      }
+
+      // Kullanım verileri
+      const planLimits = { free: {messages:500,platforms:1,templates:3,contacts:100}, pro: {messages:10000,platforms:3,templates:50,contacts:10000} }
+      const limits = planLimits[plan] || planLimits.free
+      const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+
+      const [msgRes, platRes, tplRes, conRes] = await Promise.all([
+        supabase.from('usage_logs').select('id', { count: 'exact', head: true }).eq('user_id', uid).eq('action', 'message_sent').gte('created_at', thisMonth),
+        supabase.from('platforms').select('id', { count: 'exact', head: true }).eq('user_id', uid).eq('is_active', true),
+        supabase.from('templates').select('id', { count: 'exact', head: true }).eq('user_id', uid),
+        supabase.from('contacts').select('id', { count: 'exact', head: true }).eq('user_id', uid),
+      ])
+
+      function setUsage(id, barId, used, limit) {
+        const pct = Math.min((used / limit) * 100, 100)
+        document.getElementById(id).textContent = used
+        document.getElementById('lim' + id.replace('used','')).textContent = limit
+        const bar = document.getElementById(barId)
+        bar.style.width = pct + '%'
+        if (pct >= 80) bar.classList.add('warn')
+      }
+      setUsage('usedMsg', 'barMsg', msgRes.count || 0, limits.messages)
+      setUsage('usedPlatform', 'barPlatform', platRes.count || 0, limits.platforms)
+      setUsage('usedTemplate', 'barTemplate', tplRes.count || 0, limits.templates)
+      setUsage('usedContact', 'barContact', conRes.count || 0, limits.contacts)
+
+      supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
+    })()
+
+    document.getElementById('logoutBtn').addEventListener('click', async e => {
+      e.preventDefault(); e.stopPropagation()
+      await window._supabase?.auth.signOut()
+      window.location.href = 'giris.html'
+    })
+
+    // Billing toggle
+    const toggle = document.getElementById('billingToggle')
+    toggle.addEventListener('change', () => {
+      const yearly = toggle.checked
+      document.getElementById('lblMonthly').classList.toggle('active', !yearly)
+      document.getElementById('lblYearly').classList.toggle('active', yearly)
+      document.getElementById('proPrice').innerHTML = yearly ? '₺349 <span>/ ay</span>' : '₺499 <span>/ ay</span>'
+    })
+
+    // ── Stripe Checkout ──
+    import { supabase as _sb } from './supabase.js'
+    import { PLANS } from './plans.js'
+
+    // Ödeme sonrası URL parametrelerini işle
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('payment') === 'success') {
+      window.history.replaceState({}, '', window.location.pathname)
+      showToast('🎉 Ödeme başarılı! Planınız güncellendi.', false)
+      setTimeout(() => window.location.reload(), 2000)
+    }
+    if (urlParams.get('payment') === 'canceled') {
+      window.history.replaceState({}, '', window.location.pathname)
+      showToast('Ödeme iptal edildi.', true)
+    }
+
+    async function startProCheckout() {
+      const { data: { session } } = await _sb.auth.getSession()
+      if (!session) { window.location.href = 'giris.html'; return }
+
+      const btn = document.getElementById('btnPro')
+      if (!btn || btn.classList.contains('current')) return
+      btn.disabled = true
+      btn.textContent = '⏳ Yükleniyor...'
+
+      const isYearly = document.getElementById('billingToggle')?.checked
+      const priceId = isYearly
+        ? PLANS.pro.stripe_price_id_yearly
+        : PLANS.pro.stripe_price_id_monthly
+
+      try {
+        const { data, error } = await _sb.functions.invoke('create-checkout-session', {
+          body: {
+            price_id:    priceId,
+            user_id:     session.user.id,
+            user_email:  session.user.email,
+            success_url: `${window.location.origin}/billing.html?payment=success`,
+            cancel_url:  `${window.location.origin}/billing.html?payment=canceled`,
+          }
+        })
+        if (error) throw error
+        if (!data?.url) throw new Error('Checkout URL alınamadı')
+        window.location.href = data.url
+      } catch (err) {
+        btn.disabled = false
+        btn.textContent = '⚡ Pro\'ya Geç'
+        showToast('❌ ' + (err.message || 'Ödeme başlatılamadı.'), true)
+      }
+    }
+
+    async function manageSubscription() {
+      const { data: { session } } = await _sb.auth.getSession()
+      if (!session) return
+      const manBtn = document.getElementById('manageBtn')
+      if (manBtn) { manBtn.disabled = true; manBtn.textContent = '⏳...' }
+      try {
+        const { data, error } = await _sb.functions.invoke('create-portal-session', {
+          body: { user_id: session.user.id, return_url: window.location.href }
+        })
+        if (error) throw error
+        window.location.href = data.url
+      } catch (err) {
+        showToast('❌ Portal açılamadı: ' + err.message, true)
+        if (manBtn) { manBtn.disabled = false; manBtn.textContent = '⚙️ Aboneliği Yönet' }
+      }
+    }
+
+    // Butonlara bağla
+    document.getElementById('btnPro')?.addEventListener('click', startProCheckout)
+    document.getElementById('manageBtn')?.addEventListener('click', (e) => {
+      const btn = document.getElementById('manageBtn')
+      if (btn?.textContent.includes('Yönet')) { e.preventDefault(); manageSubscription() }
+    })
+
+    function showToast(msg, isErr = false) {
+      let t = document.getElementById('billingToast')
+      if (!t) {
+        t = document.createElement('div')
+        t.id = 'billingToast'
+        t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;padding:14px 20px;border-radius:14px;font-size:0.87rem;font-weight:600;max-width:340px;transition:transform 0.3s;transform:translateY(100px);'
+        document.body.appendChild(t)
+      }
+      t.style.background = isErr ? 'rgba(244,63,94,0.15)' : 'rgba(34,197,94,0.15)'
+      t.style.border     = isErr ? '1px solid rgba(244,63,94,0.3)' : '1px solid rgba(34,197,94,0.3)'
+      t.style.color      = isErr ? '#f43f5e' : '#22c55e'
+      t.textContent = msg
+      requestAnimationFrame(() => { t.style.transform = 'translateY(0)' })
+      setTimeout(() => { t.style.transform = 'translateY(100px)' }, 4000)
+    }
+  </script>
+  <script type="module" src="mobile-nav.js"></script>
+</body>
+</html>

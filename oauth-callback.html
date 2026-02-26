@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMAsistan — Platform Bağlanıyor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--pink:#F43F75;--white:#fff;--gray:#A1A1AA;--gradient:linear-gradient(135deg,var(--purple),var(--pink));}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;align-items:center;justify-content:center;}
+    .blob{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.15;pointer-events:none;}
+    .blob-1{width:500px;height:500px;background:var(--purple);top:-200px;left:-100px;}
+    .blob-2{width:400px;height:400px;background:var(--pink);bottom:-100px;right:-100px;}
+    .card{position:relative;z-index:1;background:var(--bg-2);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px 44px;max-width:440px;width:100%;text-align:center;margin:20px;box-shadow:0 0 80px rgba(124,58,237,0.12);}
+    .spinner{width:56px;height:56px;border:3px solid rgba(124,58,237,0.2);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 20px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .icon-wrap{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 20px;}
+    .icon-success{background:rgba(34,197,94,0.12);border:2px solid rgba(34,197,94,0.3);}
+    .icon-error{background:rgba(244,63,94,0.12);border:2px solid rgba(244,63,94,0.3);}
+    h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+    p{color:var(--gray);font-size:0.88rem;line-height:1.6;margin-bottom:20px;}
+    .platform-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);border-radius:100px;padding:5px 14px;font-size:0.82rem;font-weight:600;color:#9B5CF6;margin-bottom:20px;}
+    .btn{display:inline-block;padding:12px 28px;background:var(--gradient);border-radius:12px;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;text-decoration:none;cursor:pointer;border:none;transition:all 0.3s;}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.4);}
+    .btn-ghost{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);color:var(--gray);margin-top:10px;display:block;}
+    .progress{width:100%;height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;margin-bottom:20px;}
+    .progress-fill{height:100%;background:var(--gradient);border-radius:2px;animation:progress 2s ease-out forwards;}
+    @keyframes progress{from{width:0%;}to{width:90%;}}
+    .step-list{text-align:left;margin-bottom:20px;}
+    .step{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:0.83rem;color:var(--gray);border-bottom:1px solid rgba(255,255,255,0.04);}
+    .step:last-child{border-bottom:none;}
+    .step.done{color:rgba(255,255,255,0.8);}
+    .step-dot{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;flex-shrink:0;}
+    .dot-done{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#22c55e;}
+    .dot-active{background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:var(--purple);}
+    .dot-wait{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:var(--gray);}
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="card" id="mainCard">
+    <!-- Loading State -->
+    <div id="stateLoading">
+      <div class="spinner"></div>
+      <div class="progress"><div class="progress-fill"></div></div>
+      <h2 id="loadingTitle">Platform Bağlanıyor...</h2>
+      <p id="loadingDesc">Meta'dan izinler alınıyor, lütfen bekleyin.</p>
+      <div class="step-list" id="stepList">
+        <div class="step done" id="step1"><div class="step-dot dot-done">✓</div> Yetkilendirme kodu alındı</div>
+        <div class="step" id="step2"><div class="step-dot dot-active">⏳</div> Erişim tokeni alınıyor</div>
+        <div class="step" id="step3"><div class="step-dot dot-wait">·</div> Hesap bilgileri yükleniyor</div>
+        <div class="step" id="step4"><div class="step-dot dot-wait">·</div> Veritabanına kaydediliyor</div>
+      </div>
+    </div>
+
+    <!-- Success State -->
+    <div id="stateSuccess" style="display:none;">
+      <div class="icon-wrap icon-success">✅</div>
+      <div class="platform-chip" id="successChip">📸 Instagram</div>
+      <h2>Başarıyla Bağlandı!</h2>
+      <p id="successDesc">Hesabınız DMAsistan'a bağlandı. Artık DM'leri yönetebilir ve AI yanıt sistemini kullanabilirsiniz.</p>
+      <a href="integrations.html" class="btn">🚀 Entegrasyonlara Dön</a>
+      <a href="dashboard.html" class="btn btn-ghost">Dashboard'a Git</a>
+    </div>
+
+    <!-- Error State -->
+    <div id="stateError" style="display:none;">
+      <div class="icon-wrap icon-error">❌</div>
+      <h2 id="errorTitle">Bağlantı Başarısız</h2>
+      <p id="errorDesc">Bir hata oluştu. Lütfen tekrar deneyin.</p>
+      <a href="integrations.html" class="btn">Tekrar Dene</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from './supabase.js'
+
+    const PLATFORM_INFO = {
+      instagram: { name: 'Instagram', icon: '📸', color: '#E1306C' },
+      facebook:  { name: 'Facebook Messenger', icon: '👍', color: '#1877F2' },
+      whatsapp:  { name: 'WhatsApp Business', icon: '💬', color: '#25D366' },
+    }
+
+    function setStep(num) {
+      const steps = document.querySelectorAll('.step')
+      steps.forEach((s, i) => {
+        const dot = s.querySelector('.step-dot')
+        if (i < num - 1) {
+          s.classList.add('done')
+          dot.className = 'step-dot dot-done'
+          dot.textContent = '✓'
+        } else if (i === num - 1) {
+          dot.className = 'step-dot dot-active'
+          dot.textContent = '⏳'
+        }
+      })
+    }
+
+    function showSuccess(platform, accountName) {
+      document.getElementById('stateLoading').style.display = 'none'
+      document.getElementById('stateSuccess').style.display = 'block'
+      const info = PLATFORM_INFO[platform] || { name: platform, icon: '🔗' }
+      document.getElementById('successChip').textContent = `${info.icon} ${info.name}`
+      document.getElementById('successDesc').textContent =
+        `${accountName ? `"${accountName}" hesabı` : 'Hesabınız'} DMAsistan'a bağlandı. Artık ${info.name} DM'lerini yönetebilir ve AI yanıt sistemini kullanabilirsiniz.`
+      // 3 saniye sonra otomatik yönlendir
+      setTimeout(() => { window.location.href = 'integrations.html' }, 3500)
+    }
+
+    function showError(msg) {
+      document.getElementById('stateLoading').style.display = 'none'
+      document.getElementById('stateError').style.display = 'block'
+      document.getElementById('errorDesc').textContent = msg
+    }
+
+    async function handleCallback() {
+      // URL parametrelerini oku
+      const params  = new URLSearchParams(window.location.search)
+      const code    = params.get('code')
+      const state   = params.get('state')   // platform|userId|csrfToken
+      const error   = params.get('error')
+      const errorDesc = params.get('error_description')
+
+      // Kullanıcı reddettiysee
+      if (error) {
+        showError(errorDesc || 'Yetkilendirme reddedildi.')
+        return
+      }
+
+      if (!code || !state) {
+        showError('Geçersiz callback parametreleri.')
+        return
+      }
+
+      // State'i parse et: "platform|userId|csrfToken"
+      const [platform, userId, csrfToken] = state.split('|')
+      if (!platform || !userId) {
+        showError('Geçersiz state parametresi.')
+        return
+      }
+
+      // CSRF token kontrolü
+      const savedCsrf = sessionStorage.getItem('oauth_csrf')
+      if (savedCsrf && savedCsrf !== csrfToken) {
+        showError('Güvenlik doğrulaması başarısız (CSRF). Lütfen tekrar deneyin.')
+        return
+      }
+      sessionStorage.removeItem('oauth_csrf')
+
+      // Session kontrol
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session || session.user.id !== userId) {
+        showError('Oturum doğrulanamadı. Lütfen tekrar giriş yapın.')
+        return
+      }
+
+      try {
+        // Adım 2: Token al
+        setStep(2)
+        document.getElementById('step2').querySelector('.step-dot').textContent = '⏳'
+
+        // Supabase Edge Function'a code gönder, token'ı orada al (App Secret güvende kalır)
+        const { data, error: fnErr } = await supabase.functions.invoke('meta-oauth-exchange', {
+          body: {
+            code,
+            platform,
+            user_id: userId,
+            redirect_uri: `${window.location.origin}/oauth-callback.html`,
+          }
+        })
+
+        if (fnErr) throw new Error(fnErr.message)
+        if (data?.error) throw new Error(data.error)
+
+        // Adım 3: Hesap bilgileri
+        setStep(3)
+        await new Promise(r => setTimeout(r, 400))
+
+        // Adım 4: Kaydet
+        setStep(4)
+        await new Promise(r => setTimeout(r, 300))
+
+        showSuccess(platform, data.account_name)
+        window.history.replaceState({}, '', window.location.pathname)
+
+      } catch (err) {
+        showError('Bağlantı hatası: ' + err.message)
+      }
+    }
+
+    handleCallback()
+  </script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DMAsistan — Analitik</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);--sidebar-w:248px;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}
+    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.07;pointer-events:none;z-index:0;}
+    .blob-1{width:700px;height:700px;background:var(--purple);top:-300px;left:-100px;}
+    .blob-2{width:500px;height:500px;background:var(--pink);bottom:-200px;right:-50px;}
+    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-2);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;padding:0 12px 20px;}
+    .sidebar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;padding:20px 12px;margin-bottom:8px;border-bottom:1px solid var(--glass-border);}
+    .nav-section{font-family:'Sora',sans-serif;font-size:0.67rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:14px 12px 6px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:1px;font-size:0.88rem;color:var(--gray);cursor:pointer;transition:var(--transition);text-decoration:none;}
+    .nav-item:hover{background:var(--glass);color:var(--white);}
+    .nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
+    .nav-item .nav-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0;}
+    .sidebar-divider{height:1px;background:var(--glass-border);margin:10px 0;}
+    .sidebar-bottom{margin-top:auto;}
+    .user-card{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;text-decoration:none;}
+    .user-avatar-sq{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
+    .user-info .name{font-size:0.85rem;font-weight:600;}
+    .user-info .plan{font-size:0.72rem;color:var(--gray);margin-top:1px;}
+    .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;padding:4px;transition:color 0.2s;}
+    .logout-btn:hover{color:var(--pink);}
+    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
+    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--glass-border);background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;}
+    .topbar-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;}
+    .topbar-sub{font-size:0.78rem;color:var(--gray);margin-top:1px;}
+    .content{padding:28px 32px 40px;flex:1;}
+    /* STATS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+    .stat-card{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:16px;padding:20px 22px;transition:var(--transition);}
+    .stat-card:hover{border-color:rgba(124,58,237,0.28);transform:translateY(-2px);}
+    .stat-icon{font-size:1.3rem;margin-bottom:8px;}
+    .stat-label{font-size:0.75rem;color:var(--gray);margin-bottom:4px;}
+    .stat-value{font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:3px;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .stat-note{font-size:0.72rem;color:rgba(255,255,255,0.38);}
+    .stat-note.up{color:#22c55e;}
+    /* PANEL */
+    .panel{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:16px;padding:22px 24px;margin-bottom:16px;}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+    .panel-title{font-family:'Sora',sans-serif;font-size:0.92rem;font-weight:700;}
+    .range-btns{display:flex;gap:6px;}
+    .range-btn{padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:600;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);color:var(--gray);transition:var(--transition);}
+    .range-btn.active{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.35);color:var(--white);}
+    .grid-2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px;}
+    /* CHART */
+    .chart-area{height:200px;display:flex;align-items:flex-end;gap:8px;padding:0 4px;}
+    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;padding-bottom:8px;}
+    .bar{width:100%;border-radius:6px 6px 0 0;background:var(--gradient);opacity:0.7;cursor:pointer;transition:opacity 0.2s;}
+    .bar:hover{opacity:1;}
+    .bar-lbl{font-size:0.62rem;color:var(--gray);}
+    /* PLATFORM BREAKDOWN */
+    .platform-breakdown{display:flex;flex-direction:column;gap:10px;}
+    .pb-row{display:flex;align-items:center;gap:12px;}
+    .pb-platform{font-size:0.85rem;width:110px;flex-shrink:0;}
+    .pb-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:100px;overflow:hidden;}
+    .pb-bar{height:100%;border-radius:100px;background:var(--gradient);}
+    .pb-count{font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.7);width:32px;text-align:right;}
+    /* TOP CONTACTS */
+    .top-contact-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .top-contact-row:last-child{border-bottom:none;}
+    .tc-rank{font-size:0.7rem;font-weight:700;color:var(--gray);width:20px;text-align:center;}
+    .tc-avatar{width:30px;height:30px;border-radius:8px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;}
+    .tc-name{flex:1;font-size:0.83rem;font-weight:600;}
+    .tc-msgs{font-size:0.75rem;color:var(--gray);}
+    @media(max-width:1000px){.stats-row{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
+    @media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:20px;}}
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
+    <div class="nav-section">Ana Menü</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar</a>
+    <a class="nav-item" href="automation.html"><span class="nav-icon">🤖</span> AI & Otomasyon</a>
+    <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
+    <a class="nav-item active" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
+    <div class="sidebar-divider"></div>
+    <div class="nav-section">Ayarlar</div>
+    <a class="nav-item" href="integrations.html"><span class="nav-icon">🔗</span> Entegrasyonlar</a>
+    <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span> Ayarlar</a>
+    <a class="nav-item" href="billing.html"><span class="nav-icon">💳</span> Faturalama</a>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-bottom">
+      <a class="user-card" href="settings.html">
+        <div class="user-avatar-sq" id="sidebarAvatar">?</div>
+        <div class="user-info"><div class="name" id="sidebarName">Yükleniyor...</div><div class="plan">🆓 Ücretsiz Plan</div></div>
+        <button class="logout-btn" id="logoutBtn">⏻</button>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div><div class="topbar-title">Analitik</div><div class="topbar-sub">Performansınızı takip edin</div></div>
+    </div>
+    <div class="content">
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-label">Toplam Konuşma</div><div class="stat-value" id="stConv">0</div><div class="stat-note">Tüm zamanlar</div></div>
+        <div class="stat-card"><div class="stat-icon">🤖</div><div class="stat-label">AI Yanıt Oranı</div><div class="stat-value" id="stAiRate">—</div><div class="stat-note">Bu ay</div></div>
+        <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-label">Ort. Yanıt Süresi</div><div class="stat-value" id="stResponse">—</div><div class="stat-note">saniye</div></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-label">Yeni Kişi</div><div class="stat-value" id="stNewContacts">0</div><div class="stat-note up">Bu ay</div></div>
+      </div>
+
+      <div class="grid-2">
+        <!-- CHART -->
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Konuşma Trendi</div>
+            <div class="range-btns">
+              <button class="range-btn active" onclick="loadChart(7, this)">7G</button>
+              <button class="range-btn" onclick="loadChart(30, this)">30G</button>
+              <button class="range-btn" onclick="loadChart(90, this)">90G</button>
+            </div>
+          </div>
+          <div class="chart-area" id="chartArea"></div>
+        </div>
+
+        <!-- PLATFORM BREAKDOWN -->
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Platform Dağılımı</div></div>
+          <div class="platform-breakdown" id="platformBreakdown">
+            <div style="text-align:center;padding:30px;color:var(--gray);font-size:0.82rem;">Yükleniyor...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP CONTACTS -->
+      <div class="panel">
+        <div class="panel-head"><div class="panel-title">En Aktif Kişiler</div></div>
+        <div id="topContacts">
+          <div style="text-align:center;padding:30px;color:var(--gray);font-size:0.82rem;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">👥</div>Veri bekleniyor
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { supabase } from './supabase.js'
+    let uid = null
+
+    ;(async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { window.location.replace('giris.html'); return }
+      window._supabase = supabase
+      uid = session.user.id
+      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+      document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
+      document.getElementById('sidebarName').textContent = name
+      window._uid = uid
+
+      const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
+      const [convRes, aiRes, contactRes, platRes] = await Promise.all([
+        supabase.from('conversations').select('id', { count: 'exact', head: true }).eq('user_id', uid),
+        supabase.from('messages').select('id', { count: 'exact', head: true }).eq('user_id', uid).eq('is_ai', true).gte('created_at', thisMonth),
+        supabase.from('contacts').select('id', { count: 'exact', head: true }).eq('user_id', uid).gte('created_at', thisMonth),
+        supabase.from('conversations').select('platform').eq('user_id', uid),
+      ])
+
+      document.getElementById('stConv').textContent = convRes.count || 0
+      document.getElementById('stNewContacts').textContent = contactRes.count || 0
+      document.getElementById('stAiRate').textContent = convRes.count ? Math.round((aiRes.count || 0) / Math.max(convRes.count, 1) * 100) + '%' : '—'
+      document.getElementById('stResponse').textContent = '< 1'
+
+      // Platform breakdown
+      const platData = platRes.data || []
+      const platCounts = {}
+      platData.forEach(c => { platCounts[c.platform] = (platCounts[c.platform] || 0) + 1 })
+      const total = platData.length || 1
+      const icons = { instagram: '📸', whatsapp: '💬', facebook: '👍', tiktok: '🎵' }
+      const pbEl = document.getElementById('platformBreakdown')
+      if (!Object.keys(platCounts).length) {
+        pbEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray);font-size:0.82rem;">Platform bağlayın</div>'
+      } else {
+        pbEl.innerHTML = Object.entries(platCounts).sort((a,b) => b[1]-a[1]).map(([p, c]) => `
+          <div class="pb-row">
+            <div class="pb-platform">${icons[p] || '💬'} ${p}</div>
+            <div class="pb-bar-wrap"><div class="pb-bar" style="width:${Math.round(c/total*100)}%"></div></div>
+            <div class="pb-count">${c}</div>
+          </div>`).join('')
+      }
+
+      await loadChart(7, document.querySelector('.range-btn.active'))
+      supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
+    })()
+
+    window.loadChart = async function(days, btn) {
+      document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'))
+      if (btn) btn.classList.add('active')
+      const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString()
+      const { data } = await window._supabase.from('conversations').select('created_at').eq('user_id', window._uid).gte('created_at', since)
+      const convData = data || []
+
+      const buckets = Array(Math.min(days, 30)).fill(0)
+      const now = new Date()
+      const step = days <= 7 ? 1 : days <= 30 ? 1 : 7
+      const count = days <= 30 ? days : Math.ceil(days / 7)
+
+      convData.forEach(c => {
+        const diff = Math.floor((now - new Date(c.created_at)) / (1000 * 60 * 60 * 24))
+        const idx = count - 1 - Math.floor(diff / step)
+        if (idx >= 0 && idx < count) buckets[idx] = (buckets[idx] || 0) + 1
+      })
+
+      const maxVal = Math.max(...buckets, 1)
+      const dayNames = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt']
+      const labels = Array.from({length: count}, (_, i) => {
+        const d = new Date(now)
+        d.setDate(d.getDate() - (count - 1 - i) * step)
+        return days <= 7 ? dayNames[d.getDay()] : d.getDate() + '/' + (d.getMonth()+1)
+      })
+
+      document.getElementById('chartArea').innerHTML = buckets.slice(0, count).map((c, i) => `
+        <div class="bar-col">
+          <div class="bar" style="height:${Math.max(c/maxVal*100, 4)}%" title="${c} konuşma"></div>
+          <div class="bar-lbl">${labels[i]}</div>
+        </div>`).join('')
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async e => {
+      e.preventDefault(); e.stopPropagation()
+      await window._supabase.auth.signOut()
+      window.location.href = 'giris.html'
+    })
+  </script>
+</body>
+</html>
