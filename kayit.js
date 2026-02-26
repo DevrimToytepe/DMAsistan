@@ -1,13 +1,11 @@
 // kayit.js — kayit.html ile tam eşleştirilmiş
 import { supabase } from './supabase.js'
 
-// ─── HTML elementlerini al ────────────────────────────────────
 const form       = document.getElementById('registerForm')
 const submitBtn  = document.getElementById('submitBtn')
 const errorBox   = document.getElementById('errorBox')
 const successBox = document.getElementById('successBox')
 
-// ─── UI State ────────────────────────────────────────────────
 function setLoading(active) {
   if (!submitBtn) return
   submitBtn.disabled = active
@@ -22,7 +20,6 @@ function showError(msg) {
   errorBox.textContent     = '⚠️ ' + msg
   errorBox.style.display   = 'block'
   if (successBox) successBox.style.display = 'none'
-  // Sayfayı hata kutusuna kaydır
   errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 }
 
@@ -38,7 +35,6 @@ function clearMessages() {
   if (successBox) successBox.style.display = 'none'
 }
 
-// ─── Supabase Hata Mesajları (Türkçe) ────────────────────────
 const ERROR_MAP = {
   'User already registered':     'Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.',
   'Password should be at least': 'Şifre çok kısa, en az 8 karakter olmalı.',
@@ -54,18 +50,33 @@ function parseError(error) {
   return match ? match[1] : 'Bir hata oluştu: ' + (error.message ?? 'Bilinmeyen hata')
 }
 
-// ─── Ana Register Fonksiyonu ──────────────────────────────────
+// ─── Facebook OAuth ───────────────────────────────────────────
+async function handleFacebookSignup() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'facebook',
+    options: { redirectTo: 'https://dm-asistan.vercel.app/onboarding.html' }
+  })
+  if (error) showError('Facebook ile kayıt başlatılamadı: ' + error.message)
+}
+
+// ─── Google OAuth ─────────────────────────────────────────────
+async function handleGoogleSignup() {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: 'https://dm-asistan.vercel.app/onboarding.html' }
+  })
+  if (error) showError('Google ile kayıt başlatılamadı: ' + error.message)
+}
+
 async function handleRegister(e) {
   e.preventDefault()
   clearMessages()
 
-  // Form değerlerini al (kayit.html ID'leriyle eşleşiyor)
   const email     = document.getElementById('registerEmail')?.value?.trim() ?? ''
   const password  = document.getElementById('passwordInput')?.value          ?? ''
   const firstName = document.getElementById('firstName')?.value?.trim()      ?? ''
   const lastName  = document.getElementById('lastName')?.value?.trim()       ?? ''
 
-  // ── Client-side validasyon ──
   if (!firstName) return showError('Ad alanı zorunludur.')
   if (!lastName)  return showError('Soyad alanı zorunludur.')
   if (!email) return showError('E-posta adresi zorunludur.')
@@ -73,10 +84,8 @@ async function handleRegister(e) {
   if (!password) return showError('Şifre zorunludur.')
   if (password.length < 8) return showError('Şifre en az 8 karakter olmalı.')
 
-  // ── Loading ──
   setLoading(true)
 
-  // ── Supabase Auth ──
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -89,25 +98,27 @@ async function handleRegister(e) {
 
   setLoading(false)
 
-  // ── Hata ──
   if (error) return showError(parseError(error))
 
-  // ── Başarı ──
   if (data.session) {
-    // E-posta doğrulama KAPALI → direkt giriş
     showSuccess('✅ Hesabınız oluşturuldu! Yönlendiriliyorsunuz...')
-    setTimeout(() => { window.location.href = 'onboarding.html' }, 1200)
+    setTimeout(() => { window.location.href = '/onboarding.html' }, 1200)
   } else {
-    // E-posta doğrulama AÇIK → mail gönderildi
     showSuccess('📧 Doğrulama e-postası gönderildi! Lütfen gelen kutunuzu kontrol edin.')
     form.reset()
-    document.getElementById('strengthWrap').style.display = 'none'
+    const strengthWrap = document.getElementById('strengthWrap')
+    if (strengthWrap) strengthWrap.style.display = 'none'
   }
 }
 
-// ─── Event Listener ───────────────────────────────────────────
 if (form) {
   form.addEventListener('submit', handleRegister)
-} else {
-  console.error('kayit.js: #registerForm bulunamadı!')
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.social-btn').forEach(btn => {
+    const text = btn.textContent.trim()
+    if (text.includes('Facebook')) btn.addEventListener('click', handleFacebookSignup)
+    else if (text.includes('Google')) btn.addEventListener('click', handleGoogleSignup)
+  })
+})

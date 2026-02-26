@@ -382,7 +382,7 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = '/DMAsistan/giris.html'
+      window.location.href = '/giris.html'
     })
   </script>
   <script type="module" src="mobile-nav.js"></script>
