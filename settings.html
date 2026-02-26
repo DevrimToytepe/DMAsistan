@@ -1,137 +1,788 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DMAsistan — Kullanıcı Ayarları</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="DMAsistan Kullanıcı Ayarları" />
+  <title>Ayarlar — DMAsistan</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <style>
-    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);--sidebar-w:248px;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;overflow-x:hidden;}
-    a{text-decoration:none;color:inherit;}
-    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.07;pointer-events:none;z-index:0;}
-    .blob-1{width:700px;height:700px;background:var(--purple);top:-300px;left:-100px;}
-    .blob-2{width:500px;height:500px;background:var(--pink);bottom:-200px;right:-50px;}
-    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-2);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;padding:0 12px 20px;}
-    .sidebar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;padding:20px 12px;margin-bottom:8px;border-bottom:1px solid var(--glass-border);}
-    .nav-section{font-family:'Sora',sans-serif;font-size:0.67rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:14px 12px 6px;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:1px;font-size:0.88rem;color:var(--gray);cursor:pointer;transition:var(--transition);text-decoration:none;}
-    .nav-item:hover{background:var(--glass);color:var(--white);}
-    .nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
-    .nav-item .nav-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0;}
-    .nav-badge{margin-left:auto;background:var(--gradient);border-radius:100px;font-size:0.65rem;font-weight:700;padding:2px 7px;color:white;}
-    .sidebar-divider{height:1px;background:var(--glass-border);margin:10px 0;}
-    .sidebar-bottom{margin-top:auto;}
-    .user-card{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;cursor:pointer;transition:var(--transition);text-decoration:none;}
-    .user-card:hover{background:rgba(255,255,255,0.06);}
-    .user-avatar-sq{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;overflow:hidden;}
-    .user-avatar-sq img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
-    .user-info .name{font-size:0.85rem;font-weight:600;}
-    .user-info .plan{font-size:0.72rem;color:var(--gray);margin-top:1px;}
-    .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;padding:4px;transition:color 0.2s;}
-    .logout-btn:hover{color:var(--pink);}
-    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
-    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--glass-border);background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;}
-    .topbar-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;}
-    .topbar-sub{font-size:0.78rem;color:var(--gray);margin-top:1px;}
-    .content{padding:28px 32px 60px;flex:1;}
+    :root {
+      --bg: #0A0E1A;
+      --bg-2: #0F1428;
+      --purple: #7C3AED;
+      --purple-light: #9B5CF6;
+      --pink: #F43F75;
+      --white: #FFFFFF;
+      --gray: #A1A1AA;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, #7C3AED, #F43F75);
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --sidebar-w: 248px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 700px;
+      height: 700px;
+      background: var(--purple);
+      top: -300px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--pink);
+      bottom: -200px;
+      right: -50px;
+    }
+
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--bg-2);
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+      padding: 0 12px 20px;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      padding: 20px 12px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-section {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.22);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 14px 12px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 1px;
+      font-size: 0.88rem;
+      color: var(--gray);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: var(--glass);
+      color: var(--white);
+    }
+
+    .nav-item.active {
+      background: rgba(124, 58, 237, 0.14);
+      color: var(--white);
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1rem;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--gradient);
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      color: white;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 10px 0;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 11px 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .user-card:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .user-avatar-sq {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .user-avatar-sq img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .user-info .name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .user-info .plan {
+      font-size: 0.72rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .logout-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: var(--pink);
+    }
+
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .topbar-sub {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .content {
+      padding: 28px 32px 60px;
+      flex: 1;
+    }
 
     /* SETTINGS LAYOUT */
-    .settings-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;}
-    .settings-nav{display:flex;flex-direction:column;gap:4px;position:sticky;top:90px;}
-    .settings-nav-item{padding:10px 14px;border-radius:10px;font-size:0.85rem;font-weight:500;color:var(--gray);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:10px;}
-    .settings-nav-item:hover{background:var(--glass);color:var(--white);}
-    .settings-nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
-    .settings-nav-icon{font-size:0.95rem;width:20px;text-align:center;}
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 24px;
+    }
+
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: sticky;
+      top: 90px;
+    }
+
+    .settings-nav-item {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gray);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .settings-nav-item:hover {
+      background: var(--glass);
+      color: var(--white);
+    }
+
+    .settings-nav-item.active {
+      background: rgba(124, 58, 237, 0.14);
+      color: var(--white);
+    }
+
+    .settings-nav-icon {
+      font-size: 0.95rem;
+      width: 20px;
+      text-align: center;
+    }
 
     /* PANELS */
-    .settings-panel{display:none;}
-    .settings-panel.active{display:block;}
-    .panel{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:18px;padding:28px;margin-bottom:20px;}
-    .panel-title{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;margin-bottom:6px;}
-    .panel-desc{font-size:0.8rem;color:var(--gray);margin-bottom:24px;}
-    .panel-divider{height:1px;background:var(--glass-border);margin:20px 0;}
+    .settings-panel {
+      display: none;
+    }
+
+    .settings-panel.active {
+      display: block;
+    }
+
+    .panel {
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .panel-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .panel-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 24px;
+    }
+
+    .panel-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 20px 0;
+    }
 
     /* AVATAR UPLOAD */
-    .avatar-section{display:flex;align-items:center;gap:24px;margin-bottom:28px;}
-    .avatar-preview{width:88px;height:88px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:800;flex-shrink:0;position:relative;overflow:hidden;cursor:pointer;border:3px solid rgba(124,58,237,0.4);}
-    .avatar-preview img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-    .avatar-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;font-size:1.2rem;border-radius:50%;}
-    .avatar-preview:hover .avatar-overlay{display:flex;}
-    .avatar-actions{display:flex;flex-direction:column;gap:10px;}
-    .avatar-actions p{font-size:0.8rem;color:var(--gray);}
-    .btn-upload{background:var(--gradient);border:none;border-radius:9px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.82rem;padding:9px 18px;cursor:pointer;transition:var(--transition);display:inline-block;}
-    .btn-upload:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.35);}
-    .btn-remove{background:none;border:1px solid rgba(244,63,117,0.3);border-radius:9px;color:var(--pink);font-size:0.8rem;padding:8px 16px;cursor:pointer;transition:var(--transition);}
-    .btn-remove:hover{background:rgba(244,63,117,0.1);}
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .avatar-preview {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border: 3px solid rgba(124, 58, 237, 0.4);
+    }
+
+    .avatar-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      border-radius: 50%;
+    }
+
+    .avatar-preview:hover .avatar-overlay {
+      display: flex;
+    }
+
+    .avatar-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .avatar-actions p {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .btn-upload {
+      background: var(--gradient);
+      border: none;
+      border-radius: 9px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 9px 18px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .btn-upload:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-remove {
+      background: none;
+      border: 1px solid rgba(244, 63, 117, 0.3);
+      border-radius: 9px;
+      color: var(--pink);
+      font-size: 0.8rem;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-remove:hover {
+      background: rgba(244, 63, 117, 0.1);
+    }
 
     /* FORM */
-    .form-row{margin-bottom:18px;}
-    .form-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-    .form-label{font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:8px;display:block;}
-    .form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:var(--white);font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:var(--transition);}
-    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple);background:rgba(124,58,237,0.06);}
-    .form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,0.25);}
-    .form-select{appearance:none;cursor:pointer;}
-    .form-select option{background:var(--bg-2);}
-    .form-textarea{height:100px;resize:vertical;}
-    .form-hint{font-size:0.75rem;color:var(--gray);margin-top:6px;}
+    .form-row {
+      margin-bottom: 18px;
+    }
+
+    .form-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--white);
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--purple);
+      background: rgba(124, 58, 237, 0.06);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .form-select option {
+      background: var(--bg-2);
+    }
+
+    .form-textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .form-hint {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 6px;
+    }
 
     /* SAVE BUTTON */
-    .btn-save{background:var(--gradient);border:none;border-radius:10px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;cursor:pointer;transition:var(--transition);}
-    .btn-save:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.35);}
-    .btn-ghost{background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;color:var(--gray);font-family:'Inter',sans-serif;font-size:0.88rem;padding:11px 22px;cursor:pointer;transition:var(--transition);}
-    .btn-ghost:hover{color:var(--white);}
-    .btn-row{display:flex;gap:12px;margin-top:8px;}
+    .btn-save {
+      background: var(--gradient);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 12px 28px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-save:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-ghost {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: var(--gray);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      padding: 11px 22px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-ghost:hover {
+      color: var(--white);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
 
     /* TOGGLE */
-    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-    .toggle-row:last-child{border-bottom:none;}
-    .toggle-info .toggle-label{font-size:0.87rem;font-weight:600;margin-bottom:3px;}
-    .toggle-info .toggle-desc{font-size:0.75rem;color:var(--gray);}
-    .toggle{width:44px;height:24px;background:var(--glass-border);border-radius:12px;cursor:pointer;position:relative;transition:var(--transition);flex-shrink:0;}
-    .toggle.on{background:var(--purple);}
-    .toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:var(--transition);}
-    .toggle.on::after{left:23px;}
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .toggle-row:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-info .toggle-label {
+      font-size: 0.87rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .toggle-info .toggle-desc {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      background: var(--glass-border);
+      border-radius: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .toggle.on {
+      background: var(--purple);
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: white;
+      transition: var(--transition);
+    }
+
+    .toggle.on::after {
+      left: 23px;
+    }
 
     /* PLAN CARD */
-    .plan-card{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(244,63,117,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;}
-    .plan-info .plan-name{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:4px;}
-    .plan-info .plan-desc{font-size:0.8rem;color:var(--gray);}
-    .plan-features{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
-    .plan-feature{font-size:0.72rem;padding:3px 9px;background:var(--glass);border:1px solid var(--glass-border);border-radius:100px;color:var(--gray);}
-    .btn-upgrade-big{background:var(--gradient);border:none;border-radius:10px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.85rem;padding:11px 22px;cursor:pointer;transition:var(--transition);white-space:nowrap;}
-    .btn-upgrade-big:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(124,58,237,0.35);}
+    .plan-card {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(244, 63, 117, 0.08));
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .plan-info .plan-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .plan-info .plan-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .plan-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .plan-feature {
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px;
+      color: var(--gray);
+    }
+
+    .btn-upgrade-big {
+      background: var(--gradient);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 11px 22px;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .btn-upgrade-big:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+    }
 
     /* DANGER ZONE */
-    .danger-zone{background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.2);border-radius:14px;padding:20px;}
-    .danger-title{font-family:'Sora',sans-serif;font-size:0.95rem;font-weight:700;color:var(--pink);margin-bottom:8px;}
-    .danger-desc{font-size:0.82rem;color:var(--gray);margin-bottom:16px;}
-    .btn-danger{background:none;border:1px solid rgba(244,63,94,0.4);border-radius:9px;color:var(--pink);font-size:0.85rem;font-weight:600;padding:10px 20px;cursor:pointer;transition:var(--transition);}
-    .btn-danger:hover{background:rgba(244,63,94,0.1);}
+    .danger-zone {
+      background: rgba(244, 63, 94, 0.06);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .danger-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--pink);
+      margin-bottom: 8px;
+    }
+
+    .danger-desc {
+      font-size: 0.82rem;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .btn-danger {
+      background: none;
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      border-radius: 9px;
+      color: var(--pink);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-danger:hover {
+      background: rgba(244, 63, 94, 0.1);
+    }
 
     /* PASSWORD STRENGTH */
-    .pass-strength{margin-top:8px;height:4px;border-radius:2px;background:var(--glass-border);overflow:hidden;}
-    .pass-strength-fill{height:100%;border-radius:2px;transition:width 0.3s,background 0.3s;}
+    .pass-strength {
+      margin-top: 8px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--glass-border);
+      overflow: hidden;
+    }
+
+    .pass-strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.3s, background 0.3s;
+    }
 
     /* HIDDEN INPUT */
-    #avatarFileInput{display:none;}
+    #avatarFileInput {
+      display: none;
+    }
 
     /* TOAST */
-    #toast{position:fixed;bottom:24px;right:24px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#22c55e;padding:12px 20px;border-radius:12px;font-size:0.85rem;font-weight:600;z-index:1000;transform:translateY(100px);transition:transform 0.3s;pointer-events:none;}
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 1000;
+      transform: translateY(100px);
+      transition: transform 0.3s;
+      pointer-events: none;
+    }
 
-    @media(max-width:1100px){.settings-layout{grid-template-columns:1fr;}.settings-nav{flex-direction:row;overflow-x:auto;position:static;}}
-    @media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:20px;}.form-2{grid-template-columns:1fr;}.avatar-section{flex-direction:column;align-items:flex-start;}}
+    @media(max-width:1100px) {
+      .settings-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .settings-nav {
+        flex-direction: row;
+        overflow-x: auto;
+        position: static;
+      }
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .form-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .avatar-section {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
 
   <aside class="sidebar">
     <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
     <div class="nav-section">Ana Menü</div>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
-    <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar <span class="nav-badge">12</span></a>
+    <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar <span
+        class="nav-badge">12</span></a>
     <a class="nav-item" href="automation.html"><span class="nav-icon">🤖</span> AI & Otomasyon</a>
     <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
     <a class="nav-item" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
@@ -145,7 +796,10 @@
     <div class="sidebar-bottom">
       <a class="user-card" href="settings.html">
         <div class="user-avatar-sq" id="sidebarAvatar">?</div>
-        <div class="user-info"><div class="name" id="sidebarName">Yükleniyor...</div><div class="plan">🆓 Ücretsiz Plan</div></div>
+        <div class="user-info">
+          <div class="name" id="sidebarName">Yükleniyor...</div>
+          <div class="plan">🆓 Ücretsiz Plan</div>
+        </div>
         <button class="logout-btn" id="logoutBtn">⏻</button>
       </a>
     </div>
@@ -153,18 +807,26 @@
 
   <div class="main">
     <div class="topbar">
-      <div><div class="topbar-title">Kullanıcı Ayarları</div><div class="topbar-sub">Hesabınızı özelleştirin</div></div>
+      <div>
+        <div class="topbar-title">Kullanıcı Ayarları</div>
+        <div class="topbar-sub">Hesabınızı özelleştirin</div>
+      </div>
     </div>
 
     <div class="content">
       <div class="settings-layout">
         <!-- SETTINGS NAV -->
         <div class="settings-nav">
-          <div class="settings-nav-item active" onclick="showSection('profile')"><span class="settings-nav-icon">👤</span> Profil</div>
-          <div class="settings-nav-item" onclick="showSection('account')"><span class="settings-nav-icon">🔐</span> Hesap & Güvenlik</div>
-          <div class="settings-nav-item" onclick="showSection('notifications')"><span class="settings-nav-icon">🔔</span> Bildirimler</div>
-          <div class="settings-nav-item" onclick="showSection('plan')"><span class="settings-nav-icon">💳</span> Plan & Fatura</div>
-          <div class="settings-nav-item" onclick="showSection('danger')"><span class="settings-nav-icon">⚠️</span> Tehlikeli Alan</div>
+          <div class="settings-nav-item active" onclick="showSection('profile')"><span
+              class="settings-nav-icon">👤</span> Profil</div>
+          <div class="settings-nav-item" onclick="showSection('account')"><span class="settings-nav-icon">🔐</span>
+            Hesap & Güvenlik</div>
+          <div class="settings-nav-item" onclick="showSection('notifications')"><span
+              class="settings-nav-icon">🔔</span> Bildirimler</div>
+          <div class="settings-nav-item" onclick="showSection('plan')"><span class="settings-nav-icon">💳</span> Plan &
+            Fatura</div>
+          <div class="settings-nav-item" onclick="showSection('danger')"><span class="settings-nav-icon">⚠️</span>
+            Tehlikeli Alan</div>
         </div>
 
         <div>
@@ -176,14 +838,17 @@
 
               <!-- AVATAR UPLOAD -->
               <div class="avatar-section">
-                <div class="avatar-preview" onclick="document.getElementById('avatarFileInput').click()" id="avatarPreview">
+                <div class="avatar-preview" onclick="document.getElementById('avatarFileInput').click()"
+                  id="avatarPreview">
                   <span id="avatarInitial">?</span>
                   <div class="avatar-overlay">📷</div>
                 </div>
                 <div class="avatar-actions">
                   <p>JPG, PNG veya GIF. Maksimum 5 MB.</p>
-                  <button class="btn-upload" onclick="document.getElementById('avatarFileInput').click()">📷 Fotoğraf Yükle</button>
-                  <button class="btn-remove" id="removeAvatarBtn" onclick="removeAvatar()" style="display:none">🗑 Fotoğrafı Kaldır</button>
+                  <button class="btn-upload" onclick="document.getElementById('avatarFileInput').click()">📷 Fotoğraf
+                    Yükle</button>
+                  <button class="btn-remove" id="removeAvatarBtn" onclick="removeAvatar()" style="display:none">🗑
+                    Fotoğrafı Kaldır</button>
                 </div>
               </div>
               <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarUpload(this)" />
@@ -205,7 +870,8 @@
               </div>
               <div class="form-row">
                 <label class="form-label">E-posta</label>
-                <input class="form-input" type="email" id="emailInput" placeholder="ornek@email.com" readonly style="opacity:0.7;cursor:not-allowed;" />
+                <input class="form-input" type="email" id="emailInput" placeholder="ornek@email.com" readonly
+                  style="opacity:0.7;cursor:not-allowed;" />
                 <div class="form-hint">E-posta değiştirmek için Hesap & Güvenlik bölümüne gidin</div>
               </div>
               <div class="form-row">
@@ -263,8 +929,11 @@
               </div>
               <div class="form-row">
                 <label class="form-label">Yeni Şifre</label>
-                <input class="form-input" type="password" id="newPassInput" placeholder="En az 8 karakter" oninput="checkPassStrength(this.value)" />
-                <div class="pass-strength"><div class="pass-strength-fill" id="passStrengthFill" style="width:0%"></div></div>
+                <input class="form-input" type="password" id="newPassInput" placeholder="En az 8 karakter"
+                  oninput="checkPassStrength(this.value)" />
+                <div class="pass-strength">
+                  <div class="pass-strength-fill" id="passStrengthFill" style="width:0%"></div>
+                </div>
               </div>
               <div class="form-row">
                 <label class="form-label">Yeni Şifre (Tekrar)</label>
@@ -277,11 +946,17 @@
               <div class="panel-title">İki Faktörlü Doğrulama</div>
               <div class="panel-desc">Hesabınızı ekstra güvenlik katmanıyla koruyun</div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">2FA - SMS Doğrulama</div><div class="toggle-desc">Giriş sırasında telefonunuza kod gönderilir</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">2FA - SMS Doğrulama</div>
+                  <div class="toggle-desc">Giriş sırasında telefonunuza kod gönderilir</div>
+                </div>
                 <div class="toggle" onclick="this.classList.toggle('on')"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">2FA - Authenticator Uygulaması</div><div class="toggle-desc">Google/Microsoft Authenticator ile doğrulama</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">2FA - Authenticator Uygulaması</div>
+                  <div class="toggle-desc">Google/Microsoft Authenticator ile doğrulama</div>
+                </div>
                 <div class="toggle" onclick="this.classList.toggle('on')"></div>
               </div>
             </div>
@@ -289,9 +964,13 @@
             <div class="panel">
               <div class="panel-title">Aktif Oturumlar</div>
               <div class="panel-desc">Hesabınıza bağlı cihazlar</div>
-              <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:10px;">
+              <div
+                style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:10px;">
                 <span style="font-size:1.4rem">💻</span>
-                <div style="flex:1"><div style="font-size:0.87rem;font-weight:600">Bu Cihaz</div><div style="font-size:0.75rem;color:var(--gray)">Chrome · Türkiye · Şu an aktif</div></div>
+                <div style="flex:1">
+                  <div style="font-size:0.87rem;font-weight:600">Bu Cihaz</div>
+                  <div style="font-size:0.75rem;color:var(--gray)">Chrome · Türkiye · Şu an aktif</div>
+                </div>
                 <span style="font-size:0.72rem;color:#22c55e;font-weight:700">● Aktif</span>
               </div>
             </div>
@@ -303,23 +982,38 @@
               <div class="panel-title">E-posta Bildirimleri</div>
               <div class="panel-desc">Hangi bildirimleri e-posta ile almak istediğinizi seçin</div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">Yeni Mesaj</div><div class="toggle-desc">Yeni DM geldiğinde bildir</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">Yeni Mesaj</div>
+                  <div class="toggle-desc">Yeni DM geldiğinde bildir</div>
+                </div>
                 <div class="toggle on" onclick="this.classList.toggle('on')"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">Haftalık Rapor</div><div class="toggle-desc">Her pazartesi özet rapor gönder</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">Haftalık Rapor</div>
+                  <div class="toggle-desc">Her pazartesi özet rapor gönder</div>
+                </div>
                 <div class="toggle on" onclick="this.classList.toggle('on')"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">Bağlantı Hatası</div><div class="toggle-desc">Platform bağlantısı kesilirse bildir</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">Bağlantı Hatası</div>
+                  <div class="toggle-desc">Platform bağlantısı kesilirse bildir</div>
+                </div>
                 <div class="toggle on" onclick="this.classList.toggle('on')"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">Ürün Güncellemeleri</div><div class="toggle-desc">Yeni özellikler ve güncellemeler</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">Ürün Güncellemeleri</div>
+                  <div class="toggle-desc">Yeni özellikler ve güncellemeler</div>
+                </div>
                 <div class="toggle" onclick="this.classList.toggle('on')"></div>
               </div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">Pazarlama</div><div class="toggle-desc">İpuçları ve teklifler</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">Pazarlama</div>
+                  <div class="toggle-desc">İpuçları ve teklifler</div>
+                </div>
                 <div class="toggle" onclick="this.classList.toggle('on')"></div>
               </div>
             </div>
@@ -328,7 +1022,10 @@
               <div class="panel-title">Tarayıcı Bildirimleri</div>
               <div class="panel-desc">Anlık masaüstü bildirimleri</div>
               <div class="toggle-row">
-                <div class="toggle-info"><div class="toggle-label">Anlık Mesaj Bildirimi</div><div class="toggle-desc">Gerçek zamanlı DM bildirimleri</div></div>
+                <div class="toggle-info">
+                  <div class="toggle-label">Anlık Mesaj Bildirimi</div>
+                  <div class="toggle-desc">Gerçek zamanlı DM bildirimleri</div>
+                </div>
                 <div class="toggle" onclick="this.classList.toggle('on')"></div>
               </div>
             </div>
@@ -352,16 +1049,23 @@
                 <button class="btn-upgrade-big" onclick="location.href='billing.html'">⚡ Pro'ya Geç</button>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
-                <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;text-align:center;">
-                  <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">0 / 500</div>
+                <div
+                  style="background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;text-align:center;">
+                  <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">0 / 500
+                  </div>
                   <div style="font-size:0.72rem;color:var(--gray)">Mesaj Kullanımı</div>
-                  <div style="height:4px;background:var(--glass-border);border-radius:2px;margin-top:8px;"><div style="width:0%;height:100%;background:var(--gradient);border-radius:2px;"></div></div>
+                  <div style="height:4px;background:var(--glass-border);border-radius:2px;margin-top:8px;">
+                    <div style="width:0%;height:100%;background:var(--gradient);border-radius:2px;"></div>
+                  </div>
                 </div>
-                <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;text-align:center;">
-                  <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">0 / 1</div>
+                <div
+                  style="background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;text-align:center;">
+                  <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">0 / 1
+                  </div>
                   <div style="font-size:0.72rem;color:var(--gray)">Platform</div>
                 </div>
-                <div style="background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;text-align:center;">
+                <div
+                  style="background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;text-align:center;">
                   <div style="font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px">14</div>
                   <div style="font-size:0.72rem;color:var(--gray)">Kalan Gün</div>
                 </div>
@@ -376,7 +1080,8 @@
               <div class="panel-desc">Bu işlemler geri alınamaz. Dikkatli olun.</div>
               <div class="danger-zone">
                 <div class="danger-title">Hesabı Sil</div>
-                <div class="danger-desc">Hesabınız ve tüm verileriniz kalıcı olarak silinecektir. Bu işlem geri alınamaz.</div>
+                <div class="danger-desc">Hesabınız ve tüm verileriniz kalıcı olarak silinecektir. Bu işlem geri
+                  alınamaz.</div>
                 <button class="btn-danger" onclick="confirmDelete()">🗑 Hesabımı Kalıcı Olarak Sil</button>
               </div>
             </div>
@@ -391,35 +1096,35 @@
   <script type="module">
     import { supabase } from './supabase.js'
     window._supabase = supabase
-    ;(async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) { window.location.replace('giris.html'); return }
-      const user = session.user
-      const name = user.user_metadata?.full_name || user.email.split('@')[0]
-      const parts = name.split(' ')
+      ; (async () => {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) { window.location.replace('giris.html'); return }
+        const user = session.user
+        const name = user.user_metadata?.full_name || user.email.split('@')[0]
+        const parts = name.split(' ')
 
-      // Sidebar
-      document.getElementById('sidebarName').textContent = name
+        // Sidebar
+        document.getElementById('sidebarName').textContent = name
 
-      // Form prefill
-      document.getElementById('emailInput').value = user.email || ''
-      if (parts.length >= 2) {
-        document.getElementById('firstName').value = parts[0]
-        document.getElementById('lastName').value = parts.slice(1).join(' ')
-      } else {
-        document.getElementById('firstName').value = name
-      }
+        // Form prefill
+        document.getElementById('emailInput').value = user.email || ''
+        if (parts.length >= 2) {
+          document.getElementById('firstName').value = parts[0]
+          document.getElementById('lastName').value = parts.slice(1).join(' ')
+        } else {
+          document.getElementById('firstName').value = name
+        }
 
-      // Avatar
-      const savedAvatar = localStorage.getItem('dma_avatar')
-      if (savedAvatar) {
-        setAvatarPreview(savedAvatar)
-      } else {
-        document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase()
-      }
+        // Avatar
+        const savedAvatar = localStorage.getItem('dma_avatar')
+        if (savedAvatar) {
+          setAvatarPreview(savedAvatar)
+        } else {
+          document.getElementById('avatarInitial').textContent = name.charAt(0).toUpperCase()
+        }
 
-      supabase.auth.onAuthStateChange((event) => { if (event === 'SIGNED_OUT') window.location.replace('giris.html') })
-    })()
+        supabase.auth.onAuthStateChange((event) => { if (event === 'SIGNED_OUT') window.location.replace('giris.html') })
+      })()
 
     document.getElementById('logoutBtn').addEventListener('click', async (e) => {
       e.preventDefault(); e.stopPropagation()
@@ -454,7 +1159,7 @@
       showToast('⏳ Yükleniyor...')
       try {
         const { data: { session } } = await window._supabase.auth.getSession()
-        const ext  = file.name.split('.').pop()
+        const ext = file.name.split('.').pop()
         const path = `${session.user.id}/avatar.${ext}`
         const { error: upErr } = await window._supabase.storage.from('avatars').upload(path, file, { upsert: true })
         if (upErr) throw upErr
@@ -485,10 +1190,10 @@
 
     async function saveProfile() {
       const firstName = document.getElementById('firstName').value.trim()
-      const lastName  = document.getElementById('lastName').value.trim()
-      const fullName  = (firstName + ' ' + lastName).trim()
-      const phone     = document.getElementById('phoneInput')?.value?.trim() || ''
-      const bio       = document.getElementById('bioInput')?.value?.trim() || ''
+      const lastName = document.getElementById('lastName').value.trim()
+      const fullName = (firstName + ' ' + lastName).trim()
+      const phone = document.getElementById('phoneInput')?.value?.trim() || ''
+      const bio = document.getElementById('bioInput')?.value?.trim() || ''
       if (!firstName) { showToast('Ad alanı zorunlu!', true); return }
 
       const btn = document.querySelector('[onclick="saveProfile()"]')
@@ -527,9 +1232,9 @@
         if (profile) {
           const parts = (profile.full_name || '').split(' ')
           document.getElementById('firstName').value = parts[0] || ''
-          document.getElementById('lastName').value  = parts.slice(1).join(' ') || ''
+          document.getElementById('lastName').value = parts.slice(1).join(' ') || ''
           if (profile.phone) document.getElementById('phoneInput').value = profile.phone
-          if (profile.bio)   document.getElementById('bioInput').value   = profile.bio
+          if (profile.bio) document.getElementById('bioInput').value = profile.bio
           if (profile.avatar_url) setAvatarPreview(profile.avatar_url)
         }
       } catch (e) { /* sessiz hata */ }
@@ -537,7 +1242,7 @@
 
     async function updatePassword() {
       const currentPass = document.getElementById('currentPassInput')?.value || ''
-      const newPass     = document.getElementById('newPassInput')?.value || ''
+      const newPass = document.getElementById('newPassInput')?.value || ''
       const confirmPass = document.getElementById('confirmPassInput')?.value || ''
       if (!currentPass) { showToast('Mevcut şifrenizi girin.', true); return }
       if (!newPass || newPass.length < 8) { showToast('Yeni şifre en az 8 karakter olmalı.', true); return }
@@ -576,7 +1281,7 @@
       if (/[0-9]/.test(val)) score++
       if (/[^A-Za-z0-9]/.test(val)) score++
       const fill = document.getElementById('passStrengthFill')
-      const colors = ['#ef4444','#f97316','#eab308','#22c55e']
+      const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e']
       fill.style.width = (score * 25) + '%'
       fill.style.background = colors[score - 1] || 'transparent'
     }
@@ -601,5 +1306,7 @@
     loadProfile()
   </script>
   <script type="module" src="mobile-nav.js"></script>
+  <script src="/sw-register.js"></script>
 </body>
+
 </html>

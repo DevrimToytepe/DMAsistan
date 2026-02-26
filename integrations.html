@@ -1,82 +1,534 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DMAsistan — Entegrasyonlar</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="DMAsistan Platform Entegrasyonları" />
+  <title>Entegrasyonlar — DMAsistan</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <style>
-    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);--sidebar-w:248px;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;overflow-x:hidden;}
-    a{text-decoration:none;color:inherit;}
-    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.07;pointer-events:none;z-index:0;}
-    .blob-1{width:700px;height:700px;background:var(--purple);top:-300px;left:-100px;}
-    .blob-2{width:500px;height:500px;background:var(--pink);bottom:-200px;right:-50px;}
-    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-2);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;padding:0 12px 20px;}
-    .sidebar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;padding:20px 12px;margin-bottom:8px;border-bottom:1px solid var(--glass-border);}
-    .nav-section{font-family:'Sora',sans-serif;font-size:0.67rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:14px 12px 6px;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:1px;font-size:0.88rem;color:var(--gray);cursor:pointer;transition:var(--transition);text-decoration:none;}
-    .nav-item:hover{background:var(--glass);color:var(--white);}
-    .nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
-    .nav-item .nav-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0;}
-    .sidebar-divider{height:1px;background:var(--glass-border);margin:10px 0;}
-    .sidebar-bottom{margin-top:auto;}
-    .user-card{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;text-decoration:none;}
-    .user-avatar-sq{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
-    .user-info .name{font-size:0.85rem;font-weight:600;}
-    .user-info .plan{font-size:0.72rem;color:var(--gray);margin-top:1px;}
-    .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;padding:4px;transition:color 0.2s;}
-    .logout-btn:hover{color:var(--pink);}
-    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
-    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--glass-border);background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;}
-    .topbar-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;}
-    .topbar-sub{font-size:0.78rem;color:var(--gray);margin-top:1px;}
-    .content{padding:28px 32px 40px;flex:1;}
+    :root {
+      --bg: #0A0E1A;
+      --bg-2: #0F1428;
+      --purple: #7C3AED;
+      --purple-light: #9B5CF6;
+      --pink: #F43F75;
+      --white: #FFFFFF;
+      --gray: #A1A1AA;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, #7C3AED, #F43F75);
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --sidebar-w: 248px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 700px;
+      height: 700px;
+      background: var(--purple);
+      top: -300px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--pink);
+      bottom: -200px;
+      right: -50px;
+    }
+
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--bg-2);
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+      padding: 0 12px 20px;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      padding: 20px 12px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-section {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.22);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 14px 12px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 1px;
+      font-size: 0.88rem;
+      color: var(--gray);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: var(--glass);
+      color: var(--white);
+    }
+
+    .nav-item.active {
+      background: rgba(124, 58, 237, 0.14);
+      color: var(--white);
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1rem;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 10px 0;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 11px 12px;
+      text-decoration: none;
+    }
+
+    .user-avatar-sq {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .user-info .name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .user-info .plan {
+      font-size: 0.72rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .logout-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: var(--pink);
+    }
+
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .topbar-sub {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .content {
+      padding: 28px 32px 40px;
+      flex: 1;
+    }
+
     /* CONNECTED BANNER */
-    .connected-banner{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.18);border-radius:14px;padding:14px 20px;display:flex;align-items:center;gap:10px;margin-bottom:24px;font-size:0.85rem;color:#22c55e;}
+    .connected-banner {
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.18);
+      border-radius: 14px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      font-size: 0.85rem;
+      color: #22c55e;
+    }
+
     /* PLATFORMS GRID */
-    .section-title{font-family:'Sora',sans-serif;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;}
-    .platforms-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:28px;}
-    .platform-card{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:18px;padding:24px;transition:var(--transition);position:relative;overflow:hidden;}
-    .platform-card:hover{border-color:rgba(124,58,237,0.25);transform:translateY(-2px);}
-    .platform-card.connected{border-color:rgba(34,197,94,0.25);}
-    .platform-card.soon{opacity:0.55;}
-    .platform-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-    .platform-icon-lg{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
-    .ig-bg{background:linear-gradient(135deg,rgba(225,48,108,0.2),rgba(249,97,45,0.2));}
-    .wa-bg{background:rgba(37,211,102,0.15);}
-    .fb-bg{background:rgba(24,119,242,0.15);}
-    .tt-bg{background:rgba(0,0,0,0.3);}
-    .platform-name-lg{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;}
-    .platform-handle{font-size:0.75rem;color:var(--gray);margin-top:1px;}
-    .platform-desc{font-size:0.82rem;color:rgba(255,255,255,0.5);line-height:1.55;margin-bottom:16px;}
-    .platform-stats{display:flex;gap:16px;margin-bottom:16px;}
-    .pstat{text-align:center;}
-    .pstat-val{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .pstat-lbl{font-size:0.68rem;color:var(--gray);}
-    .connected-badge{position:absolute;top:16px;right:16px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:100px;padding:3px 10px;font-size:0.7rem;font-weight:700;color:#22c55e;}
-    .soon-badge{position:absolute;top:16px;right:16px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:100px;padding:3px 10px;font-size:0.7rem;font-weight:700;color:#F59E0B;}
-    .btn-connect{width:100%;padding:11px;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:var(--transition);border:none;}
-    .btn-connect.idle{background:var(--gradient);color:white;}
-    .btn-connect.idle:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,0.35);}
-    .btn-connect.active-conn{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);color:#22c55e;cursor:default;}
-    .btn-connect.soon-btn{background:rgba(255,255,255,0.04);border:1px solid var(--glass-border);color:var(--gray);cursor:default;}
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .platforms-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .platform-card {
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 24px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .platform-card:hover {
+      border-color: rgba(124, 58, 237, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .platform-card.connected {
+      border-color: rgba(34, 197, 94, 0.25);
+    }
+
+    .platform-card.soon {
+      opacity: 0.55;
+    }
+
+    .platform-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .platform-icon-lg {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .ig-bg {
+      background: linear-gradient(135deg, rgba(225, 48, 108, 0.2), rgba(249, 97, 45, 0.2));
+    }
+
+    .wa-bg {
+      background: rgba(37, 211, 102, 0.15);
+    }
+
+    .fb-bg {
+      background: rgba(24, 119, 242, 0.15);
+    }
+
+    .tt-bg {
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .platform-name-lg {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .platform-handle {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .platform-desc {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .platform-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .pstat {
+      text-align: center;
+    }
+
+    .pstat-val {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .pstat-lbl {
+      font-size: 0.68rem;
+      color: var(--gray);
+    }
+
+    .connected-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #22c55e;
+    }
+
+    .soon-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      border-radius: 100px;
+      padding: 3px 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #F59E0B;
+    }
+
+    .btn-connect {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .btn-connect.idle {
+      background: var(--gradient);
+      color: white;
+    }
+
+    .btn-connect.idle:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-connect.active-conn {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      color: #22c55e;
+      cursor: default;
+    }
+
+    .btn-connect.soon-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      color: var(--gray);
+      cursor: default;
+    }
+
     /* OTHER INTEGRATIONS */
-    .other-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-    .other-card{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:14px;padding:18px;display:flex;align-items:center;gap:12px;transition:var(--transition);}
-    .other-card:hover{border-color:rgba(124,58,237,0.2);transform:translateY(-1px);}
-    .other-icon{font-size:1.5rem;flex-shrink:0;}
-    .other-name{font-size:0.85rem;font-weight:600;}
-    .other-desc{font-size:0.72rem;color:var(--gray);margin-top:1px;}
-    .other-status{margin-left:auto;font-size:0.7rem;padding:3px 8px;border-radius:100px;white-space:nowrap;}
-    .status-soon{background:rgba(245,158,11,0.1);color:#F59E0B;border:1px solid rgba(245,158,11,0.2);}
-    .status-available{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
-    @media(max-width:900px){.platforms-grid{grid-template-columns:1fr;}.other-grid{grid-template-columns:1fr 1fr;}}
-    @media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:20px;}.other-grid{grid-template-columns:1fr;}}
+    .other-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .other-card {
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: var(--transition);
+    }
+
+    .other-card:hover {
+      border-color: rgba(124, 58, 237, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .other-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .other-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .other-desc {
+      font-size: 0.72rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .other-status {
+      margin-left: auto;
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .status-soon {
+      background: rgba(245, 158, 11, 0.1);
+      color: #F59E0B;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .status-available {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    @media(max-width:900px) {
+      .platforms-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .other-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .other-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
   <aside class="sidebar">
     <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
     <div class="nav-section">Ana Menü</div>
@@ -94,7 +546,10 @@
     <div class="sidebar-bottom">
       <a class="user-card" href="settings.html">
         <div class="user-avatar-sq" id="sidebarAvatar">?</div>
-        <div class="user-info"><div class="name" id="sidebarName">Yükleniyor...</div><div class="plan">🆓 Ücretsiz Plan</div></div>
+        <div class="user-info">
+          <div class="name" id="sidebarName">Yükleniyor...</div>
+          <div class="plan">🆓 Ücretsiz Plan</div>
+        </div>
         <button class="logout-btn" id="logoutBtn">⏻</button>
       </a>
     </div>
@@ -102,7 +557,10 @@
 
   <div class="main">
     <div class="topbar">
-      <div><div class="topbar-title">Entegrasyonlar</div><div class="topbar-sub">Platform ve uygulama bağlantıları</div></div>
+      <div>
+        <div class="topbar-title">Entegrasyonlar</div>
+        <div class="topbar-sub">Platform ve uygulama bağlantıları</div>
+      </div>
     </div>
     <div class="content">
       <div id="connectedBanner" style="display:none;" class="connected-banner">
@@ -122,10 +580,17 @@
           </div>
           <div class="platform-desc">DM'leri otomatik yanıtla, potansiyel müşterileri yakala ve satışa dönüştür.</div>
           <div class="platform-stats" id="igStats" style="display:none;">
-            <div class="pstat"><div class="pstat-val" id="igFollowers">0</div><div class="pstat-lbl">Takipçi</div></div>
-            <div class="pstat"><div class="pstat-val" id="igMsgs">0</div><div class="pstat-lbl">Mesaj</div></div>
+            <div class="pstat">
+              <div class="pstat-val" id="igFollowers">0</div>
+              <div class="pstat-lbl">Takipçi</div>
+            </div>
+            <div class="pstat">
+              <div class="pstat-val" id="igMsgs">0</div>
+              <div class="pstat-lbl">Mesaj</div>
+            </div>
           </div>
-          <button class="btn-connect idle" id="btnInstagram" onclick="connectPlatform('instagram')">📸 Instagram Bağla</button>
+          <button class="btn-connect idle" id="btnInstagram" onclick="connectPlatform('instagram')">📸 Instagram
+            Bağla</button>
         </div>
         <!-- WHATSAPP -->
         <div class="platform-card" id="cardWhatsapp">
@@ -138,9 +603,13 @@
           </div>
           <div class="platform-desc">WhatsApp Business API ile gelen mesajlara anında AI yanıtı ver.</div>
           <div class="platform-stats" id="waStats" style="display:none;">
-            <div class="pstat"><div class="pstat-val" id="waMsgs">0</div><div class="pstat-lbl">Mesaj</div></div>
+            <div class="pstat">
+              <div class="pstat-val" id="waMsgs">0</div>
+              <div class="pstat-lbl">Mesaj</div>
+            </div>
           </div>
-          <button class="btn-connect idle" id="btnWhatsapp" onclick="connectPlatform('whatsapp')">💬 WhatsApp Bağla</button>
+          <button class="btn-connect idle" id="btnWhatsapp" onclick="connectPlatform('whatsapp')">💬 WhatsApp
+            Bağla</button>
         </div>
         <!-- FACEBOOK -->
         <div class="platform-card" id="cardFacebook">
@@ -152,7 +621,8 @@
             </div>
           </div>
           <div class="platform-desc">Facebook Messenger'dan gelen sorulara otomatik yanıt ver.</div>
-          <button class="btn-connect idle" id="btnFacebook" onclick="connectPlatform('facebook')">👍 Facebook Bağla</button>
+          <button class="btn-connect idle" id="btnFacebook" onclick="connectPlatform('facebook')">👍 Facebook
+            Bağla</button>
         </div>
         <!-- TIKTOK -->
         <div class="platform-card soon" id="cardTiktok">
@@ -171,70 +641,108 @@
 
       <div class="section-title">Diğer Entegrasyonlar</div>
       <div class="other-grid">
-        <div class="other-card"><div class="other-icon">📊</div><div><div class="other-name">Google Sheets</div><div class="other-desc">Kişileri otomatik dışa aktar</div></div><span class="other-status status-soon">Yakında</span></div>
-        <div class="other-card"><div class="other-icon">⚡</div><div><div class="other-name">Zapier</div><div class="other-desc">1000+ uygulama bağlantısı</div></div><span class="other-status status-soon">Yakında</span></div>
-        <div class="other-card"><div class="other-icon">🛒</div><div><div class="other-name">Shopify</div><div class="other-desc">Sipariş & ürün bilgisi</div></div><span class="other-status status-soon">Yakında</span></div>
-        <div class="other-card"><div class="other-icon">📧</div><div><div class="other-name">E-posta</div><div class="other-desc">SMTP ile bildirim gönder</div></div><span class="other-status status-available">Hazır</span></div>
-        <div class="other-card"><div class="other-icon">📱</div><div><div class="other-name">SMS</div><div class="other-desc">Türk GSM operatörleri</div></div><span class="other-status status-soon">Yakında</span></div>
-        <div class="other-card"><div class="other-icon">✈️</div><div><div class="other-name">Telegram</div><div class="other-desc">Bot entegrasyonu</div></div><span class="other-status status-soon">Yakında</span></div>
+        <div class="other-card">
+          <div class="other-icon">📊</div>
+          <div>
+            <div class="other-name">Google Sheets</div>
+            <div class="other-desc">Kişileri otomatik dışa aktar</div>
+          </div><span class="other-status status-soon">Yakında</span>
+        </div>
+        <div class="other-card">
+          <div class="other-icon">⚡</div>
+          <div>
+            <div class="other-name">Zapier</div>
+            <div class="other-desc">1000+ uygulama bağlantısı</div>
+          </div><span class="other-status status-soon">Yakında</span>
+        </div>
+        <div class="other-card">
+          <div class="other-icon">🛒</div>
+          <div>
+            <div class="other-name">Shopify</div>
+            <div class="other-desc">Sipariş & ürün bilgisi</div>
+          </div><span class="other-status status-soon">Yakında</span>
+        </div>
+        <div class="other-card">
+          <div class="other-icon">📧</div>
+          <div>
+            <div class="other-name">E-posta</div>
+            <div class="other-desc">SMTP ile bildirim gönder</div>
+          </div><span class="other-status status-available">Hazır</span>
+        </div>
+        <div class="other-card">
+          <div class="other-icon">📱</div>
+          <div>
+            <div class="other-name">SMS</div>
+            <div class="other-desc">Türk GSM operatörleri</div>
+          </div><span class="other-status status-soon">Yakında</span>
+        </div>
+        <div class="other-card">
+          <div class="other-icon">✈️</div>
+          <div>
+            <div class="other-name">Telegram</div>
+            <div class="other-desc">Bot entegrasyonu</div>
+          </div><span class="other-status status-soon">Yakında</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div id="toast" style="position:fixed;bottom:24px;right:24px;z-index:9999;padding:13px 20px;border-radius:12px;font-size:0.85rem;font-weight:600;transform:translateY(100px);transition:transform 0.3s;max-width:320px;border:1px solid;"></div>
+  <div id="toast"
+    style="position:fixed;bottom:24px;right:24px;z-index:9999;padding:13px 20px;border-radius:12px;font-size:0.85rem;font-weight:600;transform:translateY(100px);transition:transform 0.3s;max-width:320px;border:1px solid;">
+  </div>
 
   <script type="module">
     import { supabase } from './supabase.js'
 
-    ;(async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) { window.location.replace('giris.html'); return }
-      window._supabase = supabase
-      window._uid = session.user.id
-      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
-      document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
-      document.getElementById('sidebarName').textContent = name
+      ; (async () => {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) { window.location.replace('giris.html'); return }
+        window._supabase = supabase
+        window._uid = session.user.id
+        const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+        document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
+        document.getElementById('sidebarName').textContent = name
 
-      // Bağlı platformları getir
-      const { data: platforms } = await supabase.from('platforms').select('*').eq('user_id', session.user.id)
-      const connected = platforms || []
+        // Bağlı platformları getir
+        const { data: platforms } = await supabase.from('platforms').select('*').eq('user_id', session.user.id)
+        const connected = platforms || []
 
-      if (connected.length > 0) {
-        document.getElementById('connectedBanner').style.display = 'flex'
-        document.getElementById('connectedCount').textContent = connected.length
-      }
-
-      connected.forEach(p => {
-        const card = document.getElementById('card' + p.platform.charAt(0).toUpperCase() + p.platform.slice(1))
-        const btn = document.getElementById('btn' + p.platform.charAt(0).toUpperCase() + p.platform.slice(1))
-        const handle = document.getElementById(p.platform.slice(0,2) + 'Handle')
-
-        if (card) {
-          card.classList.add('connected')
-          const badge = document.createElement('div')
-          badge.className = 'connected-badge'
-          badge.textContent = '✓ Bağlı'
-          card.appendChild(badge)
+        if (connected.length > 0) {
+          document.getElementById('connectedBanner').style.display = 'flex'
+          document.getElementById('connectedCount').textContent = connected.length
         }
-        if (btn) {
-          btn.className = 'btn-connect'
-          btn.style.cssText = 'background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);color:#f87171;'
-          btn.textContent = '🔌 Bağlantıyı Kes'
-          btn.onclick = () => window.disconnectPlatform(p.platform)
-        }
-        if (handle) handle.textContent = p.account_name ? p.account_name : (p.account_handle ? '@' + p.account_handle : 'Bağlı')
-        if (p.platform === 'instagram') {
-          const igStats = document.getElementById('igStats')
-          if (igStats) { igStats.style.display = 'flex'; document.getElementById('igFollowers').textContent = p.platform_data?.followers_count || 0 }
-        }
-        if (p.platform === 'whatsapp') {
-          const waStats = document.getElementById('waStats')
-          if (waStats) waStats.style.display = 'flex'
-        }
-      })
 
-      supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
-    })()
+        connected.forEach(p => {
+          const card = document.getElementById('card' + p.platform.charAt(0).toUpperCase() + p.platform.slice(1))
+          const btn = document.getElementById('btn' + p.platform.charAt(0).toUpperCase() + p.platform.slice(1))
+          const handle = document.getElementById(p.platform.slice(0, 2) + 'Handle')
+
+          if (card) {
+            card.classList.add('connected')
+            const badge = document.createElement('div')
+            badge.className = 'connected-badge'
+            badge.textContent = '✓ Bağlı'
+            card.appendChild(badge)
+          }
+          if (btn) {
+            btn.className = 'btn-connect'
+            btn.style.cssText = 'background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);color:#f87171;'
+            btn.textContent = '🔌 Bağlantıyı Kes'
+            btn.onclick = () => window.disconnectPlatform(p.platform)
+          }
+          if (handle) handle.textContent = p.account_name ? p.account_name : (p.account_handle ? '@' + p.account_handle : 'Bağlı')
+          if (p.platform === 'instagram') {
+            const igStats = document.getElementById('igStats')
+            if (igStats) { igStats.style.display = 'flex'; document.getElementById('igFollowers').textContent = p.platform_data?.followers_count || 0 }
+          }
+          if (p.platform === 'whatsapp') {
+            const waStats = document.getElementById('waStats')
+            if (waStats) waStats.style.display = 'flex'
+          }
+        })
+
+        supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
+      })()
 
 
     // ── Meta OAuth Konfigürasyonu ──
@@ -265,7 +773,7 @@
       ].join(','),
     }
 
-    window.connectPlatform = async function(platform) {
+    window.connectPlatform = async function (platform) {
       const { data: { session } } = await window._supabase.auth.getSession()
       if (!session) { window.location.href = '/giris.html'; return }
       const csrf = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
@@ -286,7 +794,7 @@
       setTimeout(() => { window.location.href = oauthUrl }, 400)
     }
 
-    window.disconnectPlatform = async function(platform) {
+    window.disconnectPlatform = async function (platform) {
       if (!confirm(`${platform} bağlantısını kesmek istiyor musunuz?`)) return
       const { data: { session } } = await window._supabase.auth.getSession()
       await window._supabase.from('platforms').update({ is_active: false, access_token: null }).eq('user_id', session.user.id).eq('platform', platform)
@@ -311,5 +819,7 @@
     })
   </script>
   <script type="module" src="mobile-nav.js"></script>
+  <script src="/sw-register.js"></script>
 </body>
+
 </html>

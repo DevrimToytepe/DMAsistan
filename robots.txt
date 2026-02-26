@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /conversations
+Disallow: /contacts
+Disallow: /automation
+Disallow: /analytics
+Disallow: /integrations
+Disallow: /billing
+Disallow: /settings
+Disallow: /onboarding
+Disallow: /oauth-callback
+
+Sitemap: https://dm-asistan.vercel.app/sitemap.xml

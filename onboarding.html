@@ -1,92 +1,436 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DMAsistan — Başlayalım</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-x:hidden;}
-    h1,h2,h3{font-family:'Sora',sans-serif;}
-    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.1;pointer-events:none;z-index:0;}
-    .blob-1{width:600px;height:600px;background:var(--purple);top:-200px;left:-100px;}
-    .blob-2{width:400px;height:400px;background:var(--pink);bottom:-100px;right:-50px;}
 
-    .onboarding-card{
-      width:100%;max-width:600px;position:relative;z-index:1;
-      background:var(--bg-2);border:1px solid var(--glass-border);border-radius:28px;
-      padding:48px;box-shadow:0 40px 80px rgba(0,0,0,0.4);
-      animation:fadeUp 0.5s ease both;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="DMAsistan Kurulum Sihirbazı" />
+  <title>Başlayaлım — DMAsistan</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0A0E1A;
+      --bg-2: #0F1428;
+      --purple: #7C3AED;
+      --purple-light: #9B5CF6;
+      --pink: #F43F75;
+      --white: #FFFFFF;
+      --gray: #A1A1AA;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, #7C3AED, #F43F75);
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    @keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Sora', sans-serif;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--purple);
+      top: -200px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--pink);
+      bottom: -100px;
+      right: -50px;
+    }
+
+    .onboarding-card {
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+      z-index: 1;
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 48px;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     /* PROGRESS */
-    .progress-header{margin-bottom:40px;}
-    .progress-bar-wrap{height:4px;background:var(--glass-border);border-radius:2px;margin-bottom:12px;overflow:hidden;}
-    .progress-bar-fill{height:100%;background:var(--gradient);border-radius:2px;transition:width 0.5s ease;}
-    .progress-label{display:flex;justify-content:space-between;font-size:0.77rem;color:var(--gray);}
-    .progress-label .current{color:var(--purple-light);font-weight:600;}
+    .progress-header {
+      margin-bottom: 40px;
+    }
+
+    .progress-bar-wrap {
+      height: 4px;
+      background: var(--glass-border);
+      border-radius: 2px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.77rem;
+      color: var(--gray);
+    }
+
+    .progress-label .current {
+      color: var(--purple-light);
+      font-weight: 600;
+    }
 
     /* STEPS */
-    .step{display:none;animation:fadeUp 0.4s ease both;}
-    .step.active{display:block;}
+    .step {
+      display: none;
+      animation: fadeUp 0.4s ease both;
+    }
 
-    .step-icon{font-size:3rem;text-align:center;margin-bottom:16px;}
-    .step-title{font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:800;text-align:center;margin-bottom:8px;}
-    .step-desc{font-size:0.9rem;color:var(--gray);text-align:center;margin-bottom:32px;line-height:1.6;}
-    .gradient-text{background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .step.active {
+      display: block;
+    }
+
+    .step-icon {
+      font-size: 3rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .step-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      color: var(--gray);
+      text-align: center;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .gradient-text {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
     /* FORM */
-    .form-row{margin-bottom:18px;}
-    .form-label{font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:8px;display:block;}
-    .form-input,.form-select,.form-textarea{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:13px 16px;color:var(--white);font-size:0.9rem;font-family:'Inter',sans-serif;outline:none;transition:var(--transition);}
-    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple);background:rgba(124,58,237,0.06);}
-    .form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,0.25);}
-    .form-select{appearance:none;cursor:pointer;}
-    .form-select option{background:var(--bg-2);}
-    .form-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-    .form-textarea{height:100px;resize:vertical;}
+    .form-row {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 13px 16px;
+      color: var(--white);
+      font-size: 0.9rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--purple);
+      background: rgba(124, 58, 237, 0.06);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .form-select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .form-select option {
+      background: var(--bg-2);
+    }
+
+    .form-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-textarea {
+      height: 100px;
+      resize: vertical;
+    }
 
     /* PLATFORM CARDS */
-    .platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;}
-    .platform-option{background:var(--glass);border:2px solid var(--glass-border);border-radius:16px;padding:20px;cursor:pointer;text-align:center;transition:var(--transition);position:relative;}
-    .platform-option:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.06);}
-    .platform-option.selected{border-color:var(--purple);background:rgba(124,58,237,0.12);}
-    .platform-option.selected::after{content:'✓';position:absolute;top:10px;right:12px;width:20px;height:20px;background:var(--purple);border-radius:50%;font-size:0.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;color:white;}
-    .platform-option.soon{opacity:0.45;cursor:not-allowed;}
-    .platform-emoji{font-size:2rem;margin-bottom:8px;}
-    .platform-name{font-size:0.87rem;font-weight:600;}
-    .platform-soon-label{font-size:0.65rem;color:var(--gray);margin-top:3px;}
+    .platform-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .platform-option {
+      background: var(--glass);
+      border: 2px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .platform-option:hover {
+      border-color: rgba(124, 58, 237, 0.4);
+      background: rgba(124, 58, 237, 0.06);
+    }
+
+    .platform-option.selected {
+      border-color: var(--purple);
+      background: rgba(124, 58, 237, 0.12);
+    }
+
+    .platform-option.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 20px;
+      height: 20px;
+      background: var(--purple);
+      border-radius: 50%;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .platform-option.soon {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .platform-emoji {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .platform-name {
+      font-size: 0.87rem;
+      font-weight: 600;
+    }
+
+    .platform-soon-label {
+      font-size: 0.65rem;
+      color: var(--gray);
+      margin-top: 3px;
+    }
 
     /* AI TONE */
-    .tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-    .tone-option{background:var(--glass);border:2px solid var(--glass-border);border-radius:12px;padding:14px;cursor:pointer;transition:var(--transition);}
-    .tone-option:hover,.tone-option.selected{border-color:var(--purple);background:rgba(124,58,237,0.1);}
-    .tone-label{font-size:0.85rem;font-weight:600;margin-bottom:4px;}
-    .tone-desc{font-size:0.72rem;color:var(--gray);}
+    .tone-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tone-option {
+      background: var(--glass);
+      border: 2px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .tone-option:hover,
+    .tone-option.selected {
+      border-color: var(--purple);
+      background: rgba(124, 58, 237, 0.1);
+    }
+
+    .tone-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .tone-desc {
+      font-size: 0.72rem;
+      color: var(--gray);
+    }
 
     /* BUTTONS */
-    .btn-next{width:100%;padding:15px;background:var(--gradient);border:none;border-radius:14px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:var(--transition);margin-top:8px;}
-    .btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,0.4);}
-    .btn-next:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
-    .btn-skip{width:100%;padding:12px;background:none;border:1px solid var(--glass-border);border-radius:14px;color:var(--gray);font-size:0.87rem;cursor:pointer;transition:var(--transition);margin-top:8px;}
-    .btn-skip:hover{color:var(--white);border-color:rgba(255,255,255,0.2);}
+    .btn-next {
+      width: 100%;
+      padding: 15px;
+      background: var(--gradient);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+    }
+
+    .btn-next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(124, 58, 237, 0.4);
+    }
+
+    .btn-next:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-skip {
+      width: 100%;
+      padding: 12px;
+      background: none;
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      color: var(--gray);
+      font-size: 0.87rem;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+    }
+
+    .btn-skip:hover {
+      color: var(--white);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
 
     /* SUCCESS */
-    .success-confetti{text-align:center;padding:20px 0;}
-    .success-emoji{font-size:4rem;animation:bounce 0.6s ease infinite alternate;}
-    @keyframes bounce{from{transform:scale(1);}to{transform:scale(1.1);}}
+    .success-confetti {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .success-emoji {
+      font-size: 4rem;
+      animation: bounce 0.6s ease infinite alternate;
+    }
+
+    @keyframes bounce {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.1);
+      }
+    }
 
     /* SPINNER */
-    .spinner{display:none;width:22px;height:22px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto;}
-    @keyframes spin{to{transform:rotate(360deg);}}
-    .loading .btn-text{display:none;}
-    .loading .spinner{display:block;}
+    .spinner {
+      display: none;
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading .btn-text {
+      display: none;
+    }
+
+    .loading .spinner {
+      display: block;
+    }
   </style>
 </head>
+
 <body>
-  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
 
   <div class="onboarding-card">
     <!-- PROGRESS -->
@@ -177,7 +521,8 @@
       <p class="step-desc">Yapay zekanın nasıl konuşmasını istiyorsun?</p>
       <div class="form-row">
         <label class="form-label">Bot Adı</label>
-        <input class="form-input" type="text" id="ob_botName" placeholder="Örn: Asistan, Yardımcı, Satış Uzmanı..." value="DMAsistan" />
+        <input class="form-input" type="text" id="ob_botName" placeholder="Örn: Asistan, Yardımcı, Satış Uzmanı..."
+          value="DMAsistan" />
       </div>
       <div class="form-row">
         <label class="form-label">Konuşma Tonu</label>
@@ -202,7 +547,8 @@
       </div>
       <div class="form-row">
         <label class="form-label">Kendinden Kısaca Bahset (AI'ya öğret)</label>
-        <textarea class="form-textarea" id="ob_prompt" placeholder="Örn: Kadın giyim butik sahibiyim. Ürünlerim 200-800₺ arasında değişiyor. Kargo ücretsiz. İade garantisi var..."></textarea>
+        <textarea class="form-textarea" id="ob_prompt"
+          placeholder="Örn: Kadın giyim butik sahibiyim. Ürünlerim 200-800₺ arasında değişiyor. Kargo ücretsiz. İade garantisi var..."></textarea>
       </div>
       <button class="btn-next" onclick="goStep(4)">Devam Et →</button>
     </div>
@@ -214,7 +560,8 @@
       </div>
       <h2 class="step-title" style="margin-top:16px">Harika! Her şey <span class="gradient-text">hazır</span>!</h2>
       <p class="step-desc">DMAsistan hesabın kuruldu. Artık otomatik satışlara başlayabilirsin.</p>
-      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:16px;padding:20px;margin-bottom:24px;">
+      <div
+        style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:16px;padding:20px;margin-bottom:24px;">
         <div style="font-family:'Sora',sans-serif;font-weight:700;margin-bottom:12px;">✅ Tamamlananlar</div>
         <div id="completedList" style="display:flex;flex-direction:column;gap:8px;font-size:0.85rem;"></div>
       </div>
@@ -241,7 +588,7 @@
       document.getElementById('ob_lastName').value = name.split(' ').slice(1).join(' ') || ''
     }
 
-    window.finishOnboarding = async function() {
+    window.finishOnboarding = async function () {
       const btn = document.getElementById('dashboardBtn')
       btn.classList.add('loading')
       btn.disabled = true
@@ -251,25 +598,25 @@
         if (!user) { window.location.replace('giris.html'); return }
 
         const firstName = document.getElementById('ob_firstName')?.value?.trim() || ''
-        const lastName  = document.getElementById('ob_lastName')?.value?.trim()  || ''
-        const business  = document.getElementById('ob_business')?.value?.trim()  || ''
-        const industry  = document.getElementById('ob_industry')?.value          || 'E-ticaret'
-        const phone     = document.getElementById('ob_phone')?.value?.trim()     || ''
-        const botName   = document.getElementById('ob_botName')?.value?.trim()   || 'DMAsistan'
-        const prompt    = document.getElementById('ob_prompt')?.value?.trim()    || ''
-        const tone      = document.querySelector('.tone-option.selected')?.dataset.tone || 'Samimi ve Sıcak'
+        const lastName = document.getElementById('ob_lastName')?.value?.trim() || ''
+        const business = document.getElementById('ob_business')?.value?.trim() || ''
+        const industry = document.getElementById('ob_industry')?.value || 'E-ticaret'
+        const phone = document.getElementById('ob_phone')?.value?.trim() || ''
+        const botName = document.getElementById('ob_botName')?.value?.trim() || 'DMAsistan'
+        const prompt = document.getElementById('ob_prompt')?.value?.trim() || ''
+        const tone = document.querySelector('.tone-option.selected')?.dataset.tone || 'Samimi ve Sıcak'
 
         // Profili kaydet (upsert — zaten varsa güncelle)
         const { error: profileErr } = await supabase
           .from('profiles')
           .upsert({
-            id:                   user.id,
-            full_name:            `${firstName} ${lastName}`.trim(),
-            business_name:        business,
+            id: user.id,
+            full_name: `${firstName} ${lastName}`.trim(),
+            business_name: business,
             industry,
             phone,
             onboarding_completed: true,
-            updated_at:           new Date().toISOString()
+            updated_at: new Date().toISOString()
           }, { onConflict: 'id' })
         if (profileErr) throw profileErr
 
@@ -277,11 +624,11 @@
         const { error: aiErr } = await supabase
           .from('ai_settings')
           .upsert({
-            user_id:       user.id,
-            bot_name:      botName,
+            user_id: user.id,
+            bot_name: botName,
             tone,
             system_prompt: prompt,
-            updated_at:    new Date().toISOString()
+            updated_at: new Date().toISOString()
           }, { onConflict: 'user_id' })
         if (aiErr) throw aiErr
 
@@ -291,9 +638,9 @@
           const { error: stepErr } = await supabase
             .from('onboarding_steps')
             .upsert({
-              user_id:      user.id,
+              user_id: user.id,
               step,
-              completed:    true,
+              completed: true,
               completed_at: new Date().toISOString()
             }, { onConflict: 'user_id,step' })
           if (stepErr) throw stepErr
@@ -405,5 +752,7 @@
       el.classList.add('selected')
     }
   </script>
+  <script src="/sw-register.js"></script>
 </body>
+
 </html>

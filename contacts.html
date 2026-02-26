@@ -1,77 +1,509 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DMAsistan — Kişiler</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="DMAsistan Kişiler Paneli" />
+  <title>Kişiler — DMAsistan</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <style>
-    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,#7C3AED,#F43F75);--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);--sidebar-w:248px;}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;overflow-x:hidden;}
-    a{text-decoration:none;color:inherit;}
-    .blob{position:fixed;border-radius:50%;filter:blur(140px);opacity:0.07;pointer-events:none;z-index:0;}
-    .blob-1{width:700px;height:700px;background:var(--purple);top:-300px;left:-100px;}
-    .blob-2{width:500px;height:500px;background:var(--pink);bottom:-200px;right:-50px;}
-    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--bg-2);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;padding:0 12px 20px;}
-    .sidebar-logo{display:flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.3rem;padding:20px 12px;margin-bottom:8px;border-bottom:1px solid var(--glass-border);}
-    .nav-section{font-family:'Sora',sans-serif;font-size:0.67rem;font-weight:700;color:rgba(255,255,255,0.22);text-transform:uppercase;letter-spacing:0.12em;padding:14px 12px 6px;}
-    .nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin-bottom:1px;font-size:0.88rem;color:var(--gray);cursor:pointer;transition:var(--transition);text-decoration:none;}
-    .nav-item:hover{background:var(--glass);color:var(--white);}
-    .nav-item.active{background:rgba(124,58,237,0.14);color:var(--white);}
-    .nav-item .nav-icon{font-size:1rem;width:22px;text-align:center;flex-shrink:0;}
-    .sidebar-divider{height:1px;background:var(--glass-border);margin:10px 0;}
-    .sidebar-bottom{margin-top:auto;}
-    .user-card{display:flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:11px 12px;text-decoration:none;}
-    .user-avatar-sq{width:36px;height:36px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0;}
-    .user-info .name{font-size:0.85rem;font-weight:600;}
-    .user-info .plan{font-size:0.72rem;color:var(--gray);margin-top:1px;}
-    .logout-btn{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1.1rem;cursor:pointer;padding:4px;transition:color 0.2s;}
-    .logout-btn:hover{color:var(--pink);}
-    .main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative;z-index:1;}
-    .topbar{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--glass-border);background:rgba(10,14,26,0.85);backdrop-filter:blur(20px);position:sticky;top:0;z-index:50;}
-    .topbar-title{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;}
-    .topbar-sub{font-size:0.78rem;color:var(--gray);margin-top:1px;}
-    .topbar-right{display:flex;align-items:center;gap:10px;}
-    .content{padding:28px 32px 40px;flex:1;}
+    :root {
+      --bg: #0A0E1A;
+      --bg-2: #0F1428;
+      --purple: #7C3AED;
+      --purple-light: #9B5CF6;
+      --pink: #F43F75;
+      --white: #FFFFFF;
+      --gray: #A1A1AA;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, #7C3AED, #F43F75);
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      --sidebar-w: 248px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.07;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 700px;
+      height: 700px;
+      background: var(--purple);
+      top: -300px;
+      left: -100px;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--pink);
+      bottom: -200px;
+      right: -50px;
+    }
+
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--bg-2);
+      border-right: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+      padding: 0 12px 20px;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      padding: 20px 12px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .nav-section {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.22);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 14px 12px 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 1px;
+      font-size: 0.88rem;
+      color: var(--gray);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .nav-item:hover {
+      background: var(--glass);
+      color: var(--white);
+    }
+
+    .nav-item.active {
+      background: rgba(124, 58, 237, 0.14);
+      color: var(--white);
+    }
+
+    .nav-item .nav-icon {
+      font-size: 1rem;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 10px 0;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 11px 12px;
+      text-decoration: none;
+    }
+
+    .user-avatar-sq {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .user-info .name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .user-info .plan {
+      font-size: 0.72rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .logout-btn {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: var(--pink);
+    }
+
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .topbar-sub {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 1px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .content {
+      padding: 28px 32px 40px;
+      flex: 1;
+    }
+
     /* TOOLBAR */
-    .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
-    .search-input{padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:var(--white);font-family:'Inter',sans-serif;font-size:0.85rem;outline:none;transition:var(--transition);width:240px;}
-    .search-input::placeholder{color:rgba(255,255,255,0.25);}
-    .search-input:focus{border-color:var(--purple);}
-    .filter-btn{padding:8px 14px;border-radius:100px;font-size:0.78rem;font-weight:600;cursor:pointer;border:1px solid var(--glass-border);background:var(--glass);color:var(--gray);transition:var(--transition);}
-    .filter-btn.active{background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.35);color:var(--white);}
-    .ml-auto{margin-left:auto;}
-    .btn-primary{padding:9px 18px;background:var(--gradient);border:none;border-radius:10px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer;transition:var(--transition);}
-    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,0.35);}
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .search-input {
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition);
+      width: 240px;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    .search-input:focus {
+      border-color: var(--purple);
+    }
+
+    .filter-btn {
+      padding: 8px 14px;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--gray);
+      transition: var(--transition);
+    }
+
+    .filter-btn.active {
+      background: rgba(124, 58, 237, 0.15);
+      border-color: rgba(124, 58, 237, 0.35);
+      color: var(--white);
+    }
+
+    .ml-auto {
+      margin-left: auto;
+    }
+
+    .btn-primary {
+      padding: 9px 18px;
+      background: var(--gradient);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.35);
+    }
+
     /* TABLE */
-    .contacts-table{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:16px;overflow:hidden;}
-    .table-head{display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 1fr 0.6fr;gap:0;padding:12px 20px;border-bottom:1px solid var(--glass-border);font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;}
-    .contact-row{display:grid;grid-template-columns:2fr 1.2fr 1fr 1fr 1fr 0.6fr;gap:0;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center;transition:background 0.15s;cursor:pointer;}
-    .contact-row:hover{background:rgba(255,255,255,0.02);}
-    .contact-row:last-child{border-bottom:none;}
-    .contact-identity{display:flex;align-items:center;gap:10px;}
-    .contact-avatar{width:34px;height:34px;border-radius:10px;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.82rem;flex-shrink:0;}
-    .contact-name{font-size:0.85rem;font-weight:600;}
-    .contact-handle{font-size:0.72rem;color:var(--gray);}
-    .contact-cell{font-size:0.82rem;color:rgba(255,255,255,0.7);}
-    .status-badge{display:inline-flex;padding:3px 10px;border-radius:100px;font-size:0.7rem;font-weight:700;}
-    .status-hot{background:rgba(244,63,117,0.15);color:var(--pink);border:1px solid rgba(244,63,117,0.25);}
-    .status-warm{background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.25);}
-    .status-cold{background:rgba(255,255,255,0.06);color:var(--gray);border:1px solid var(--glass-border);}
-    .status-customer{background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
-    .platform-tag{font-size:0.75rem;color:var(--gray);}
-    .row-action{background:none;border:none;color:var(--gray);cursor:pointer;font-size:0.85rem;transition:color 0.2s;padding:4px 8px;border-radius:6px;}
-    .row-action:hover{color:var(--white);background:var(--glass);}
+    .contacts-table {
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .table-head {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 0.6fr;
+      gap: 0;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--glass-border);
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 0.6fr;
+      gap: 0;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      align-items: center;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+
+    .contact-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .contact-row:last-child {
+      border-bottom: none;
+    }
+
+    .contact-identity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .contact-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .contact-handle {
+      font-size: 0.72rem;
+      color: var(--gray);
+    }
+
+    .contact-cell {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .status-hot {
+      background: rgba(244, 63, 117, 0.15);
+      color: var(--pink);
+      border: 1px solid rgba(244, 63, 117, 0.25);
+    }
+
+    .status-warm {
+      background: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .status-cold {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--gray);
+      border: 1px solid var(--glass-border);
+    }
+
+    .status-customer {
+      background: rgba(34, 197, 94, 0.12);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .platform-tag {
+      font-size: 0.75rem;
+      color: var(--gray);
+    }
+
+    .row-action {
+      background: none;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .row-action:hover {
+      color: var(--white);
+      background: var(--glass);
+    }
+
     /* STATS */
-    .contact-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
-    .stat-mini{background:var(--bg-2);border:1px solid var(--glass-border);border-radius:12px;padding:16px 18px;}
-    .stat-mini-label{font-size:0.74rem;color:var(--gray);margin-bottom:4px;}
-    .stat-mini-val{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    @media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:20px;}.table-head,.contact-row{grid-template-columns:1fr 1fr;}.contact-stats{grid-template-columns:1fr 1fr;}}
+    .contact-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-mini {
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .stat-mini-label {
+      font-size: 0.74rem;
+      color: var(--gray);
+      margin-bottom: 4px;
+    }
+
+    .stat-mini-val {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .table-head,
+      .contact-row {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .contact-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
   </style>
 </head>
+
 <body>
-  <div class="blob blob-1"></div><div class="blob blob-2"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
   <aside class="sidebar">
     <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
     <div class="nav-section">Ana Menü</div>
@@ -89,7 +521,10 @@
     <div class="sidebar-bottom">
       <a class="user-card" href="settings.html">
         <div class="user-avatar-sq" id="sidebarAvatar">?</div>
-        <div class="user-info"><div class="name" id="sidebarName">Yükleniyor...</div><div class="plan">🆓 Ücretsiz Plan</div></div>
+        <div class="user-info">
+          <div class="name" id="sidebarName">Yükleniyor...</div>
+          <div class="plan">🆓 Ücretsiz Plan</div>
+        </div>
         <button class="logout-btn" id="logoutBtn">⏻</button>
       </a>
     </div>
@@ -97,14 +532,29 @@
 
   <div class="main">
     <div class="topbar">
-      <div><div class="topbar-title">Kişiler</div><div class="topbar-sub" id="contactCount">Yükleniyor...</div></div>
+      <div>
+        <div class="topbar-title">Kişiler</div>
+        <div class="topbar-sub" id="contactCount">Yükleniyor...</div>
+      </div>
     </div>
     <div class="content">
       <div class="contact-stats">
-        <div class="stat-mini"><div class="stat-mini-label">Toplam Kişi</div><div class="stat-mini-val" id="stTotal">0</div></div>
-        <div class="stat-mini"><div class="stat-mini-label">🔥 Sıcak Lead</div><div class="stat-mini-val" id="stHot">0</div></div>
-        <div class="stat-mini"><div class="stat-mini-label">✅ Müşteri</div><div class="stat-mini-val" id="stCustomer">0</div></div>
-        <div class="stat-mini"><div class="stat-mini-label">Bu Ay Eklenen</div><div class="stat-mini-val" id="stNew">0</div></div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Toplam Kişi</div>
+          <div class="stat-mini-val" id="stTotal">0</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">🔥 Sıcak Lead</div>
+          <div class="stat-mini-val" id="stHot">0</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">✅ Müşteri</div>
+          <div class="stat-mini-val" id="stCustomer">0</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Bu Ay Eklenen</div>
+          <div class="stat-mini-val" id="stNew">0</div>
+        </div>
       </div>
 
       <div class="toolbar">
@@ -120,7 +570,12 @@
 
       <div class="contacts-table">
         <div class="table-head">
-          <div>Kişi</div><div>Platform</div><div>Durum</div><div>Telefon</div><div>İlk Temas</div><div></div>
+          <div>Kişi</div>
+          <div>Platform</div>
+          <div>Durum</div>
+          <div>Telefon</div>
+          <div>İlk Temas</div>
+          <div></div>
         </div>
         <div id="contactsList">
           <div style="padding:40px;text-align:center;color:var(--gray);font-size:0.85rem;">
@@ -136,28 +591,28 @@
 
     let allContacts = []
 
-    ;(async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) { window.location.replace('giris.html'); return }
-      window._supabase = supabase
-      const uid = session.user.id
-      const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
-      document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
-      document.getElementById('sidebarName').textContent = name
+      ; (async () => {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) { window.location.replace('giris.html'); return }
+        window._supabase = supabase
+        const uid = session.user.id
+        const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+        document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
+        document.getElementById('sidebarName').textContent = name
 
-      const { data } = await supabase.from('contacts').select('*').eq('user_id', uid).order('created_at', { ascending: false })
-      allContacts = data || []
+        const { data } = await supabase.from('contacts').select('*').eq('user_id', uid).order('created_at', { ascending: false })
+        allContacts = data || []
 
-      const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      document.getElementById('stTotal').textContent = allContacts.length
-      document.getElementById('stHot').textContent = allContacts.filter(c => c.status === 'hot').length
-      document.getElementById('stCustomer').textContent = allContacts.filter(c => c.status === 'customer').length
-      document.getElementById('stNew').textContent = allContacts.filter(c => new Date(c.created_at) >= thisMonth).length
-      document.getElementById('contactCount').textContent = `${allContacts.length} kişi`
+        const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        document.getElementById('stTotal').textContent = allContacts.length
+        document.getElementById('stHot').textContent = allContacts.filter(c => c.status === 'hot').length
+        document.getElementById('stCustomer').textContent = allContacts.filter(c => c.status === 'customer').length
+        document.getElementById('stNew').textContent = allContacts.filter(c => new Date(c.created_at) >= thisMonth).length
+        document.getElementById('contactCount').textContent = `${allContacts.length} kişi`
 
-      renderContacts(allContacts)
-      supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
-    })()
+        renderContacts(allContacts)
+        supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
+      })()
 
     const STATUS_MAP = {
       hot: '<span class="status-badge status-hot">🔥 Sıcak</span>',
@@ -190,13 +645,13 @@
         </div>`).join('')
     }
 
-    window.filterContacts = function(status, btn) {
+    window.filterContacts = function (status, btn) {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
       btn.classList.add('active')
       renderContacts(status === 'all' ? allContacts : allContacts.filter(c => c.status === status))
     }
 
-    document.getElementById('searchInput').addEventListener('input', function() {
+    document.getElementById('searchInput').addEventListener('input', function () {
       const q = this.value.toLowerCase()
       renderContacts(allContacts.filter(c => (c.name || '').toLowerCase().includes(q) || (c.handle || '').toLowerCase().includes(q)))
     })
@@ -207,5 +662,7 @@
       window.location.href = '/giris.html'
     })
   </script>
+  <script src="/sw-register.js"></script>
 </body>
+
 </html>
