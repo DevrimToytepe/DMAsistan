@@ -279,7 +279,7 @@
         await completeOnboardingStep(user.id, 'ai_setup')
         await completeOnboardingStep(user.id, 'complete')
 
-        window.location.href = 'dashboard.html'
+        window.location.href = '/DMAsistan/dashboard.html'
       } catch (err) {
         console.error('Onboarding kayıt hatası:', err)
         btn.classList.remove('loading')
