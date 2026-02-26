@@ -1,5 +1,5 @@
 // supabase.js — CDN versiyonu (npm gerekmez)
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm'
 import CONFIG from './config.js'
 
 /**

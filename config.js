@@ -7,7 +7,7 @@
 const CONFIG = {
     // ── Supabase ──────────────────────────────────────────────────
     SUPABASE_URL: window.ENV?.SUPABASE_URL || 'https://ohoazazkrntbdqzmjonh.supabase.co',
-    SUPABASE_ANON_KEY: window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzQwNjA3OTM0LCJleHAiOjIwNTYxODM5MzR9.Lh_YFhR-Jp_vG9L5HwogF_gqP3QObEwrkA_LIPCa4qkY',
+    SUPABASE_ANON_KEY: window.ENV?.SUPABASE_ANON_KEY || 'sb_publishable_uAP81oO1N5qirA38auSn4w_0hLAh68n',
 
     // ── Uygulama ──────────────────────────────────────────────────
     APP_NAME: 'DMAsistan',
