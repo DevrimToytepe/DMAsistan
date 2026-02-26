@@ -281,7 +281,6 @@
             bot_name:      botName,
             tone,
             system_prompt: prompt,
-            is_active:     true,
             updated_at:    new Date().toISOString()
           }, { onConflict: 'user_id' })
         if (aiErr) throw aiErr
