@@ -267,7 +267,7 @@
 
     window.connectPlatform = async function(platform) {
       const { data: { session } } = await window._supabase.auth.getSession()
-      if (!session) { window.location.href = 'giris.html'; return }
+      if (!session) { window.location.href = '/DMAsistan/giris.html'; return }
       const csrf = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
       sessionStorage.setItem('oauth_csrf', csrf)
       const state = `${platform}|${session.user.id}|${csrf}`
@@ -307,7 +307,7 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = 'giris.html'
+      window.location.href = '/DMAsistan/giris.html'
     })
   </script>
   <script type="module" src="mobile-nav.js"></script>

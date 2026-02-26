@@ -107,7 +107,7 @@
       document.getElementById('successDesc').textContent =
         `${accountName ? `"${accountName}" hesabı` : 'Hesabınız'} DMAsistan'a bağlandı. Artık ${info.name} DM'lerini yönetebilir ve AI yanıt sistemini kullanabilirsiniz.`
       // 3 saniye sonra otomatik yönlendir
-      setTimeout(() => { window.location.href = 'integrations.html' }, 3500)
+      setTimeout(() => { window.location.href = '/DMAsistan/integrations.html' }, 3500)
     }
 
     function showError(msg) {

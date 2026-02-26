@@ -682,7 +682,7 @@
       const pc = e.target.closest('.page-close');
       if (pc) {
         // page-close may appear in standalone pages; if inside this page, navigate home
-        e.preventDefault(); e.stopPropagation(); window.location.href = 'index.html';
+        e.preventDefault(); e.stopPropagation(); window.location.href = '/DMAsistan/index.html';
         return;
       }
     }, { capture: true });
@@ -693,10 +693,10 @@
       if (!t) return;
       const txt = (t.textContent || '').trim();
       if (/^Ücretsiz/i.test(txt) || txt.includes('Ücretsiz Başla') || txt.includes('Ücretsiz Başlayın')) {
-        e.preventDefault(); window.location.href = 'kayit.html'; return;
+        e.preventDefault(); window.location.href = '/DMAsistan/kayit.html'; return;
       }
       if (/^Giriş/i.test(txt) || txt.includes('Giriş Yap')) {
-        e.preventDefault(); window.location.href = 'giris.html'; return;
+        e.preventDefault(); window.location.href = '/DMAsistan/giris.html'; return;
       }
     });
 

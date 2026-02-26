@@ -300,7 +300,7 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase?.auth.signOut()
-      window.location.href = 'giris.html'
+      window.location.href = '/DMAsistan/giris.html'
     })
 
     // Billing toggle
@@ -330,7 +330,7 @@
 
     async function startProCheckout() {
       const { data: { session } } = await _sb.auth.getSession()
-      if (!session) { window.location.href = 'giris.html'; return }
+      if (!session) { window.location.href = '/DMAsistan/giris.html'; return }
 
       const btn = document.getElementById('btnPro')
       if (!btn || btn.classList.contains('current')) return
