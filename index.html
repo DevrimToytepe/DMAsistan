@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DMAsistan — Her DM'i Anlaşmaya Çevir</title>
-  <meta name="description" content="DMAsistan, Instagram, Facebook, WhatsApp ve SMS konuşmalarınızı otomatikleştirerek satışlarınızı artırır. 7/24 otopilotta çalışın." />
+  <meta name="description"
+    content="DMAsistan, Instagram, Facebook, WhatsApp ve SMS konuşmalarınızı otomatikleştirerek satışlarınızı artırır. 7/24 otopilotta çalışın." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
     /* Modal close button styling + hover animation */
@@ -21,26 +25,29 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
       color: var(--white);
       font-size: 22px;
       cursor: pointer;
-      transition: transform 200ms cubic-bezier(.2,.9,.2,1), background 180ms, box-shadow 180ms;
+      transition: transform 200ms cubic-bezier(.2, .9, .2, 1), background 180ms, box-shadow 180ms;
       z-index: 99999 !important;
       pointer-events: auto;
     }
+
     .modal-close:hover {
       transform: rotate(90deg) scale(1.06);
-      background: linear-gradient(135deg, rgba(124,58,237,0.14), rgba(244,63,117,0.10));
-      box-shadow: 0 8px 30px rgba(124,58,237,0.12);
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.14), rgba(244, 63, 117, 0.10));
+      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.12);
     }
+
     .modal-close:focus {
       outline: none;
-      box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
     }
   </style>
 </head>
+
 <body>
 
   <!-- BACKGROUND BLOBS -->
@@ -63,8 +70,8 @@
         <li><a href="#faq">SSS</a></li>
       </ul>
       <div class="nav-actions">
-        <a href="giris.html" class="btn-ghost">Giriş Yap</a>
-        <a href="kayit.html" class="btn-gradient">Ücretsiz Başla</a>
+        <a href="/giris" class="btn-ghost">Giriş Yap</a>
+        <a href="/kayit" class="btn-gradient">Ücretsiz Başla</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Menü">
         <span></span><span></span><span></span>
@@ -80,8 +87,8 @@
         <li><a href="#faq" class="mobile-link">SSS</a></li>
       </ul>
       <div class="mobile-actions">
-        <a href="" class="btn-ghost w-full">Giriş Yap</a>
-        <a href="" class="btn-gradient w-full">Ücretsiz Başla</a>
+        <a href="/giris" class="btn-ghost w-full">Giriş Yap</a>
+        <a href="/kayit" class="btn-gradient w-full">Ücretsiz Başla</a>
       </div>
     </div>
   </nav>
@@ -100,7 +107,8 @@
           Kapat.
         </h1>
         <p class="hero-sub reveal">
-          DMAsistan, Instagram, Facebook ve WhatsApp konuşmalarınızı 1 numaralı satış kanalınıza dönüştürür — tamamen otopilotta.
+          DMAsistan, Instagram, Facebook ve WhatsApp konuşmalarınızı 1 numaralı satış kanalınıza dönüştürür — tamamen
+          otopilotta.
         </p>
         <div class="hero-ctas reveal">
           <a href="#" class="btn-gradient btn-large">Ücretsiz Başla →</a>
@@ -135,14 +143,16 @@
             </div>
             <div class="chat-messages" id="chatMessages">
               <div class="msg incoming">Merhaba! Ürününüz hakkında bilgi almak istiyorum 🙋</div>
-              <div class="msg outgoing typing-anim" style="animation-delay:1s">Harika! Hangi ürünle ilgileniyorsunuz? 😊</div>
+              <div class="msg outgoing typing-anim" style="animation-delay:1s">Harika! Hangi ürünle ilgileniyorsunuz? 😊
+              </div>
               <div class="quick-replies" style="animation-delay:1.5s">
                 <button class="qr-btn">👗 Giyim</button>
                 <button class="qr-btn">💻 Elektronik</button>
                 <button class="qr-btn">🏠 Ev & Yaşam</button>
               </div>
               <div class="msg incoming" style="animation-delay:2.5s">💻 Elektronik</div>
-              <div class="msg outgoing" style="animation-delay:3.5s">Mükemmel seçim! Size özel %20 indirim kodunuzu gönderiyorum 🎁</div>
+              <div class="msg outgoing" style="animation-delay:3.5s">Mükemmel seçim! Size özel %20 indirim kodunuzu
+                gönderiyorum 🎁</div>
               <div class="msg outgoing coupon" style="animation-delay:4.5s">
                 <span>Kod: DMATECH20</span>
                 <span class="coupon-badge">%20 İndirim</span>
@@ -306,7 +316,8 @@
       <div class="pricing-grid">
         <div class="price-card reveal">
           <div class="plan-name">Ücretsiz</div>
-          <div class="plan-price"><span class="currency">₺</span><span class="monthly-price">0</span><span class="period">/ay</span></div>
+          <div class="plan-price"><span class="currency">₺</span><span class="monthly-price">0</span><span
+              class="period">/ay</span></div>
           <ul class="plan-features">
             <li>✅ 500 kişiye kadar</li>
             <li>✅ 1 kanal</li>
@@ -314,12 +325,13 @@
             <li>❌ AI yanıtlar</li>
             <li>❌ Analitik</li>
           </ul>
-          <a href="kayit.html" class="btn-outline w-full">Ücretsiz Başla</a>
+          <a href="/kayit" class="btn-outline w-full">Ücretsiz Başla</a>
         </div>
         <div class="price-card featured reveal">
           <div class="popular-badge">En Popüler</div>
           <div class="plan-name">Pro</div>
-          <div class="plan-price"><span class="currency">₺</span><span class="monthly-price" data-monthly="799" data-yearly="559">799</span><span class="period">/ay</span></div>
+          <div class="plan-price"><span class="currency">₺</span><span class="monthly-price" data-monthly="799"
+              data-yearly="559">799</span><span class="period">/ay</span></div>
           <ul class="plan-features">
             <li>✅ Sınırsız kişi</li>
             <li>✅ 5 kanal</li>
@@ -327,11 +339,12 @@
             <li>✅ Gelişmiş analitik</li>
             <li>✅ Shopify entegrasyonu</li>
           </ul>
-          <a href="kayit.html" class="btn-gradient w-full">14 Gün Ücretsiz Dene</a>
+          <a href="/kayit" class="btn-gradient w-full">14 Gün Ücretsiz Dene</a>
         </div>
         <div class="price-card reveal">
           <div class="plan-name">Ajans</div>
-          <div class="plan-price"><span class="currency">₺</span><span class="monthly-price" data-monthly="2499" data-yearly="1749">2.499</span><span class="period">/ay</span></div>
+          <div class="plan-price"><span class="currency">₺</span><span class="monthly-price" data-monthly="2499"
+              data-yearly="1749">2.499</span><span class="period">/ay</span></div>
           <ul class="plan-features">
             <li>✅ Sınırsız her şey</li>
             <li>✅ Çoklu müşteri hesabı</li>
@@ -339,7 +352,7 @@
             <li>✅ Öncelikli destek</li>
             <li>✅ Özel entegrasyonlar</li>
           </ul>
-          <a href="kayit.html" class="btn-outline w-full">Satış Ekibi ile Konuş</a>
+          <a href="/kayit" class="btn-outline w-full">Satış Ekibi ile Konuş</a>
         </div>
       </div>
     </div>
@@ -353,18 +366,42 @@
         <h2>Sevdiğin Araçlarla<br /><span class="gradient-text">Sorunsuz Çalışır.</span></h2>
       </div>
       <div class="integrations-grid">
-        <div class="integration-item reveal"><div class="int-icon">📸</div><span>Instagram</span></div>
-        <div class="integration-item reveal"><div class="int-icon">👍</div><span>Facebook</span></div>
-        <div class="integration-item reveal"><div class="int-icon">💬</div><span>WhatsApp</span></div>
-        <div class="integration-item reveal"><div class="int-icon">🎵</div><span>TikTok</span></div>
-        <div class="integration-item reveal"><div class="int-icon">🛒</div><span>Shopify</span></div>
-        <div class="integration-item reveal"><div class="int-icon">🛍️</div><span>WooCommerce</span></div>
-        <div class="integration-item reveal"><div class="int-icon">⚡</div><span>Zapier</span></div>
-        <div class="integration-item reveal"><div class="int-icon">🔄</div><span>Make</span></div>
-        <div class="integration-item reveal"><div class="int-icon">📊</div><span>Google Sheets</span></div>
-        <div class="integration-item reveal"><div class="int-icon">📅</div><span>Calendly</span></div>
-        <div class="integration-item reveal"><div class="int-icon">💳</div><span>Stripe</span></div>
-        <div class="integration-item reveal"><div class="int-icon">🏢</div><span>HubSpot</span></div>
+        <div class="integration-item reveal">
+          <div class="int-icon">📸</div><span>Instagram</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">👍</div><span>Facebook</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">💬</div><span>WhatsApp</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">🎵</div><span>TikTok</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">🛒</div><span>Shopify</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">🛍️</div><span>WooCommerce</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">⚡</div><span>Zapier</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">🔄</div><span>Make</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">📊</div><span>Google Sheets</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">📅</div><span>Calendly</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">💳</div><span>Stripe</span>
+        </div>
+        <div class="integration-item reveal">
+          <div class="int-icon">🏢</div><span>HubSpot</span>
+        </div>
       </div>
     </div>
   </section>
@@ -383,7 +420,8 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Evet! DMAsistan, Instagram DM'leri, yorumlar ve hikaye yanıtları ile tam entegrasyon sunar. Meta'nın resmi API'sini kullanarak hesabınızı güvende tutar.</p>
+            <p>Evet! DMAsistan, Instagram DM'leri, yorumlar ve hikaye yanıtları ile tam entegrasyon sunar. Meta'nın
+              resmi API'sini kullanarak hesabınızı güvende tutar.</p>
           </div>
         </div>
         <div class="faq-item reveal">
@@ -392,7 +430,8 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Kesinlikle hayır. Sürükle-bırak akış oluşturucumuz herkes için tasarlandı. Karmaşık otomasyonlar oluşturmak için sıfır teknik bilgi gereklidir.</p>
+            <p>Kesinlikle hayır. Sürükle-bırak akış oluşturucumuz herkes için tasarlandı. Karmaşık otomasyonlar
+              oluşturmak için sıfır teknik bilgi gereklidir.</p>
           </div>
         </div>
         <div class="faq-item reveal">
@@ -401,7 +440,8 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Evet! Ücretsiz planımız 500 kişiye kadar, 1 kanala ve temel özelliklere erişim sağlar. Kredi kartı gerekmez, süre sınırı yoktur.</p>
+            <p>Evet! Ücretsiz planımız 500 kişiye kadar, 1 kanala ve temel özelliklere erişim sağlar. Kredi kartı
+              gerekmez, süre sınırı yoktur.</p>
           </div>
         </div>
         <div class="faq-item reveal">
@@ -410,7 +450,8 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>DMAsistan, tüm platformların resmi API'lerini kullanır ve hizmet şartlarına tam uyum içinde çalışır. Binlerce kullanıcı hiç sorun yaşamadan DMAsistan'ı kullanmaktadır.</p>
+            <p>DMAsistan, tüm platformların resmi API'lerini kullanır ve hizmet şartlarına tam uyum içinde çalışır.
+              Binlerce kullanıcı hiç sorun yaşamadan DMAsistan'ı kullanmaktadır.</p>
           </div>
         </div>
         <div class="faq-item reveal">
@@ -419,7 +460,8 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Kesinlikle! Ajans planımız birden fazla müşteri hesabı yönetimi, beyaz etiket seçeneği ve öncelikli destek içerir. Ajansınızı büyütmek için mükemmel.</p>
+            <p>Kesinlikle! Ajans planımız birden fazla müşteri hesabı yönetimi, beyaz etiket seçeneği ve öncelikli
+              destek içerir. Ajansınızı büyütmek için mükemmel.</p>
           </div>
         </div>
         <div class="faq-item reveal">
@@ -428,7 +470,8 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>DMAsistan, Türkçe dil desteği, yerel ödeme sistemleri entegrasyonu ve Türk işletmelerine özel özellikler sunar. Ayrıca daha uygun fiyatlı ve daha sezgisel bir arayüze sahiptir.</p>
+            <p>DMAsistan, Türkçe dil desteği, yerel ödeme sistemleri entegrasyonu ve Türk işletmelerine özel özellikler
+              sunar. Ayrıca daha uygun fiyatlı ve daha sezgisel bir arayüze sahiptir.</p>
           </div>
         </div>
       </div>
@@ -500,16 +543,23 @@
   </footer>
 
   <!-- REGISTER & LOGIN MODALS (entegre edilmiş kayit.html & giris.html formları) -->
-  <div id="modalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:60;backdrop-filter:blur(2px);"></div>
+  <div id="modalOverlay"
+    style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:60;backdrop-filter:blur(2px);"></div>
 
-  <div id="registerModal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;z-index:70;padding:24px;">
-    <button class="modal-close" aria-label="Kapat" style="position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--white);font-size:20px;display:flex;align-items:center;justify-content:center;z-index:80;">×</button>
-    <div style="max-width:1000px;width:100%;background:var(--bg-2);border:1px solid rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;display:flex;flex-direction:row;">
+  <div id="registerModal"
+    style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;z-index:70;padding:24px;">
+    <button class="modal-close" aria-label="Kapat"
+      style="position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--white);font-size:20px;display:flex;align-items:center;justify-content:center;z-index:80;">×</button>
+    <div
+      style="max-width:1000px;width:100%;background:var(--bg-2);border:1px solid rgba(255,255,255,0.06);border-radius:20px;overflow:hidden;display:flex;flex-direction:row;">
       <!-- LEFT (summary) -->
-      <div style="flex:1;padding:40px;background:linear-gradient(145deg, rgba(124,58,237,0.08), rgba(244,63,117,0.04));">
+      <div
+        style="flex:1;padding:40px;background:linear-gradient(145deg, rgba(124,58,237,0.08), rgba(244,63,117,0.04));">
         <div style="font-weight:700;font-size:1.2rem;margin-bottom:12px;">14 günlük ücretsiz deneme</div>
-        <h3 style="font-size:1.6rem;margin-bottom:12px;">DM'lerin seni için <span class="gradient-text">para kazansın.</span></h3>
-        <p style="color:var(--gray);">DMAsistan ile Instagram, Facebook ve WhatsApp mesajlarını otopilota al. Kredi kartı gerekmez.</p>
+        <h3 style="font-size:1.6rem;margin-bottom:12px;">DM'lerin seni için <span class="gradient-text">para
+            kazansın.</span></h3>
+        <p style="color:var(--gray);">DMAsistan ile Instagram, Facebook ve WhatsApp mesajlarını otopilota al. Kredi
+          kartı gerekmez.</p>
       </div>
       <!-- RIGHT (form) -->
       <div style="flex:1;padding:40px;">
@@ -558,9 +608,13 @@
           <div class="form-group">
             <label>Şifre</label>
             <div class="input-wrap">
-              <input type="password" id="passwordInput" placeholder="Min. 8 karakter" required autocomplete="new-password" />
+              <input type="password" id="passwordInput" placeholder="Min. 8 karakter" required
+                autocomplete="new-password" />
               <button type="button" class="pass-toggle" id="registerPassToggle">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
               </button>
             </div>
             <div class="password-strength" id="strengthWrap">
@@ -591,9 +645,12 @@
     </div>
   </div>
 
-  <div id="loginModal" style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;z-index:70;padding:24px;">
-    <button class="modal-close" aria-label="Kapat" style="position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--white);font-size:20px;display:flex;align-items:center;justify-content:center;z-index:80;">×</button>
-    <div style="max-width:480px;width:100%;background:var(--bg-2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:36px;">
+  <div id="loginModal"
+    style="display:none;position:fixed;inset:0;align-items:center;justify-content:center;z-index:70;padding:24px;">
+    <button class="modal-close" aria-label="Kapat"
+      style="position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:var(--white);font-size:20px;display:flex;align-items:center;justify-content:center;z-index:80;">×</button>
+    <div
+      style="max-width:480px;width:100%;background:var(--bg-2);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:36px;">
       <div class="card-logo">
         <div class="logo-mark">⚡</div>
         <h2>Tekrar <span class="gradient-text">Hoş Geldin</span></h2>
@@ -624,7 +681,10 @@
           <div class="input-wrap">
             <input type="password" id="loginPassInput" placeholder="Şifreni gir" autocomplete="current-password" />
             <button type="button" class="pass-toggle" id="loginPassToggle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
             </button>
           </div>
           <div class="error-msg" id="loginPassError">Şifre en az 6 karakter olmalı.</div>
@@ -658,7 +718,7 @@
     function closeModals() {
       const overlay = document.getElementById('modalOverlay');
       if (overlay) overlay.style.display = 'none';
-      ['registerModal','loginModal'].forEach(id => {
+      ['registerModal', 'loginModal'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.style.display = 'none';
       });
@@ -675,7 +735,7 @@
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModals(); });
 
     // Robust delegated handler: ensure modal/page close elements always respond
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       const mc = e.target.closest('.modal-close');
       if (mc) { e.preventDefault(); e.stopPropagation(); closeModals(); return; }
 
@@ -687,21 +747,10 @@
       }
     }, { capture: true });
 
-    // Buton yönlendirmeleri
-    document.addEventListener('click', function(e) {
-      const t = e.target.closest('a,button');
-      if (!t) return;
-      const txt = (t.textContent || '').trim();
-      if (/^Ücretsiz/i.test(txt) || txt.includes('Ücretsiz Başla') || txt.includes('Ücretsiz Başlayın')) {
-        e.preventDefault(); window.location.href = '/DMAsistan/kayit.html'; return;
-      }
-      if (/^Giriş/i.test(txt) || txt.includes('Giriş Yap')) {
-        e.preventDefault(); window.location.href = '/DMAsistan/giris.html'; return;
-      }
-    });
+    // Buton yönlendirmeleri — artık <a> tagleri doğrudan yönlendiriyor, bu blok sadece dinamik butonlar için
 
     // REGISTER form behavior (from kayit.html)
-    (function(){
+    (function () {
       const passInput = document.getElementById('passwordInput');
       const passToggle = document.getElementById('registerPassToggle');
       if (passToggle && passInput) {
@@ -724,58 +773,59 @@
           if (/[0-9]/.test(val)) score++;
           if (/[^A-Za-z0-9]/.test(val)) score++;
 
-          const bars = [document.getElementById('bar1'),document.getElementById('bar2'),document.getElementById('bar3'),document.getElementById('bar4')];
-          const colors = ['#ef4444','#f97316','#eab308','#22c55e'];
-          const labels = ['Çok Zayıf','Zayıf','Orta','Güçlü'];
+          const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3'), document.getElementById('bar4')];
+          const colors = ['#ef4444', '#f97316', '#eab308', '#22c55e'];
+          const labels = ['Çok Zayıf', 'Zayıf', 'Orta', 'Güçlü'];
 
-          bars.forEach((bar,i)=>{
+          bars.forEach((bar, i) => {
             if (!bar) return;
-            bar.style.background = i < score ? colors[Math.max(0,score-1)] : 'rgba(255,255,255,0.1)';
+            bar.style.background = i < score ? colors[Math.max(0, score - 1)] : 'rgba(255,255,255,0.1)';
           });
           const txt = document.getElementById('strengthText');
-          if (txt) { txt.textContent = labels[score-1] || 'Çok Zayıf'; txt.style.color = colors[score-1] || '#ef4444'; }
+          if (txt) { txt.textContent = labels[score - 1] || 'Çok Zayıf'; txt.style.color = colors[score - 1] || '#ef4444'; }
         });
       }
 
       const regForm = document.getElementById('registerForm');
       if (regForm) {
-        regForm.addEventListener('submit', (e)=>{
+        regForm.addEventListener('submit', (e) => {
           e.preventDefault();
           const btn = document.getElementById('registerSubmitBtn');
-          if (btn) { btn.classList.add('loading'); setTimeout(()=>{ btn.classList.remove('loading'); alert('Hesabınız oluşturuldu! Hoş geldiniz 🎉'); closeModals(); },2000); }
+          if (btn) { btn.classList.add('loading'); setTimeout(() => { btn.classList.remove('loading'); alert('Hesabınız oluşturuldu! Hoş geldiniz 🎉'); closeModals(); }, 2000); }
         });
       }
     })();
 
     // LOGIN form behavior (from giris.html, ids adjusted)
-    (function(){
+    (function () {
       const loginPassToggle = document.getElementById('loginPassToggle');
       if (loginPassToggle) {
-        loginPassToggle.addEventListener('click', ()=>{
+        loginPassToggle.addEventListener('click', () => {
           const inp = document.getElementById('loginPassInput'); if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
         });
       }
 
       const loginForm = document.getElementById('loginForm');
       if (loginForm) {
-        loginForm.addEventListener('submit', (e)=>{
+        loginForm.addEventListener('submit', (e) => {
           e.preventDefault();
           const email = document.getElementById('loginEmailInput');
-          const pass  = document.getElementById('loginPassInput');
+          const pass = document.getElementById('loginPassInput');
           const emailGroup = document.getElementById('loginEmailGroup');
-          const passGroup  = document.getElementById('loginPassGroup');
+          const passGroup = document.getElementById('loginPassGroup');
           let valid = true;
           if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { emailGroup.classList.add('error'); valid = false; } else { emailGroup.classList.remove('error'); }
           if (!pass || !pass.value || pass.value.length < 6) { passGroup.classList.add('error'); valid = false; } else { passGroup.classList.remove('error'); }
           if (!valid) return;
-          const btn = document.getElementById('loginSubmitBtn'); if (btn) { btn.classList.add('loading'); setTimeout(()=>{ btn.classList.remove('loading'); alert('Giriş başarılı! Hoş geldiniz 👋'); closeModals(); },1800); }
+          const btn = document.getElementById('loginSubmitBtn'); if (btn) { btn.classList.add('loading'); setTimeout(() => { btn.classList.remove('loading'); alert('Giriş başarılı! Hoş geldiniz 👋'); closeModals(); }, 1800); }
         });
 
-        ['loginEmailInput','loginPassInput'].forEach(id => {
-          const el = document.getElementById(id); if (!el) return; el.addEventListener('input', ()=>{ const g = document.getElementById(id==='loginEmailInput'? 'loginEmailGroup' : 'loginPassGroup'); if (g) g.classList.remove('error'); });
+        ['loginEmailInput', 'loginPassInput'].forEach(id => {
+          const el = document.getElementById(id); if (!el) return; el.addEventListener('input', () => { const g = document.getElementById(id === 'loginEmailInput' ? 'loginEmailGroup' : 'loginPassGroup'); if (g) g.classList.remove('error'); });
         });
       }
     })();
   </script>
 </body>
+
 </html>
