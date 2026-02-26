@@ -107,7 +107,11 @@ async function handleLogin(e) {
       .eq('step', 'complete')
       .single()
 
-    window.location.href = steps?.completed ? '/dashboard.html' : '/onboarding.html'
+    if (steps?.completed) {
+      window.location.href = 'dashboard.html'
+    } else {
+      window.location.href = 'onboarding.html'
+    }
   }
 }
 
