@@ -468,5 +468,5 @@ export async function getActiveSessions() {
 export async function signOutAllDevices() {
   const { error } = await supabase.auth.signOut({ scope: 'global' })
   if (error) throw error
-  window.location.replace('/giris.html')
+  window.location.replace('giris.html')
 }

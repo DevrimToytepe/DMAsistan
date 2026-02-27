@@ -131,7 +131,7 @@ async function handleLogin(e) {
       .eq('step', 'complete')
       .single()
 
-    window.location.href = steps?.completed ? 'dashboard' : 'onboarding'
+    window.location.href = steps?.completed ? 'dashboard.html' : 'onboarding.html'
   }
 }
 
@@ -140,7 +140,7 @@ if (form) form.addEventListener('submit', handleLogin)
 document.addEventListener('DOMContentLoaded', () => {
   // Login sayfasında session var mı kontrol et
   supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) window.location.replace('/dashboard')
+    if (session) window.location.replace('dashboard.html')
   })
 
   document.querySelectorAll('.social-btn').forEach(btn => {

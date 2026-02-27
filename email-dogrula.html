@@ -1,35 +1,216 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DMAsistan — E-posta Doğrulama</title>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <style>
-    :root{--bg:#0A0E1A;--bg-2:#0F1428;--purple:#7C3AED;--purple-light:#9B5CF6;--pink:#F43F75;--white:#FFFFFF;--gray:#A1A1AA;--glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--gradient:linear-gradient(135deg,var(--purple),var(--pink));--transition:all 0.35s cubic-bezier(0.4,0,0.2,1);}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow-x:hidden;}
-    .blob{position:fixed;border-radius:50%;filter:blur(120px);opacity:0.18;pointer-events:none;z-index:0;animation:blobFloat 12s ease-in-out infinite alternate;}
-    .blob-1{width:500px;height:500px;background:var(--pink);top:-150px;right:-150px;animation-duration:13s;}
-    .blob-2{width:400px;height:400px;background:var(--purple);bottom:0;left:-100px;animation-duration:10s;}
-    @keyframes blobFloat{from{transform:translate(0,0) scale(1);}to{transform:translate(25px,20px) scale(1.07);}}
-    .card{position:relative;z-index:1;width:100%;max-width:440px;background:var(--bg-2);border:1px solid var(--glass-border);border-radius:28px;padding:52px 44px;text-align:center;box-shadow:0 0 80px rgba(124,58,237,0.12),0 32px 64px rgba(0,0,0,0.4);animation:fadeUp 0.55s cubic-bezier(0.4,0,0.2,1) both;margin:20px;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-    .icon-circle{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 20px;}
-    .icon-loading{background:rgba(124,58,237,0.15);border:2px solid rgba(124,58,237,0.3);animation:pulse 1.5s ease-in-out infinite;}
-    .icon-success{background:rgba(34,197,94,0.12);border:2px solid rgba(34,197,94,0.25);}
-    .icon-error{background:rgba(244,63,94,0.12);border:2px solid rgba(244,63,94,0.25);}
-    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
-    h2{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:10px;}
-    p{color:var(--gray);font-size:0.88rem;line-height:1.6;margin-bottom:24px;}
-    .btn{display:inline-block;padding:12px 28px;background:var(--gradient);border-radius:12px;color:white;font-family:'Sora',sans-serif;font-weight:700;font-size:0.9rem;text-decoration:none;transition:var(--transition);}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,58,237,0.35);}
-    .btn-ghost{background:rgba(255,255,255,0.05);border:1px solid var(--glass-border);color:var(--gray);margin-top:10px;display:block;}
-    .countdown{font-size:0.78rem;color:var(--gray);margin-top:14px;}
-    .countdown span{color:var(--purple-light);font-weight:600;}
-    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:8px;}
+    :root {
+      --bg: #0A0E1A;
+      --bg-2: #0F1428;
+      --purple: #7C3AED;
+      --purple-light: #9B5CF6;
+      --pink: #F43F75;
+      --white: #FFFFFF;
+      --gray: #A1A1AA;
+      --glass: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --gradient: linear-gradient(135deg, var(--purple), var(--pink));
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+      animation: blobFloat 12s ease-in-out infinite alternate;
+    }
+
+    .blob-1 {
+      width: 500px;
+      height: 500px;
+      background: var(--pink);
+      top: -150px;
+      right: -150px;
+      animation-duration: 13s;
+    }
+
+    .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: var(--purple);
+      bottom: 0;
+      left: -100px;
+      animation-duration: 10s;
+    }
+
+    @keyframes blobFloat {
+      from {
+        transform: translate(0, 0) scale(1);
+      }
+
+      to {
+        transform: translate(25px, 20px) scale(1.07);
+      }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 52px 44px;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(124, 58, 237, 0.12), 0 32px 64px rgba(0, 0, 0, 0.4);
+      animation: fadeUp 0.55s cubic-bezier(0.4, 0, 0.2, 1) both;
+      margin: 20px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .icon-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 20px;
+    }
+
+    .icon-loading {
+      background: rgba(124, 58, 237, 0.15);
+      border: 2px solid rgba(124, 58, 237, 0.3);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .icon-success {
+      background: rgba(34, 197, 94, 0.12);
+      border: 2px solid rgba(34, 197, 94, 0.25);
+    }
+
+    .icon-error {
+      background: rgba(244, 63, 94, 0.12);
+      border: 2px solid rgba(244, 63, 94, 0.25);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: var(--gray);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--gradient);
+      border-radius: 12px;
+      color: white;
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--gray);
+      margin-top: 10px;
+      display: block;
+    }
+
+    .countdown {
+      font-size: 0.78rem;
+      color: var(--gray);
+      margin-top: 14px;
+    }
+
+    .countdown span {
+      color: var(--purple-light);
+      font-weight: 600;
+    }
+
+    .logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
   </style>
 </head>
+
 <body>
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -75,7 +256,7 @@
     import { supabase } from './supabase.js'
 
     function show(id) {
-      ['stateLoading','stateSuccess','stateError','stateAlready'].forEach(s => {
+      ['stateLoading', 'stateSuccess', 'stateError', 'stateAlready'].forEach(s => {
         document.getElementById(s).style.display = s === id ? 'block' : 'none'
       })
     }
@@ -140,7 +321,7 @@
         if (el) el.textContent = count
         if (count <= 0) {
           clearInterval(timer)
-          window.location.href = '/onboarding.html'
+          window.location.href = 'onboarding.html'
         }
       }, 1000)
     }
@@ -148,4 +329,5 @@
     handleVerification()
   </script>
 </body>
+
 </html>

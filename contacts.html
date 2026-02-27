@@ -622,6 +622,11 @@
     }
     const PLATFORM_ICONS = { instagram: '📸', whatsapp: '💬', facebook: '👍', tiktok: '🎵' }
 
+    function escapeHtml(str) {
+      if (!str) return ''
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+    }
+
     function renderContacts(contacts) {
       const list = document.getElementById('contactsList')
       if (!contacts.length) {
@@ -631,15 +636,15 @@
       list.innerHTML = contacts.map(c => `
         <div class="contact-row">
           <div class="contact-identity">
-            <div class="contact-avatar">${(c.name || '?').charAt(0).toUpperCase()}</div>
+            <div class="contact-avatar">${escapeHtml((c.name || '?').charAt(0).toUpperCase())}</div>
             <div>
-              <div class="contact-name">${c.name || 'İsimsiz'}</div>
-              <div class="contact-handle">${c.handle ? '@' + c.handle : ''}</div>
+              <div class="contact-name">${escapeHtml(c.name || 'İsimsiz')}</div>
+              <div class="contact-handle">${c.handle ? '@' + escapeHtml(c.handle) : ''}</div>
             </div>
           </div>
-          <div class="contact-cell platform-tag">${PLATFORM_ICONS[c.platform] || ''} ${c.platform || '—'}</div>
+          <div class="contact-cell platform-tag">${PLATFORM_ICONS[c.platform] || ''} ${escapeHtml(c.platform || '—')}</div>
           <div class="contact-cell">${STATUS_MAP[c.status] || STATUS_MAP.cold}</div>
-          <div class="contact-cell">${c.phone || '—'}</div>
+          <div class="contact-cell">${escapeHtml(c.phone || '—')}</div>
           <div class="contact-cell">${c.first_contact_at ? new Date(c.first_contact_at).toLocaleDateString('tr-TR') : '—'}</div>
           <div><button class="row-action">···</button></div>
         </div>`).join('')
@@ -659,10 +664,10 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = '/giris.html'
+      window.location.href = 'giris.html'
     })
   </script>
-  <script src="/sw-register.js"></script>
+  <script src="sw-register.js"></script>
 </body>
 
 </html>

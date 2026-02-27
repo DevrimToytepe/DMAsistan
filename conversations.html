@@ -737,6 +737,12 @@
 
     const PLATFORM_ICONS = { instagram: '📸', whatsapp: '💬', facebook: '👍', tiktok: '🎵' }
 
+    // XSS koruması — tüm kullanıcı verisini escape et
+    function escapeHtml(str) {
+      if (!str) return ''
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+    }
+
     function renderConvList(convs) {
       const list = document.getElementById('convList')
       if (!convs.length) {
@@ -744,18 +750,18 @@
         return
       }
       list.innerHTML = convs.map(c => `
-        <div class="conv-item ${c.id === activeConvId ? 'active' : ''}" onclick="openConv('${c.id}')">
+        <div class="conv-item ${c.id === activeConvId ? 'active' : ''}" onclick="openConv('${escapeHtml(c.id)}')">
           <div class="conv-avatar">
-            ${(c.contact_name || '?').charAt(0).toUpperCase()}
+            ${escapeHtml((c.contact_name || '?').charAt(0).toUpperCase())}
             <div class="conv-platform">${PLATFORM_ICONS[c.platform] || '💬'}</div>
           </div>
           <div class="conv-info">
             <div class="conv-name">
-              <span>${c.contact_name || c.contact_handle || 'Bilinmeyen'}</span>
+              <span>${escapeHtml(c.contact_name || c.contact_handle || 'Bilinmeyen')}</span>
               <span class="conv-time">${timeAgo(c.last_message_at)}</span>
             </div>
             <div class="conv-preview">
-              <span>${c.last_message || 'Mesaj yok'}</span>
+              <span>${escapeHtml(c.last_message || 'Mesaj yok')}</span>
               ${c.unread_count > 0 ? '<span class="unread-dot"></span>' : ''}
             </div>
           </div>
@@ -797,7 +803,7 @@
       msgsEl.innerHTML = msgs.map(m => `
         <div>
           ${m.is_ai ? '<div class="msg-ai-tag">🤖 AI Yanıtı</div>' : ''}
-          <div class="msg-bubble ${m.direction}${m.is_ai ? ' ai' : ''}">${m.content}</div>
+          <div class="msg-bubble ${m.direction === 'outbound' ? 'outbound' : 'inbound'}${m.is_ai ? ' ai' : ''}">${escapeHtml(m.content)}</div>
           <div class="msg-meta" style="text-align:${m.direction === 'outbound' ? 'right' : 'left'}">${new Date(m.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
         </div>`).join('')
       msgsEl.scrollTop = msgsEl.scrollHeight
@@ -806,26 +812,33 @@
       const { data: { session: convSess } } = await window._supabase.auth.getSession()
       subscribeToConv(id, convSess?.user.id)
     }
-    const input = document.getElementById('msgInput')
-    const content = input.value.trim()
-    if (!content) return
-    input.value = ''
-    input.style.height = 'auto'
-    const { data: { session } } = await window._supabase.auth.getSession()
-    await window._supabase.from('messages').insert({
-      conversation_id: convId,
-      user_id: session.user.id,
-      direction: 'outbound',
-      sender: 'human_agent',
-      content,
-      is_ai: false
-    })
-    await window._supabase.from('conversations').update({
-      last_message: content,
-      last_message_at: new Date().toISOString()
-    }).eq('id', convId)
-    // Mesaj listesini yenile (realtime channel yetersizse)
-    appendMessage({ content, direction: 'outbound', is_ai: false, created_at: new Date().toISOString() })
+
+    window.sendMsg = async function (convId) {
+      const input = document.getElementById('msgInput')
+      if (!input) return
+      const content = input.value.trim()
+      if (!content) return
+      input.value = ''
+      input.style.height = 'auto'
+      try {
+        const { data: { session } } = await window._supabase.auth.getSession()
+        if (!session) return
+        await window._supabase.from('messages').insert({
+          conversation_id: convId,
+          user_id: session.user.id,
+          direction: 'outbound',
+          sender: 'human_agent',
+          content,
+          is_ai: false
+        })
+        await window._supabase.from('conversations').update({
+          last_message: content,
+          last_message_at: new Date().toISOString()
+        }).eq('id', convId)
+        appendMessage({ content, direction: 'outbound', is_ai: false, created_at: new Date().toISOString() })
+      } catch (err) {
+        console.error('Mesaj gönderilemedi:', err)
+      }
     }
 
     // ── Mesajı ekrana append et (sayfa yenilemeden) ──
@@ -837,7 +850,7 @@
       const div = document.createElement('div')
       div.innerHTML = `
         ${msg.is_ai ? '<div class="msg-ai-tag">🤖 AI Yanıtı</div>' : ''}
-        <div class="msg-bubble ${msg.direction}${msg.is_ai ? ' ai' : ''}">${msg.content}</div>
+        <div class="msg-bubble ${msg.direction === 'outbound' ? 'outbound' : 'inbound'}${msg.is_ai ? ' ai' : ''}">${escapeHtml(msg.content)}</div>
         <div class="msg-meta" style="text-align:${msg.direction === 'outbound' ? 'right' : 'left'}">${new Date(msg.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</div>
       `
       msgsEl.appendChild(div)
@@ -889,11 +902,11 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = '/giris.html'
+      window.location.href = 'giris.html'
     })
   </script>
   <script type="module" src="mobile-nav.js"></script>
-  <script src="/sw-register.js"></script>
+  <script src="sw-register.js"></script>
 </body>
 
 </html>

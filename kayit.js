@@ -128,7 +128,7 @@ async function handleRegister(e) {
 
   if (data.session) {
     showSuccess('✅ Hesabınız oluşturuldu! Yönlendiriliyorsunuz...')
-    setTimeout(() => { window.location.href = 'onboarding' }, 1200)
+    setTimeout(() => { window.location.href = 'onboarding.html' }, 1200)
   } else {
     showSuccess('📧 Doğrulama e-postası gönderildi! Lütfen gelen kutunuzu kontrol edin.')
     form.reset()
@@ -140,7 +140,7 @@ if (form) form.addEventListener('submit', handleRegister)
 document.addEventListener('DOMContentLoaded', () => {
   // Kayıt sayfasında oturum var mı kontrol et
   supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) window.location.replace('/dashboard')
+    if (session) window.location.replace('dashboard.html')
   })
 
   document.querySelectorAll('.social-btn').forEach(btn => {

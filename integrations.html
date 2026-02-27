@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="DMAsistan Platform Entegrasyonları" />
-  <title>Entegrasyonlar — DMAsistan</title>
+  <title>Entegrasyonlar v1.0.1 — DMAsistan</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
@@ -692,6 +692,24 @@
   </div>
 
   <script type="module">
+    // 🛡️ Önbellek Temizleme ve Sürüm Kontrolü (Kesin Çözüm)
+    (async () => {
+      const CURRENT_V = '1.0.1'
+      const lastV = localStorage.getItem('dma_v')
+      if (lastV !== CURRENT_V) {
+        console.log('🚀 Yeni sürüm algılandı, önbellek temizleniyor...')
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations()
+          for (let r of regs) await r.unregister()
+        }
+        const cacheNames = await caches.keys()
+        for (let name of cacheNames) await caches.delete(name)
+        localStorage.setItem('dma_v', CURRENT_V)
+        window.location.reload(true) // Sert yenileme
+        return
+      }
+    })()
+
     import { supabase } from './supabase.js'
 
       ; (async () => {
@@ -746,27 +764,27 @@
 
 
     // ── Meta OAuth Konfigürasyonu ──
-    const META_APP_ID = '2017158822176401'
-    const REDIRECT_URI = `${window.location.origin}/oauth-callback.html`
+    import CONFIG from './config.js'
+    const META_APP_ID = CONFIG.META_APP_ID
 
     const PLATFORM_SCOPES = {
       instagram: [
+        'public_profile',
         'instagram_basic',
         'instagram_manage_messages',
-        'instagram_manage_insights',
         'pages_show_list',
-        'pages_read_engagement',
         'pages_manage_metadata',
         'business_management',
       ].join(','),
       facebook: [
+        'public_profile',
         'pages_show_list',
         'pages_messaging',
         'pages_manage_metadata',
-        'pages_read_engagement',
         'business_management',
       ].join(','),
       whatsapp: [
+        'public_profile',
         'whatsapp_business_management',
         'whatsapp_business_messaging',
         'business_management',
@@ -775,14 +793,15 @@
 
     window.connectPlatform = async function (platform) {
       const { data: { session } } = await window._supabase.auth.getSession()
-      if (!session) { window.location.href = '/giris.html'; return }
+      if (!session) { window.location.href = 'giris.html'; return }
       const csrf = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
       sessionStorage.setItem('oauth_csrf', csrf)
       const state = `${platform}|${session.user.id}|${csrf}`
       const scopes = PLATFORM_SCOPES[platform]
       if (!scopes) { showToast('Bilinmeyen platform', true); return }
+      const REDIRECT_URI = `${window.location.origin}/oauth-callback.html`
       const oauthUrl =
-        `https://www.facebook.com/v19.0/dialog/oauth?` +
+        `https://www.facebook.com/v21.0/dialog/oauth?` +
         `client_id=${META_APP_ID}` +
         `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
         `&scope=${encodeURIComponent(scopes)}` +
@@ -815,11 +834,11 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = '/giris.html'
+      window.location.href = 'giris.html'
     })
   </script>
   <script type="module" src="mobile-nav.js"></script>
-  <script src="/sw-register.js"></script>
+  <script src="sw-register.js"></script>
 </body>
 
 </html>

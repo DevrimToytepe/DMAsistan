@@ -4,7 +4,7 @@ import { getProfile } from './db.js'
 import { initSessionTimeout, trackPageView, healthCheck } from './monitor.js'
 import { createRateLimiter } from './sanitize.js'
 
-const PUBLIC_PAGES = ['/giris.html', '/kayit.html', '/index.html', '/sifre-sifirla.html', '/email-dogrula.html', '/']
+const PUBLIC_PAGES = ['giris.html', 'kayit.html', 'index.html', 'sifre-sifirla.html', 'email-dogrula.html', '']
 
   ; (async function authGuard() {
     const path = window.location.pathname
@@ -15,7 +15,7 @@ const PUBLIC_PAGES = ['/giris.html', '/kayit.html', '/index.html', '/sifre-sifir
     const { data: { session } } = await supabase.auth.getSession()
 
     if (!session) {
-      window.location.replace('/giris.html?reason=no_session')
+      window.location.replace('giris.html?reason=no_session')
       return
     }
 
@@ -53,14 +53,14 @@ const PUBLIC_PAGES = ['/giris.html', '/kayit.html', '/index.html', '/sifre-sifir
       const hasCompleteStep = steps?.find(s => s.step === 'complete' && s.completed)
       if (!hasCompleteStep) {
         // Onboarding tamamlanmamışsa yönlendir
-        // window.location.replace('/onboarding.html')
+        window.location.replace('onboarding.html')
       }
     }
 
     // ── Auth state değişikliklerini dinle ──
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') {
-        window.location.replace('/giris.html')
+        window.location.replace('giris.html')
       }
     })
 
@@ -126,7 +126,7 @@ export async function handleLogout() {
   } finally {
     localStorage.removeItem('dma_avatar')
     localStorage.removeItem('dma_session_start')
-    window.location.href = '/giris.html'
+    window.location.href = 'giris.html'
   }
 }
 

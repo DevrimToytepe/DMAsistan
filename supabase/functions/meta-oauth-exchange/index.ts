@@ -35,7 +35,7 @@ serve(async (req) => {
 
     // ── 1. Code → Short-lived token ──────────────────────────
     const tokenRes = await fetch(
-      `https://graph.facebook.com/v19.0/oauth/access_token?` +
+      `https://graph.facebook.com/v21.0/oauth/access_token?` +
       `client_id=${APP_ID}` +
       `&client_secret=${APP_SECRET}` +
       `&redirect_uri=${encodeURIComponent(redirect_uri)}` +
@@ -44,14 +44,15 @@ serve(async (req) => {
     const tokenData = await tokenRes.json()
 
     if (tokenData.error) {
-      throw new Error(`Token hatası: ${tokenData.error.message}`)
+      console.error('Meta Token Hatası:', tokenData.error)
+      throw new Error(`Token hatası: ${tokenData.error.message || 'Bilinmeyen hata'}`)
     }
 
     let accessToken = tokenData.access_token
 
     // ── 2. Short-lived → Long-lived token (60 gün) ───────────
     const longTokenRes = await fetch(
-      `https://graph.facebook.com/v19.0/oauth/access_token?` +
+      `https://graph.facebook.com/v21.0/oauth/access_token?` +
       `grant_type=fb_exchange_token` +
       `&client_id=${APP_ID}` +
       `&client_secret=${APP_SECRET}` +
@@ -70,11 +71,13 @@ serve(async (req) => {
     if (platform === 'instagram') {
       // Instagram Business hesap bilgileri
       const igRes = await fetch(
-        `https://graph.facebook.com/v19.0/me/accounts?` +
+        `https://graph.facebook.com/v21.0/me/accounts?` +
         `fields=id,name,instagram_business_account{id,name,username,followers_count,profile_picture_url}` +
         `&access_token=${accessToken}`
       )
       const igData = await igRes.json()
+      
+      if (igData.error) throw new Error(`Instagram Veri Hatası: ${igData.error.message}`)
 
       // İlk bağlı Instagram hesabını al
       const page = igData.data?.[0]
@@ -98,11 +101,14 @@ serve(async (req) => {
     } else if (platform === 'facebook') {
       // Facebook Sayfaları
       const fbRes = await fetch(
-        `https://graph.facebook.com/v19.0/me/accounts?` +
+        `https://graph.facebook.com/v21.0/me/accounts?` +
         `fields=id,name,access_token,category,fan_count` +
         `&access_token=${accessToken}`
       )
       const fbData = await fbRes.json()
+      
+      if (fbData.error) throw new Error(`Facebook Veri Hatası: ${fbData.error.message}`)
+      
       const page = fbData.data?.[0]
 
       if (!page) {
@@ -123,7 +129,7 @@ serve(async (req) => {
     } else if (platform === 'whatsapp') {
       // WhatsApp Business hesap bilgileri
       const waRes = await fetch(
-        `https://graph.facebook.com/v19.0/me?` +
+        `https://graph.facebook.com/v21.0/me?` +
         `fields=id,name` +
         `&access_token=${accessToken}`
       )
@@ -131,7 +137,7 @@ serve(async (req) => {
 
       // WhatsApp Business hesabını bul
       const wabRes = await fetch(
-        `https://graph.facebook.com/v19.0/${waData.id}/whatsapp_business_accounts?` +
+        `https://graph.facebook.com/v21.0/${waData.id}/whatsapp_business_accounts?` +
         `access_token=${accessToken}`
       )
       const wabData = await wabRes.json()
@@ -165,7 +171,10 @@ serve(async (req) => {
         updated_at:     new Date().toISOString(),
       }, { onConflict: 'user_id,platform' })
 
-    if (dbErr) throw new Error('Veritabanı kayıt hatası: ' + dbErr.message)
+    if (dbErr) {
+      console.error('DB Kayıt Hatası:', dbErr)
+      throw new Error('Veritabanı kayıt hatası: ' + dbErr.message)
+    }
 
     // ── 5. Webhook'u kaydet (Instagram & Facebook için) ──────
     if (platform === 'instagram' || platform === 'facebook') {
@@ -174,7 +183,7 @@ serve(async (req) => {
 
       // Sayfa webhook aboneliği
       await fetch(
-        `https://graph.facebook.com/v19.0/${pageId}/subscribed_apps?` +
+        `https://graph.facebook.com/v21.0/${pageId}/subscribed_apps?` +
         `subscribed_fields=messages,messaging_postbacks,message_deliveries,message_reads` +
         `&access_token=${pageToken}`,
         { method: 'POST' }
@@ -193,7 +202,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error('OAuth exchange hatası:', err)
-    return errorResponse(err.message)
+    return errorResponse(err instanceof Error ? err.message : String(err))
   }
 })
 

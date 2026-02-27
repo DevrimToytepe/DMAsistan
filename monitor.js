@@ -103,13 +103,13 @@ window.onerror = function (msg, src, line, col, error) {
     return false // tarayıcının varsayılan hata işlemesini engelleme
 }
 
-window.onunhandledrejection = function (event) {
+window.addEventListener('unhandledrejection', function (event) {
     logError({
         type: 'unhandled_rejection',
         message: String(event.reason?.message || event.reason || 'Unhandled rejection').slice(0, 500),
         stack: event.reason?.stack?.slice(0, 1000)
     })
-}
+})
 
 // ─────────────────────────────────────────────────────────────
 // ONLINE / OFFLINE BANNER
@@ -307,7 +307,7 @@ async function _doSessionLogout() {
     try {
         await supabase.auth.signOut()
     } catch (_) { }
-    window.location.replace('/giris.html?reason=timeout')
+    window.location.replace('giris.html?reason=timeout')
 }
 
 /** Kullanıcı aktif işlem yapınca session timer'ı sıfırla */

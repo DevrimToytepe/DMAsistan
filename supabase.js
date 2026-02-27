@@ -25,10 +25,10 @@ supabase.auth.onAuthStateChange((event, session) => {
     return
   }
   if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESH_FAILED' && !session)) {
-    const publicPages = ['/giris.html', '/kayit.html', '/index.html', '/sifre-sifirla.html', '/']
+    const publicPages = ['giris.html', 'kayit.html', 'index.html', 'sifre-sifirla.html', '']
     const isPublic = publicPages.some(p => window.location.pathname.endsWith(p))
     if (!isPublic) {
-      window.location.replace('/giris.html?reason=expired')
+      window.location.replace('giris.html?reason=expired')
     }
   }
 })

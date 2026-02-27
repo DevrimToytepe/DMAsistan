@@ -4,7 +4,7 @@
  * Offline sayfası: /offline.html
  */
 
-const CACHE_VERSION = 'dma-v1'
+const CACHE_VERSION = 'dma-v2'
 const OFFLINE_URL = '/offline.html'
 
 // Önbelleğe alınacak statik dosyalar (app shell)

@@ -683,10 +683,10 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = '/giris.html'
+      window.location.href = 'giris.html'
     })
   </script>
-  <script src="/sw-register.js"></script>
+  <script src="sw-register.js"></script>
 </body>
 
 </html>

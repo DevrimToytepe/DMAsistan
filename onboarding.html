@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="description" content="DMAsistan Kurulum Sihirbazı" />
-  <title>Başlayaлım — DMAsistan</title>
+  <title>Başlayalım — DMAsistan</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
@@ -726,11 +726,11 @@
 
       // Son adımda tamamlananları göster
       if (step === 4) {
+        function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
         const list = document.getElementById('completedList')
-        list.innerHTML = completedItems.map(item => `
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="color:#22c55e">✓</span> ${item}
-          </div>`).join('')
+        list.innerHTML = completedItems.map(item =>
+          `<div style="display:flex;align-items:center;gap:8px;"><span style="color:#22c55e">✓</span> ${escHtml(item)}</div>`
+        ).join('')
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -752,7 +752,7 @@
       el.classList.add('selected')
     }
   </script>
-  <script src="/sw-register.js"></script>
+  <script src="sw-register.js"></script>
 </body>
 
 </html>

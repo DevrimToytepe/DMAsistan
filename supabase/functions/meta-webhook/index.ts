@@ -11,7 +11,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const VERIFY_TOKEN = Deno.env.get('META_WEBHOOK_VERIFY_TOKEN') || 'dmasistan_whook_2024'
-const APP_SECRET   = Deno.env.get('META_APP_SECRET') || ''
+const APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
 
 const supabase = createClient(
   Deno.env.get('SUPABASE_URL') || '',
@@ -22,9 +22,9 @@ serve(async (req) => {
 
   // ── GET: Webhook doğrulama (Meta'nın ilk handshake isteği) ──
   if (req.method === 'GET') {
-    const url    = new URL(req.url)
-    const mode   = url.searchParams.get('hub.mode')
-    const token  = url.searchParams.get('hub.verify_token')
+    const url = new URL(req.url)
+    const mode = url.searchParams.get('hub.mode')
+    const token = url.searchParams.get('hub.verify_token')
     const challenge = url.searchParams.get('hub.challenge')
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
@@ -47,7 +47,7 @@ serve(async (req) => {
 
     try {
       const payload = JSON.parse(body)
-      console.log('Webhook payload:', JSON.stringify(payload).slice(0, 200))
+      console.log('Webhook payload obj:', payload.object)
 
       // Meta her platform için farklı format kullanır
       for (const entry of (payload.entry || [])) {
@@ -90,7 +90,7 @@ serve(async (req) => {
 
     } catch (err) {
       console.error('Webhook işleme hatası:', err)
-      return new Response('Processing error', { status: 500 })
+      return new Response('Processing error: ' + (err instanceof Error ? err.message : String(err)), { status: 500 })
     }
   }
 
@@ -99,11 +99,11 @@ serve(async (req) => {
 
 // ── Instagram DM İşle ────────────────────────────────────────
 async function handleInstagramMessage(pageId: string, messaging: Record<string, unknown>) {
-  const senderId   = (messaging.sender as Record<string, string>)?.id
+  const senderId = (messaging.sender as Record<string, string>)?.id
   const recipientId = (messaging.recipient as Record<string, string>)?.id
-  const message    = messaging.message as Record<string, unknown>
-  const text       = (message?.text as string) || ''
-  const timestamp  = messaging.timestamp as number
+  const message = messaging.message as Record<string, unknown>
+  const text = (message?.text as string) || ''
+  const timestamp = messaging.timestamp as number
 
   if (!senderId || !text) return
 
@@ -121,12 +121,12 @@ async function handleInstagramMessage(pageId: string, messaging: Record<string, 
   }
 
   await processIncomingMessage({
-    userId:     platform.user_id,
-    platform:   'instagram',
+    userId: platform.user_id,
+    platform: 'instagram',
     senderId,
     senderName: senderId,
-    content:    text,
-    timestamp:  timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString(),
+    content: text,
+    timestamp: timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString(),
     rawPayload: messaging,
     accessToken: platform.access_token,
   })
@@ -135,8 +135,8 @@ async function handleInstagramMessage(pageId: string, messaging: Record<string, 
 // ── Facebook Messenger İşle ──────────────────────────────────
 async function handleFacebookMessage(pageId: string, messaging: Record<string, unknown>) {
   const senderId = (messaging.sender as Record<string, string>)?.id
-  const message  = messaging.message as Record<string, unknown>
-  const text     = (message?.text as string) || ''
+  const message = messaging.message as Record<string, unknown>
+  const text = (message?.text as string) || ''
   const timestamp = messaging.timestamp as number
 
   if (!senderId || !text) return
@@ -155,19 +155,19 @@ async function handleFacebookMessage(pageId: string, messaging: Record<string, u
   let senderName = senderId
   try {
     const profileRes = await fetch(
-      `https://graph.facebook.com/v19.0/${senderId}?fields=name&access_token=${platform.access_token}`
+      `https://graph.facebook.com/v21.0/${senderId}?fields=name&access_token=${platform.access_token}`
     )
     const profileData = await profileRes.json()
     senderName = profileData.name || senderId
   } catch (_) { /* sessiz */ }
 
   await processIncomingMessage({
-    userId:     platform.user_id,
-    platform:   'facebook',
+    userId: platform.user_id,
+    platform: 'facebook',
     senderId,
     senderName,
-    content:    text,
-    timestamp:  timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString(),
+    content: text,
+    timestamp: timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString(),
     rawPayload: messaging,
     accessToken: platform.access_token,
   })
@@ -179,9 +179,9 @@ async function handleWhatsAppMessage(
   message: Record<string, unknown>,
   contact?: Record<string, unknown>
 ) {
-  const senderId   = message.from as string
-  const text       = (message.text as Record<string, string>)?.body || ''
-  const timestamp  = message.timestamp as string
+  const senderId = message.from as string
+  const text = (message.text as Record<string, string>)?.body || ''
+  const timestamp = message.timestamp as string
   const senderName = (contact?.profile as Record<string, string>)?.name || senderId
 
   if (!senderId || !text) return
@@ -197,7 +197,7 @@ async function handleWhatsAppMessage(
 
   // WhatsApp mesajını "okundu" olarak işaretle
   try {
-    await fetch(`https://graph.facebook.com/v19.0/${phoneNumberId}/messages`, {
+    await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${platform.access_token}` },
       body: JSON.stringify({
@@ -209,11 +209,11 @@ async function handleWhatsAppMessage(
   } catch (_) { /* sessiz */ }
 
   await processIncomingMessage({
-    userId:    platform.user_id,
-    platform:  'whatsapp',
+    userId: platform.user_id,
+    platform: 'whatsapp',
     senderId,
     senderName,
-    content:   text,
+    content: text,
     timestamp: timestamp ? new Date(parseInt(timestamp) * 1000).toISOString() : new Date().toISOString(),
     rawPayload: message,
     accessToken: platform.access_token,
@@ -249,13 +249,13 @@ async function processIncomingMessage(params: {
     const { data: newConv } = await supabase
       .from('conversations')
       .insert({
-        user_id:        userId,
+        user_id: userId,
         platform,
-        sender_id:      senderId,
-        contact_name:   senderName,
+        sender_id: senderId,
+        contact_name: senderName,
         contact_handle: senderId,
-        status:         'open',
-        last_message:   content,
+        status: 'open',
+        last_message: content,
         last_message_at: timestamp,
       })
       .select()
@@ -274,13 +274,13 @@ async function processIncomingMessage(params: {
   // 2. Kullanıcı mesajını kaydet
   await supabase.from('messages').insert({
     conversation_id: conv.id,
-    user_id:         userId,
+    user_id: userId,
     content,
-    direction:       'inbound',
-    is_ai:           false,
+    direction: 'inbound',
+    is_ai: false,
     platform,
-    sender_id:       senderId,
-    created_at:      timestamp,
+    sender_id: senderId,
+    created_at: timestamp,
   })
 
   // 3. AI ayarlarını kontrol et
@@ -300,11 +300,11 @@ async function processIncomingMessage(params: {
     const { data: aiData } = await supabase.functions.invoke('ai-webhook', {
       body: {
         conversation_id: conv.id,
-        user_id:         userId,
-        message:         content,
+        user_id: userId,
+        message: content,
         platform,
-        sender_id:       senderId,
-        sender_name:     senderName,
+        sender_id: senderId,
+        sender_name: senderName,
       }
     })
 
@@ -313,7 +313,7 @@ async function processIncomingMessage(params: {
       await sendReplyToPlatform({
         platform,
         recipientId: senderId,
-        message:     aiData.reply,
+        message: aiData.reply,
         accessToken,
         phoneNumberId,
       })
@@ -336,7 +336,7 @@ async function sendReplyToPlatform(params: {
   try {
     if (platform === 'instagram' || platform === 'facebook') {
       // Messenger / Instagram Graph API
-      await fetch('https://graph.facebook.com/v19.0/me/messages', {
+      await fetch('https://graph.facebook.com/v21.0/me/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -344,13 +344,13 @@ async function sendReplyToPlatform(params: {
         },
         body: JSON.stringify({
           recipient: { id: recipientId },
-          message:   { text: message },
+          message: { text: message },
         })
       })
 
     } else if (platform === 'whatsapp' && phoneNumberId) {
       // WhatsApp Business API
-      await fetch(`https://graph.facebook.com/v19.0/${phoneNumberId}/messages`, {
+      await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -358,9 +358,9 @@ async function sendReplyToPlatform(params: {
         },
         body: JSON.stringify({
           messaging_product: 'whatsapp',
-          to:     recipientId,
-          type:   'text',
-          text:   { body: message },
+          to: recipientId,
+          type: 'text',
+          text: { body: message },
         })
       })
     }

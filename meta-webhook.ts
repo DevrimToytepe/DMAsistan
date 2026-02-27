@@ -155,7 +155,7 @@ async function handleFacebookMessage(pageId: string, messaging: Record<string, u
   let senderName = senderId
   try {
     const profileRes = await fetch(
-      `https://graph.facebook.com/v19.0/${senderId}?fields=name&access_token=${platform.access_token}`
+      `https://graph.facebook.com/v21.0/${senderId}?fields=name&access_token=${platform.access_token}`
     )
     const profileData = await profileRes.json()
     senderName = profileData.name || senderId
@@ -197,7 +197,7 @@ async function handleWhatsAppMessage(
 
   // WhatsApp mesajını "okundu" olarak işaretle
   try {
-    await fetch(`https://graph.facebook.com/v19.0/${phoneNumberId}/messages`, {
+    await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${platform.access_token}` },
       body: JSON.stringify({
@@ -336,7 +336,7 @@ async function sendReplyToPlatform(params: {
   try {
     if (platform === 'instagram' || platform === 'facebook') {
       // Messenger / Instagram Graph API
-      await fetch('https://graph.facebook.com/v19.0/me/messages', {
+      await fetch('https://graph.facebook.com/v21.0/me/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -350,7 +350,7 @@ async function sendReplyToPlatform(params: {
 
     } else if (platform === 'whatsapp' && phoneNumberId) {
       // WhatsApp Business API
-      await fetch(`https://graph.facebook.com/v19.0/${phoneNumberId}/messages`, {
+      await fetch(`https://graph.facebook.com/v21.0/${phoneNumberId}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

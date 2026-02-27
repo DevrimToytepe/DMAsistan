@@ -1,0 +1,18 @@
+{
+    "deno.enablePaths": [
+        "supabase/functions",
+        "ai-webhook.ts",
+        "meta-oauth-exchange.ts",
+        "meta-webhook.ts",
+        "index.ts"
+    ],
+    "deno.importMap": "./supabase/functions/deno.json",
+    "[typescript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno"
+    },
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    }
+}

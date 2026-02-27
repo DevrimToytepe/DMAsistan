@@ -453,6 +453,7 @@
     .slider {
       flex: 1;
       -webkit-appearance: none;
+      appearance: none;
       height: 4px;
       border-radius: 100px;
       background: rgba(255, 255, 255, 0.1);
@@ -745,7 +746,7 @@
 
       ; (async () => {
         const { data: { session } } = await supabase.auth.getSession()
-        if (!session) { window.location.replace('/giris'); return }
+        if (!session) { window.location.replace('giris.html'); return }
         window._supabase = supabase
         const uid = session.user.id
         const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
@@ -794,7 +795,7 @@
           showToast(error ? '❌ Kayıt hatası: ' + error.message : '✅ Ayarlar kaydedildi!', !!error)
         })
 
-        supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('/giris') })
+        supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
       })()
 
     document.getElementById('creativity').addEventListener('input', function () {
@@ -803,20 +804,30 @@
 
     const CAT_COLORS = { welcome: 'rgba(124,58,237,0.12)', sales: 'rgba(244,63,117,0.12)', support: 'rgba(34,197,94,0.12)', general: 'rgba(255,255,255,0.06)' }
 
+    function escHtml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') }
+
     function renderTemplates(templates) {
       const list = document.getElementById('templateList')
       if (!templates.length) {
-        list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray);font-size:0.82rem;">Henüz şablon yok. Aşağıdan ekleyin.</div>'
+        list.textContent = ''
+        const empty = document.createElement('div')
+        empty.style.cssText = 'text-align:center;padding:20px;color:var(--gray);font-size:0.82rem;'
+        empty.textContent = 'Henüz şablon yok. Aşağıdan ekleyin.'
+        list.appendChild(empty)
         return
       }
       list.innerHTML = templates.map(t => `
         <div class="template-item">
-          <span class="template-cat">${t.category}</span>
-          <span class="template-text">${t.content}</span>
+          <span class="template-cat">${escHtml(t.category)}</span>
+          <span class="template-text">${escHtml(t.content)}</span>
           <div class="template-actions">
-            <button class="tpl-btn" onclick="deleteTemplate('${t.id}')">🗑</button>
+            <button class="tpl-btn" data-id="${escHtml(t.id)}" title="Sil">🗑</button>
           </div>
         </div>`).join('')
+      // data-id ile güvenli event delegation
+      list.querySelectorAll('.tpl-btn[data-id]').forEach(btn => {
+        btn.addEventListener('click', () => window.deleteTemplate(btn.dataset.id))
+      })
     }
 
     window.addTemplate = async function () {
@@ -909,11 +920,11 @@
     document.getElementById('logoutBtn').addEventListener('click', async e => {
       e.preventDefault(); e.stopPropagation()
       await window._supabase.auth.signOut()
-      window.location.href = '/giris'
+      window.location.href = 'giris.html'
     })
   </script>
   <script type="module" src="mobile-nav.js"></script>
-  <script src="/sw-register.js"></script>
+  <script src="sw-register.js"></script>
 </body>
 
 </html>
