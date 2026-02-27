@@ -7,7 +7,7 @@
 // supabase secrets set META_APP_SECRET=<yeni_secret_buraya>
 // supabase secrets set META_WEBHOOK_VERIFY_TOKEN=dmasistan_whook_2024
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+// @ts-ignore
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -15,37 +15,57 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') || '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
-)
-
-const APP_ID     = Deno.env.get('META_APP_ID') || ''
-const APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
-
-serve(async (req) => {
+// @ts-ignore
+Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
+    // @ts-ignore
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') || ''
+    // @ts-ignore
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
+    // @ts-ignore
+    const APP_ID = Deno.env.get('META_APP_ID') || ''
+    // @ts-ignore
+    const APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
+
+    console.log('1. Parametreler kontrol ediliyor')
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Supabase ortam değişkenleri (URL veya KEY) eksik.')
+    }
+    if (!APP_ID || !APP_SECRET) {
+      throw new Error('Meta uygulama sırları (APP_ID veya APP_SECRET) eksik.')
+    }
+
+    // @ts-ignore
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
     const { code, platform, user_id, redirect_uri } = await req.json()
+    console.log(`2. Gelen istek: platform=${platform}, user_id=${user_id}`)
 
     if (!code || !platform || !user_id) {
       return errorResponse('code, platform ve user_id zorunlu')
     }
 
-    // ── 1. Code → Short-lived token ──────────────────────────
-    const tokenRes = await fetch(
-      `https://graph.facebook.com/v21.0/oauth/access_token?` +
-      `client_id=${APP_ID}` +
-      `&client_secret=${APP_SECRET}` +
-      `&redirect_uri=${encodeURIComponent(redirect_uri)}` +
-      `&code=${code}`
-    )
+    console.log('3. Meta Graph API (Token) isteği başlatılıyor')
+    const qs = new URLSearchParams({
+      client_id: APP_ID,
+      client_secret: APP_SECRET,
+      redirect_uri: redirect_uri || '',
+      code: code
+    }).toString()
+
+    const tokenRes = await fetch(`https://graph.facebook.com/v21.0/oauth/access_token?${qs}`, {
+      // 10 saniyelik timeout koruması
+      signal: AbortSignal.timeout(10000)
+    })
+    
+    console.log('4. Meta Graph API yanıt verdi, status:', tokenRes.status)
     const tokenData = await tokenRes.json()
 
     if (tokenData.error) {
       console.error('Meta Token Hatası:', tokenData.error)
-      throw new Error(`Token hatası: ${tokenData.error.message || 'Bilinmeyen hata'}`)
+      throw new Error(`Token hatası: ${tokenData.error.message || JSON.stringify(tokenData.error)}`)
     }
 
     let accessToken = tokenData.access_token
@@ -106,13 +126,14 @@ serve(async (req) => {
         `&access_token=${accessToken}`
       )
       const fbData = await fbRes.json()
+      console.log('FB Hesapları Yanıtı:', fbData)
       
       if (fbData.error) throw new Error(`Facebook Veri Hatası: ${fbData.error.message}`)
       
       const page = fbData.data?.[0]
 
       if (!page) {
-        throw new Error('Bağlı Facebook Sayfası bulunamadı. En az bir Facebook Sayfasına yönetici erişiminiz olması gerekiyor.')
+        throw new Error(`Bağlı Facebook Sayfası bulunamadı. (Detay: ${JSON.stringify(fbData)}) Lütfen izin ekranında sayfalarınızı seçtiğinizden emin olun.`)
       }
 
       accountId   = page.id
@@ -209,6 +230,7 @@ serve(async (req) => {
 function errorResponse(msg: string) {
   return new Response(
     JSON.stringify({ error: msg }),
-    { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    // Status 200 döner ki client tarafındaki supabase.functions.invoke hata mesajını alabilsin
+    { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
   )
 }

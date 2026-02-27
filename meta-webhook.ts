@@ -7,18 +7,26 @@
 // Meta Developer Console → Webhooks → Endpoint URL:
 // https://PROJE_ID.supabase.co/functions/v1/meta-webhook
 
+// @ts-ignore
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+// @ts-ignore
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+// @ts-ignore
 const VERIFY_TOKEN = Deno.env.get('META_WEBHOOK_VERIFY_TOKEN') || 'dmasistan_whook_2024'
+// @ts-ignore
 const APP_SECRET   = Deno.env.get('META_APP_SECRET') || ''
 
+// @ts-ignore
 const supabase = createClient(
+  // @ts-ignore
   Deno.env.get('SUPABASE_URL') || '',
+  // @ts-ignore
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 )
 
-serve(async (req) => {
+// @ts-ignore
+serve(async (req: Request) => {
 
   // ── GET: Webhook doğrulama (Meta'nın ilk handshake isteği) ──
   if (req.method === 'GET') {

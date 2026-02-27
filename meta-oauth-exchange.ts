@@ -7,7 +7,9 @@
 // supabase secrets set META_APP_SECRET=<yeni_secret_buraya>
 // supabase secrets set META_WEBHOOK_VERIFY_TOKEN=dmasistan_whook_2024
 
+// @ts-ignore
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+// @ts-ignore
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -15,15 +17,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// @ts-ignore
 const supabase = createClient(
+  // @ts-ignore
   Deno.env.get('SUPABASE_URL') || '',
+  // @ts-ignore
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 )
 
+// @ts-ignore
 const APP_ID = Deno.env.get('META_APP_ID') || ''
+// @ts-ignore
 const APP_SECRET = Deno.env.get('META_APP_SECRET') || ''
 
-serve(async (req) => {
+// @ts-ignore
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {

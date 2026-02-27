@@ -5,7 +5,7 @@
 // supabase functions deploy ai-webhook
 // supabase secrets set OPENAI_API_KEY=sk-xxx
 
-import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+// @ts-ignore
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -13,8 +13,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// @ts-ignore
 const supabase = createClient(
+  // @ts-ignore
   Deno.env.get('SUPABASE_URL') || '',
+  // @ts-ignore
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || ''
 )
 
@@ -24,8 +27,9 @@ async function generateAIReply(
   aiSettings: Record<string, string>,
   conversationHistory: { role: string; content: string }[]
 ): Promise<string> {
+  // @ts-ignore
   const openaiKey = Deno.env.get('OPENAI_API_KEY')
-  if (!openaiKey) throw new Error('OPENAI_API_KEY secret eksik')
+  if (!openaiKey) throw new Error('OPENAI_API_KEY secret eksik. (Lütfen Supabase Dashboard -> Edge Functions -> Secrets kısmına OPENAI_API_KEY ekleyin.)')
 
   const systemPrompt = buildSystemPrompt(aiSettings)
 
@@ -68,7 +72,7 @@ function buildSystemPrompt(settings: Record<string, string>): string {
   const toneMap: Record<string, string> = {
     professional: 'Profesyonel ve nazik bir dil kullan.',
     friendly:     'Samimi ve sıcak bir dil kullan, emoji kullanabilirsin.',
-    formal:       'Resmi ve kurumsal bir dil kullan.',
+    formal:       'Resmi ve kurumsal bir az kullan.',
     casual:       'Günlük ve rahat bir dil kullan.',
   }
 
@@ -83,7 +87,8 @@ Asla uydurma bilgi verme; bilmiyorsan "Bu konuda size daha iyi yardımcı olmak 
 }
 
 // ─── Ana Handler ─────────────────────────────────────────────
-serve(async (req) => {
+// @ts-ignore
+Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
@@ -162,7 +167,7 @@ serve(async (req) => {
 
     const conversationHistory = (history || [])
       .reverse()
-      .map(m => ({
+      .map((m: any) => ({
         role: m.direction === 'outbound' ? 'assistant' : 'user',
         content: m.content,
       }))
@@ -215,7 +220,7 @@ serve(async (req) => {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
 
-  } catch (err) {
+  } catch (err: any) {
     console.error('AI webhook hatası:', err)
     return new Response(
       JSON.stringify({ error: err.message }),
