@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhasebe & CRM — DMAsistan</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #0A0E1A;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* REUSING SIDEBAR AND TOPBAR FROM DASHBOARD */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: rgba(10, 14, 26, 0.6);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 20px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            padding: 0 12px;
+        }
+
+        .nav-section {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.35);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 16px 0 6px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 1px;
+            font-size: 0.88rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--glass);
+            color: var(--white);
+        }
+
+        .nav-item.active {
+            background: rgba(124, 58, 237, 0.14);
+            color: var(--white);
+        }
+
+        .nav-icon {
+            font-size: 1rem;
+            width: 22px;
+            text-align: center;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--glass-border);
+            margin: 10px 0;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 11px 12px;
+            text-decoration: none;
+        }
+
+        .user-info .name {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .user-info .plan {
+            font-size: 0.72rem;
+            color: var(--gray);
+            margin-top: 1px;
+        }
+
+        .logout-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .main {
+            margin-left: 260px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topbar {
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(10, 14, 26, 0.85);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* ACCOUNTING SPECIFIC STATS */
+        .acc-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .acc-stat-card {
+            background: var(--bg-2);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .acc-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .acc-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .val-green {
+            color: #22c55e;
+        }
+
+        .val-red {
+            color: #f43f5e;
+        }
+
+        /* TABLE LAYOUT */
+        .panel {
+            background: var(--bg-2);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .btn-action {
+            background: var(--gradient);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            padding: 8px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.85rem;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .st-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .st-pending {
+            background: rgba(234, 179, 8, 0.1);
+            color: #eab308;
+            border: 1px solid rgba(234, 179, 8, 0.2);
+        }
+
+        .st-danger {
+            background: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .action-icon {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 4px;
+            margin-right: 4px;
+            transition: 0.2s;
+        }
+
+        .action-icon:hover {
+            color: var(--white);
+        }
+
+        /* TABS */
+        .acc-tabs {
+            display: flex;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            pdding: 4px;
+            border-radius: 10px;
+        }
+
+        .acc-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .acc-tab.active {
+            background: rgba(124, 58, 237, 0.15);
+            color: var(--white);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: var(--bg-2);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            width: 400px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .form-group input:focus {
+            border-color: var(--purple);
+            outline: none;
+        }
+    </style>
+    <script type="module">
+        import { supabase } from './supabase.js'
+
+        let transactions = [];
+
+        // Veritabanı tablo yapısı (Muhasebe için 'accounting' adında tablo gerekecektir, biz supabase üzerinden lokal cache uyduralım veya direkt db'ye ekleyelim, 
+        // şu anlık basit bir bellek tutulumu + localStorage ile demo yapıyorum, ilerde supabase tablosuna çevrilir)
+        // Supabase'den çekilmeli:
+
+        async function init() {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session) { window.location.replace('giris.html'); return }
+            document.getElementById('sidebarName').textContent = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+
+            loadFakeData();
+            renderTable();
+            updateStats();
+
+            // Modal Events
+            document.getElementById('newTransBtn').addEventListener('click', () => {
+                document.getElementById('txModal').style.display = 'flex';
+            })
+            document.getElementById('closeModalBtn').addEventListener('click', () => {
+                document.getElementById('txModal').style.display = 'none';
+            })
+            document.getElementById('txForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('txTitle').value;
+                const amount = parseFloat(document.getElementById('txAmount').value);
+                const type = document.getElementById('txType').value;
+                const status = document.getElementById('txStatus').value;
+
+                transactions.unshift({
+                    id: Date.now().toString(),
+                    date: new Date().toISOString(),
+                    title,
+                    amount,
+                    type,
+                    status,
+                    contact: 'Yeni İşlem'
+                });
+
+                renderTable();
+                updateStats();
+                document.getElementById('txModal').style.display = 'none';
+                e.target.reset();
+            });
+        }
+
+        function loadFakeData() {
+            transactions = [
+                { id: '1', date: new Date().toISOString(), title: 'DM Satış - Elbise', amount: 850, type: 'income', status: 'completed', contact: 'Ayşe Yılmaz' },
+                { id: '2', date: new Date(Date.now() - 86400000).toISOString(), title: 'DM Satış - Saat', amount: 1500, type: 'income', status: 'pending', contact: 'Mehmet K.' },
+                { id: '3', date: new Date(Date.now() - 2 * 86400000).toISOString(), title: 'Reklam Gideri (Meta)', amount: 450, type: 'expense', status: 'completed', contact: 'Meta Ads' },
+                { id: '4', date: new Date(Date.now() - 3 * 86400000).toISOString(), title: 'Randevu Kaparosu', amount: 200, type: 'income', status: 'completed', contact: 'Ali C.' },
+            ];
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('txTableBody');
+            tbody.innerHTML = transactions.map(t => {
+                const dateStr = new Date(t.date).toLocaleDateString('tr-TR');
+                const amtStr = t.type === 'income' ? `+₺${t.amount}` : `-₺${t.amount}`;
+                const amtClass = t.type === 'income' ? 'val-green' : 'val-red';
+                let statusHtml = '';
+                if (t.status === 'completed') statusHtml = `<span class="status-badge st-success">Tamamlandı</span>`;
+                else if (t.status === 'pending') statusHtml = `<span class="status-badge st-pending">Bekliyor</span>`;
+                else statusHtml = `<span class="status-badge st-danger">İptal</span>`;
+
+                return `
+            <tr>
+                <td>${dateStr}</td>
+                <td style="font-weight:500;">${t.title}</td>
+                <td>${t.contact}</td>
+                <td>${statusHtml}</td>
+                <td class="${amtClass}" style="font-weight:600;">${amtStr}</td>
+                <td style="text-align:right;">
+                    <button class="action-icon" onclick="deleteTx('${t.id}')">🗑️</button>
+                </td>
+            </tr>`;
+            }).join('');
+        }
+
+        window.deleteTx = function (id) {
+            transactions = transactions.filter(t => t.id !== id);
+            renderTable();
+            updateStats();
+        }
+
+        function updateStats() {
+            let income = 0, expenses = 0, pending = 0;
+            transactions.forEach(t => {
+                if (t.status === 'completed' && t.type === 'income') income += t.amount;
+                if (t.status === 'completed' && t.type === 'expense') expenses += t.amount;
+                if (t.status === 'pending') pending += t.amount;
+            });
+
+            document.getElementById('statIncome').textContent = '₺' + income.toLocaleString('tr-TR');
+            document.getElementById('statExpense').textContent = '₺' + expenses.toLocaleString('tr-TR');
+            document.getElementById('statNet').textContent = '₺' + (income - expenses).toLocaleString('tr-TR');
+            document.getElementById('statPending').textContent = '₺' + pending.toLocaleString('tr-TR');
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</head>
+
+<body>
+    <!-- BACKGROUND BLOBS -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
+
+        <div class="nav-section">Ana Menü</div>
+        <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar</a>
+        <a class="nav-item" href="automation.html"><span class="nav-icon">🤖</span> AI & Otomasyon</a>
+        <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
+        <a class="nav-item" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
+        <a class="nav-item active" href="accounting.html"><span class="nav-icon">💰</span> Muhasebe</a>
+
+        <div class="sidebar-divider"></div>
+        <div class="nav-section">Ayarlar</div>
+        <a class="nav-item" href="integrations.html"><span class="nav-icon">🔗</span> Entegrasyonlar</a>
+        <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span> Ayarlar</a>
+
+        <div class="sidebar-bottom">
+            <a class="user-card" href="settings.html">
+                <div class="user-info">
+                    <div class="name" id="sidebarName">Yükleniyor...</div>
+                    <div class="plan">🆓 Ücretsiz Plan</div>
+                </div>
+            </a>
+        </div>
+    </aside>
+
+    <div class="main">
+        <div class="topbar">
+            <div>
+                <div class="topbar-title">Muhasebe & Finans</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="acc-stats">
+                <div class="acc-stat-card">
+                    <div class="acc-label">Aylık Toplam Gelir</div>
+                    <div class="acc-value val-green" id="statIncome">₺0</div>
+                </div>
+                <div class="acc-stat-card">
+                    <div class="acc-label">Aylık Gider</div>
+                    <div class="acc-value val-red" id="statExpense">₺0</div>
+                </div>
+                <div class="acc-stat-card">
+                    <div class="acc-label">Net Bakiye</div>
+                    <div class="acc-value" id="statNet">₺0</div>
+                </div>
+                <div class="acc-stat-card">
+                    <div class="acc-label">Bekleyen Ödemeler</div>
+                    <div class="acc-value" id="statPending" style="color: #eab308;">₺0</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="acc-tabs">
+                        <div class="acc-tab active">Tüm İşlemler</div>
+                        <div class="acc-tab">Randevular</div>
+                        <div class="acc-tab">Satışlar</div>
+                    </div>
+                    <button class="btn-action" id="newTransBtn">+ Yeni İşlem Ekle</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>İşlem Adı / Ürün</th>
+                                <th>Kişi</th>
+                                <th>Durum</th>
+                                <th>Tutar</th>
+                                <th style="text-align:right;">İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="txTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="txModal">
+        <div class="modal">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <div class="panel-title" style="margin-bottom: 20px;">Yeni İşlem Ekle</div>
+            <form id="txForm">
+                <div class="form-group">
+                    <label>İşlem Adı (Örn: Elbise Satışı)</label>
+                    <input type="text" id="txTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Tutar (₺)</label>
+                    <input type="number" id="txAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Tür</label>
+                    <select id="txType">
+                        <option value="income">Gelir (+)</option>
+                        <option value="expense">Gider (-)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Durum</label>
+                    <select id="txStatus">
+                        <option value="completed">Tamamlandı (Tahsil Edildi)</option>
+                        <option value="pending">Bekliyor (Kaparo vs)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-action" style="width: 100%; margin-top: 10px;">Kaydet</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
