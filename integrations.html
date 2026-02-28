@@ -816,9 +816,19 @@
     window.disconnectPlatform = async function (platform) {
       if (!confirm(`${platform} bağlantısını kesmek istiyor musunuz?`)) return
       const { data: { session } } = await window._supabase.auth.getSession()
-      await window._supabase.from('platforms').update({ is_active: false, access_token: null }).eq('user_id', session.user.id).eq('platform', platform)
-      showToast(`${platform} bağlantısı kesildi.`)
-      setTimeout(() => window.location.reload(), 1200)
+
+      const { error } = await window._supabase
+        .from('platforms')
+        .delete()
+        .match({ user_id: session.user.id, platform: platform })
+
+      if (error) {
+        console.error('Silme hatası:', error)
+        showToast('Bağlantı kesilirken bir hata oluştu.', true)
+      } else {
+        showToast(`${platform} bağlantısı tamamen temizlendi.`)
+      }
+      setTimeout(() => window.location.reload(), 1500)
     }
 
     function showToast(msg, isError = false) {
