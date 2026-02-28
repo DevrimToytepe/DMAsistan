@@ -807,19 +807,10 @@
             <div
               style="padding:15px; border-bottom:1px solid var(--glass-border); font-weight:700; font-family:'Sora', sans-serif;">
               Bildirimler</div>
-            <div style="max-height:300px; overflow-y:auto; padding:10px;">
-              <div
-                style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.8rem; display:flex; gap:10px;">
-                <div style="font-size:1.2rem;">✨</div>
-                <div><strong style="color:white; display:block; margin-bottom:2px;">DMAsistan'a Hoş
-                    Geldiniz!</strong>Hemen bir platform bağlayın ve başlayın.</div>
-              </div>
-              <div style="padding:10px; font-size:0.8rem; display:flex; gap:10px; color:var(--gray);">
-                <div style="font-size:1.2rem; opacity:0.5;">✅</div>
-                <div>Yedekleme servisleri başarıyla aktifleşti.</div>
-              </div>
+            <div id="notifList" style="max-height:300px; overflow-y:auto; padding:10px;">
+              <div style="text-align:center; padding:20px; color:var(--gray); font-size:0.8rem;">Yükleniyor...</div>
             </div>
-            <div
+            <div id="notifClear"
               style="padding:10px; text-align:center; border-top:1px solid var(--glass-border); font-size:0.75rem; color:var(--purple-light); cursor:pointer;">
               Tümünü okundu işaretle</div>
           </div>
@@ -1056,6 +1047,60 @@
         supabase.auth.onAuthStateChange((event) => {
           if (event === 'SIGNED_OUT') window.location.replace('giris.html')
         })
+
+        // Dinamik Bildirimler
+        const notifBadge = document.querySelector('.has-new-alert')
+        const notifList = document.getElementById('notifList')
+
+        async function loadNotifications() {
+          const { data: msgs } = await supabase.from('messages')
+            .select('content, created_at, conversations(platform)')
+            .eq('user_id', uid)
+            .eq('is_ai', false)
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+          if (!msgs || msgs.length === 0) {
+            notifList.innerHTML = `<div style="text-align:center; padding:20px; color:var(--gray); font-size:0.8rem;">Yeni bildirim yok</div>`;
+            return;
+          }
+
+          notifList.innerHTML = msgs.map(m => {
+            const platName = m.conversations?.platform || 'Bilinmiyor';
+            const icon = platName === 'instagram' ? '📸' : (platName === 'whatsapp' ? '💬' : '👍');
+            const time = new Date(m.created_at).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+            return `
+              <div style="padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); font-size:0.8rem; display:flex; gap:10px; cursor:pointer;" onclick="location.href='conversations.html'">
+                <div style="font-size:1.2rem;">${icon}</div>
+                <div style="flex:1; overflow:hidden;">
+                    <strong style="color:white; display:block; margin-bottom:2px;">Yeni Mesaj (${platName})</strong>
+                    <div style="color:var(--gray); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.content}</div>
+                    <div style="font-size:0.65rem; color:var(--purple-light); margin-top:4px;">${time}</div>
+                </div>
+              </div>`
+          }).join('');
+        }
+
+        loadNotifications();
+
+        // Okundu işaretlendiğinde kırmızı ışığı gizle
+        document.getElementById('notifClear')?.addEventListener('click', () => {
+          notifBadge.style.display = 'none';
+        });
+
+        // Yeni mesaj geldiğinde canlı olarak yakala
+        supabase.channel('dashboard_notifications')
+          .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `user_id=eq.${uid}` }, (payload) => {
+            if (!payload.new.is_ai) {
+              notifBadge.style.display = 'block'; // Kırmızı ışığı yak
+              loadNotifications(); // Bildirim listesini güncelle
+
+              // Hafif bir "ting" sesi çal
+              const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+              audio.volume = 0.5;
+              audio.play().catch(e => console.log(e));
+            }
+          }).subscribe();
 
         // Okunmamış konuşma badge'i
         const { count: unreadCount } = await supabase
