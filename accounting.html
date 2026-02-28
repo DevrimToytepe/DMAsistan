@@ -315,7 +315,7 @@
             display: flex;
             gap: 4px;
             background: rgba(255, 255, 255, 0.03);
-            pdding: 4px;
+            padding: 4px;
             border-radius: 10px;
         }
 
@@ -409,6 +409,7 @@
             document.getElementById('sidebarName').textContent = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
 
             loadFakeData();
+            initTabs();
             renderTable();
             updateStats();
 
@@ -452,9 +453,34 @@
             ];
         }
 
+        let currentFilter = 'all';
+
+        function initTabs() {
+            const tabs = document.querySelectorAll('.acc-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', (e) => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const tabText = e.target.textContent;
+                    if (tabText === 'Randevular') currentFilter = 'randevu';
+                    else if (tabText === 'Satışlar') currentFilter = 'satış';
+                    else currentFilter = 'all';
+                    renderTable();
+                });
+            });
+        }
+
         function renderTable() {
             const tbody = document.getElementById('txTableBody');
-            tbody.innerHTML = transactions.map(t => {
+            let filteredTx = transactions;
+
+            if (currentFilter === 'randevu') {
+                filteredTx = transactions.filter(t => t.title.toLowerCase().includes('randevu'));
+            } else if (currentFilter === 'satış') {
+                filteredTx = transactions.filter(t => t.title.toLowerCase().includes('satış'));
+            }
+
+            tbody.innerHTML = filteredTx.map(t => {
                 const dateStr = new Date(t.date).toLocaleDateString('tr-TR');
                 const amtStr = t.type === 'income' ? `+₺${t.amount}` : `-₺${t.amount}`;
                 const amtClass = t.type === 'income' ? 'val-green' : 'val-red';

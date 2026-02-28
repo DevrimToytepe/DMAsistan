@@ -588,6 +588,7 @@
     <a class="nav-item active" href="automation.html"><span class="nav-icon">🤖</span> AI & Otomasyon</a>
     <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
     <a class="nav-item" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
+    <a class="nav-item" href="accounting.html"><span class="nav-icon">💰</span> Muhasebe</a>
     <div class="sidebar-divider"></div>
     <div class="nav-section">Ayarlar</div>
     <a class="nav-item" href="integrations.html"><span class="nav-icon">🔗</span> Entegrasyonlar</a>
@@ -643,10 +644,30 @@
                 <option value="ar">🇸🇦 Arapça</option>
               </select>
             </div>
-            <div class="form-row">
-              <div class="field-label">Sistem Talimatları</div>
-              <textarea class="textarea-field" id="systemPrompt"
-                placeholder="Müşterilere nazik ve yardımsever davran. Fiyat sorularında önce ürünün faydalarını anlat..."></textarea>
+            <div class="form-row"
+              style="margin-top: 24px; border-top: 1px solid var(--glass-border); padding-top: 24px;">
+              <div class="field-label" style="display:flex; justify-content:space-between; align-items:center;">
+                <span>🧠 AI Yönlendirmeleri (Sistem Promptu)</span>
+                <span style="font-size:0.65rem; color:var(--purple-light); cursor:pointer;"
+                  onclick="this.nextElementSibling.style.display='flex'">Örnekler ▼</span>
+                <div
+                  style="display:none; position:absolute; right:24px; margin-top:30px; background:var(--bg-2); border:1px solid var(--glass-border); padding:8px; border-radius:8px; flex-direction:column; gap:6px; z-index:10; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+                  <button type="button" class="tpl-btn" style="text-align:left"
+                    onclick="document.getElementById('systemPrompt').value='Sen DMAsistan adlı gelişmiş bir satış asistanısın. Müşteriye ürünün faydalarını anlat, her cümleni kısa ve ikna edici tut. Asla gereksiz bilgi verme. Mesajı her zaman bir soruyla bitirerek ondan cevap bekle.'">Satış
+                    & İkna Odaklı</button>
+                  <button type="button" class="tpl-btn" style="text-align:left"
+                    onclick="document.getElementById('systemPrompt').value='Sen sadece bir müşteri hizmetleri botusun. Çok nazik ve anlayışlı ol. Sorun yaşayan müşterilerden özür dile ve iletişim bilgilerini alıp ekibimize yönlendir.'">Sadece
+                    Destek (Nazik)</button>
+                  <button type="button" class="tpl-btn" style="text-align:left"
+                    onclick="document.getElementById('systemPrompt').value='Sen fiyat ve özellik bilgisi veren hızlı bir botsun. Cevapların madde madde, çok kısa ve emojili olsun. Sadece sorulan soruya yanıt ver.'">Hızlı
+                    & Kısa Bilgi</button>
+                </div>
+              </div>
+              <p style="font-size:0.75rem; color:var(--gray); margin-bottom:10px; line-height:1.4;">Yapay zekanın
+                müşterilerle tam olarak <strong>nasıl konuşacağını</strong>, <strong>hangi ürünleri nasıl
+                  satacağını</strong> veya <strong>hangi kurallara uyması gerektiğini</strong> buraya yazın.</p>
+              <textarea class="textarea-field" id="systemPrompt" style="min-height: 200px;"
+                placeholder="Örn: 'Sen bir butik mağaza asistanısın. Sadece stoktaki elbise ve tişörtleri öner. Fiyat sorulmadan fiyat söyleme. Çok samimi bir dil kullan...'"></textarea>
             </div>
             <div class="form-row">
               <div class="field-label">Yaratıcılık Seviyesi — <span id="creativityVal">70</span>%</div>
