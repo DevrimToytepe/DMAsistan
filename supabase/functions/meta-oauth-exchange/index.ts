@@ -203,12 +203,17 @@ Deno.serve(async (req: Request) => {
       const pageToken = accessToken
 
       // Sayfa webhook aboneliği
-      await fetch(
+      const subRes = await fetch(
         `https://graph.facebook.com/v21.0/${pageId}/subscribed_apps?` +
         `subscribed_fields=messages,messaging_postbacks,message_deliveries,message_reads` +
         `&access_token=${pageToken}`,
         { method: 'POST' }
       )
+      const subData = await subRes.json()
+      console.log('Sayfa abonelik sonucu:', subData)
+      if (subData.error) {
+         console.error('Sayfa abonelik hatası:', subData.error)
+      }
     }
 
     return new Response(
