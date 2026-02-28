@@ -177,22 +177,46 @@
                 return;
             }
 
-            // Eğer adminse, istatistikleri yükle (Tüm db tablosu sayımları)
             document.getElementById('accessDenied').style.display = 'none';
             document.getElementById('adminApp').style.display = 'block';
 
             loadStats();
+            loadUsers();
         }
 
         async function loadStats() {
             // Gerçek veritabanı sorguları (Supabase'den tüm satırları say)
-            const { count: userCount } = await supabase.from('users_view').select('*', { count: 'exact', head: true }).catch(() => ({ count: 214 })); // Örnek fallback
-            const { count: convCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).catch(() => ({ count: 1540 }));
+            const { count: userCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true }).catch(() => ({ count: 0 }));
+            const { count: convCount } = await supabase.from('conversations').select('*', { count: 'exact', head: true }).catch(() => ({ count: 0 }));
 
-            document.getElementById('s-users').textContent = userCount || '214';
-            document.getElementById('s-daily').textContent = '+12'; // Bugün kayıt olan
-            document.getElementById('s-income').textContent = '₺14.500'; // Aylık ciro
-            document.getElementById('s-conv').textContent = convCount || '1.5K';
+            document.getElementById('s-users').textContent = userCount || '0';
+            document.getElementById('s-daily').textContent = '+1'; // Bugün kayıt olan örnek
+            document.getElementById('s-income').textContent = '₺14.500'; // Aylık ciro statik şimdilik
+            document.getElementById('s-conv').textContent = convCount || '0';
+        }
+
+        async function loadUsers() {
+            const { data: users, error } = await supabase.from('profiles').select('id, full_name, plan, created_at, stripe_customer_id').order('created_at', { ascending: false }).limit(10);
+            const tbody = document.getElementById('usersTableBody');
+            if (error || !users) {
+                tbody.innerHTML = '<tr><td colspan="4">Kullanıcı bulunamadı.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = users.map(u => `
+                <tr>
+                    <td>${u.full_name || 'İsimsiz Kullanıcı'} <br><span style="font-size:0.7rem; color:var(--gray)">${u.id}</span></td>
+                    <td>${new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
+                    <td><span style="color:#22c55e;">Aktif</span></td>
+                    <td>${u.plan || 'Ücretsiz'}</td>
+                </tr>
+            `).join('');
+        }
+
+        window.switchTab = function (tabId) {
+            document.querySelectorAll('.tab-section').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).style.display = 'block';
+            event.currentTarget.classList.add('active');
         }
 
         document.addEventListener('DOMContentLoaded', checkAdmin);
@@ -212,73 +236,112 @@
     <div id="adminApp" style="display:none; width: 100%; height: 100%;">
         <aside class="sidebar">
             <div class="sidebar-logo">⚡ DMAsistan <span class="badge-admin">ADMİN</span></div>
-            <a class="nav-item active" href="#">📊 Genel Bakış</a>
-            <a class="nav-item" href="#">👥 Kullanıcılar</a>
-            <a class="nav-item" href="#">💰 Finans & Gelirler</a>
-            <a class="nav-item" href="#">⚙️ Sistem Ayarları</a>
+            <a class="nav-item active" href="#" onclick="switchTab('tab-overview')">📊 Genel Bakış</a>
+            <a class="nav-item" href="#" onclick="switchTab('tab-users')">👥 Kullanıcılar</a>
+            <a class="nav-item" href="#" onclick="switchTab('tab-finance')">💰 Finans & Gelirler</a>
+            <a class="nav-item" href="#" onclick="switchTab('tab-settings')">⚙️ Sistem Ayarları</a>
             <a class="nav-item" style="margin-top:auto;" href="dashboard.html">← Kullanıcı Paneline Dön</a>
         </aside>
 
         <div class="main">
-            <div class="topbar-title">
-                Sistem Durumu
-                <button class="btn-action">Güncelleme Yayınla</button>
+            <!-- TAB: OVERVIEW -->
+            <div id="tab-overview" class="tab-section">
+                <div class="topbar-title" style="margin-bottom: 24px;">
+                    Sistem Durumu
+                    <button class="btn-action">Güncelleme Yayınla</button>
+                </div>
+
+                <div class="stats-grid" style="margin-bottom: 24px;">
+                    <div class="stat-card">
+                        <div style="color:var(--gray); font-size:0.8rem">Toplam Aktif Kullanıcı</div>
+                        <div class="stat-value" id="s-users">...</div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="color:var(--gray); font-size:0.8rem">Bugün Kayıt Olanlar</div>
+                        <div class="stat-value" id="s-daily">...</div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="color:var(--gray); font-size:0.8rem">Aylık Brüt Gelir</div>
+                        <div class="stat-value" style="color:#22c55e" id="s-income">...</div>
+                    </div>
+                    <div class="stat-card">
+                        <div style="color:var(--gray); font-size:0.8rem">Sistem İş yükü (Mesajlar)</div>
+                        <div class="stat-value" id="s-conv">...</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3 style="margin-bottom: 20px;">Sistem Sağlığı 🟢</h3>
+                    <p style="color:var(--gray); font-size:0.9rem; line-height: 1.5;">Vercel Sunucuları:
+                        Aktif<br>Supabase Veritabanı: Aktif (%12 kullanım)<br>Meta Webhook'ları: Aktif ve Sağlıklı</p>
+                </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div style="color:var(--gray); font-size:0.8rem">Toplam Aktif Kullanıcı</div>
-                    <div class="stat-value" id="s-users">...</div>
-                </div>
-                <div class="stat-card">
-                    <div style="color:var(--gray); font-size:0.8rem">Bugün Kayıt Olanlar</div>
-                    <div class="stat-value" id="s-daily">...</div>
-                </div>
-                <div class="stat-card">
-                    <div style="color:var(--gray); font-size:0.8rem">Aylık Brüt Gelir</div>
-                    <div class="stat-value" style="color:#22c55e" id="s-income">...</div>
-                </div>
-                <div class="stat-card">
-                    <div style="color:var(--gray); font-size:0.8rem">Sistem İş yükü (Mesajlar)</div>
-                    <div class="stat-value" id="s-conv">...</div>
+            <!-- TAB: USERS -->
+            <div id="tab-users" class="tab-section" style="display:none;">
+                <div class="topbar-title" style="margin-bottom: 24px;">Kullanıcı Yönetimi</div>
+                <div class="panel">
+                    <h3 style="margin-bottom: 20px;">Tüm Kullanıcılar (Son Kayıtlar)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Kullanıcı / ID</th>
+                                <th>Kayıt Tarihi</th>
+                                <th>Durum</th>
+                                <th>Plan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align:center;">Yükleniyor...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="panel">
-                <h3 style="margin-bottom: 20px;">Son Kayıt Olanlar</h3>
-                <table>
-                    <tr>
-                        <th>Kullanıcı E-posta</th>
-                        <th>Kayıt Tarihi</th>
-                        <th>Durum</th>
-                        <th>Plan</th>
-                    </tr>
-                    <tr>
-                        <td>ahmet@example.com</td>
-                        <td>Bugün 14:30</td>
-                        <td><span style="color:#22c55e;">Aktif</span></td>
-                        <td>Pro</td>
-                    </tr>
-                    <tr>
-                        <td>mehmet@firma.com</td>
-                        <td>Dün 09:15</td>
-                        <td><span style="color:#22c55e;">Aktif</span></td>
-                        <td>Ücretsiz</td>
-                    </tr>
-                </table>
+            <!-- TAB: FINANCE -->
+            <div id="tab-finance" class="tab-section" style="display:none;">
+                <div class="topbar-title" style="margin-bottom: 24px;">Finansal Veriler</div>
+                <div class="panel">
+                    <h3 style="margin-bottom: 20px;">Stripe Abonelikleri Geliri</h3>
+                    <p style="color:var(--gray); font-size:0.9rem;">(Buraya Stripe entegrasyonu tamamlandığında anlık
+                        ciro akışı yansıtılacaktır.)</p>
+                    <table style="margin-top: 20px;">
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Müşteri</th>
+                            <th>Tutar</th>
+                            <th>Plan</th>
+                        </tr>
+                        <tr>
+                            <td>12 Mar 2026</td>
+                            <td>Gelecekteki Pro Üye</td>
+                            <td style="color:#22c55e">+₺500</td>
+                            <td>Pro</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
-            <div class="panel">
-                <h3 style="margin-bottom: 20px; color:#F43F75">Hızlı Kontroller</h3>
-                <p style="color:var(--gray); font-size:0.9rem; margin-bottom:15px">Sitenin genel ayarlarını buradan
-                    anında değiştirebilirsin.</p>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn-action"
-                        style="background:var(--bg-2); border:1px solid var(--glass-border)">Bakım Moduna Al</button>
-                    <button class="btn-action"
-                        style="background:var(--bg-2); border:1px solid var(--glass-border)">Kayıtları Durdur</button>
-                    <button class="btn-action" style="background:var(--bg-2); border:1px solid var(--glass-border)">Tüm
-                        Cache'i Temizle</button>
+            <!-- TAB: SETTINGS -->
+            <div id="tab-settings" class="tab-section" style="display:none;">
+                <div class="topbar-title" style="margin-bottom: 24px;">Sistem Kontrolleri</div>
+                <div class="panel">
+                    <h3 style="margin-bottom: 20px; color:#F43F75">Hızlı Kontroller</h3>
+                    <p style="color:var(--gray); font-size:0.9rem; margin-bottom:15px">Sitenin genel ayarlarını buradan
+                        anında değiştirebilirsin.</p>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-action"
+                            style="background:var(--bg-2); border:1px solid var(--glass-border)">Bakım Moduna
+                            Al</button>
+                        <button class="btn-action"
+                            style="background:var(--bg-2); border:1px solid var(--glass-border)">Kayıtları
+                            Durdur</button>
+                        <button class="btn-action"
+                            style="background:var(--bg-2); border:1px solid var(--glass-border)">Tüm Cache'i
+                            Temizle</button>
+                    </div>
                 </div>
             </div>
         </div>
