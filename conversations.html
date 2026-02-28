@@ -823,6 +823,19 @@
       try {
         const { data: { session } } = await window._supabase.auth.getSession()
         if (!session) return
+
+        // Önce Edge Function ile Meta'ya mesajı gönder!
+        const { data: fnData, error: fnErr } = await window._supabase.functions.invoke('send-message', {
+          body: { conv_id: convId, content }
+        })
+
+        if (fnErr || fnData?.error) {
+          console.error("Meta Gönderim Hatası:", fnErr || fnData?.error)
+          alert("Hata: Mesaj Facebook'a gönderilemedi. (" + (fnData?.error || fnErr?.message) + ")")
+          return // Geri dön, DB'ye ekleme.
+        }
+
+        // Gönderim başarılı ise veritabanına ekle
         await window._supabase.from('messages').insert({
           conversation_id: convId,
           user_id: session.user.id,
@@ -835,9 +848,11 @@
           last_message: content,
           last_message_at: new Date().toISOString()
         }).eq('id', convId)
+
         appendMessage({ content, direction: 'outbound', is_ai: false, created_at: new Date().toISOString() })
       } catch (err) {
         console.error('Mesaj gönderilemedi:', err)
+        alert('Kritik Hata: ' + err.message)
       }
     }
 
