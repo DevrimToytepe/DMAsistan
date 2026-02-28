@@ -791,36 +791,40 @@
             <button class="btn-plan upgrade" id="btnPro">⚡ Pro'ya Geç</button>
           </div>
           <!-- ENTERPRISE -->
+          <!-- PAY AS YOU GO -->
           <div class="plan-card">
-            <div class="plan-name">Kurumsal</div>
-            <div class="plan-price">Özel <span>fiyat</span></div>
-            <div class="plan-desc">Büyük ekipler için</div>
+            <div class="plan-name">Dakika / Kullandıkça Öde</div>
+            <div class="plan-price">₺1 <span>/ dakika</span></div>
+            <div class="plan-desc">Sadece kullandığın kadar öde</div>
             <div class="plan-features">
-              <div class="plan-feature"><span class="check">✓</span> Sınırsız mesaj</div>
               <div class="plan-feature"><span class="check">✓</span> Sınırsız platform</div>
               <div class="plan-feature"><span class="check">✓</span> Sınırsız şablon</div>
               <div class="plan-feature"><span class="check">✓</span> Sınırsız kişi</div>
-              <div class="plan-feature"><span class="check">✓</span> API erişimi</div>
-              <div class="plan-feature"><span class="check">✓</span> Özel entegrasyon</div>
-              <div class="plan-feature"><span class="check">✓</span> Dedicated destek</div>
+              <div class="plan-feature"><span class="check">✓</span> AI tam otomasyon</div>
+              <div class="plan-feature"><span class="check">✓</span> Önceden limit yok</div>
+              <div class="plan-feature"><span class="check">✓</span> Harcadıkça düşer</div>
             </div>
-            <button class="btn-plan enterprise" onclick="window.open('mailto:sales@dmasistan.com')">📩 Bize
-              Yazın</button>
+            <button class="btn-plan enterprise" style="border-color: #22c55e;">💳 İyzico ile Bakiye Yükle</button>
           </div>
         </div>
-      </div>
 
-      <!-- FATURA GEÇMİŞİ -->
-      <div class="panel">
-        <div class="panel-title">Fatura Geçmişi</div>
-        <div id="invoiceList">
-          <div style="text-align:center;padding:24px;color:var(--gray);font-size:0.85rem;">
-            <div style="font-size:1.8rem;margin-bottom:8px;">🧾</div>
-            Henüz fatura yok
-          </div>
+        <div style="text-align:center; padding: 20px; font-size: 0.8rem; color: var(--gray);">
+          🔒 Tüm ödemeler <strong>iyzico</strong> güvencesi ile 256-bit şifrelenerek alınmaktadır.
         </div>
       </div>
     </div>
+
+    <!-- FATURA GEÇMİŞİ -->
+    <div class="panel">
+      <div class="panel-title">Fatura Geçmişi</div>
+      <div id="invoiceList">
+        <div style="text-align:center;padding:24px;color:var(--gray);font-size:0.85rem;">
+          <div style="font-size:1.8rem;margin-bottom:8px;">🧾</div>
+          Henüz fatura yok
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 
   <script type="module">

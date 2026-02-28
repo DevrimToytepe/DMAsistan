@@ -403,12 +403,16 @@
         // şu anlık basit bir bellek tutulumu + localStorage ile demo yapıyorum, ilerde supabase tablosuna çevrilir)
         // Supabase'den çekilmeli:
 
+        function saveTransactions() {
+            localStorage.setItem('dmasistan_transactions', JSON.stringify(transactions));
+        }
+
         async function init() {
             const { data: { session } } = await supabase.auth.getSession()
             if (!session) { window.location.replace('giris.html'); return }
             document.getElementById('sidebarName').textContent = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
 
-            loadFakeData();
+            loadData();
             initTabs();
             renderTable();
             updateStats();
@@ -434,9 +438,10 @@
                     amount,
                     type,
                     status,
-                    contact: 'Yeni İşlem'
+                    contact: '-'
                 });
 
+                saveTransactions();
                 renderTable();
                 updateStats();
                 document.getElementById('txModal').style.display = 'none';
@@ -444,13 +449,13 @@
             });
         }
 
-        function loadFakeData() {
-            transactions = [
-                { id: '1', date: new Date().toISOString(), title: 'DM Satış - Elbise', amount: 850, type: 'income', status: 'completed', contact: 'Ayşe Yılmaz' },
-                { id: '2', date: new Date(Date.now() - 86400000).toISOString(), title: 'DM Satış - Saat', amount: 1500, type: 'income', status: 'pending', contact: 'Mehmet K.' },
-                { id: '3', date: new Date(Date.now() - 2 * 86400000).toISOString(), title: 'Reklam Gideri (Meta)', amount: 450, type: 'expense', status: 'completed', contact: 'Meta Ads' },
-                { id: '4', date: new Date(Date.now() - 3 * 86400000).toISOString(), title: 'Randevu Kaparosu', amount: 200, type: 'income', status: 'completed', contact: 'Ali C.' },
-            ];
+        function loadData() {
+            const stored = localStorage.getItem('dmasistan_transactions');
+            if (stored) {
+                transactions = JSON.parse(stored);
+            } else {
+                transactions = [];
+            }
         }
 
         let currentFilter = 'all';
@@ -505,6 +510,7 @@
 
         window.deleteTx = function (id) {
             transactions = transactions.filter(t => t.id !== id);
+            saveTransactions();
             renderTable();
             updateStats();
         }
