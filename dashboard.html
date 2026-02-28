@@ -934,6 +934,18 @@
         document.getElementById('welcomeName').textContent = first
         document.getElementById('topbarGreet').textContent = `Merhaba, ${first} 👋`
 
+        // SADECE ADMİN İSE SİDEBAR'A ADMİN BÖLÜMÜNÜ EKLE
+        if (user.email === 'devrimtoytepe007@gmail.com') {
+          const adminBtn = document.createElement('a');
+          adminBtn.className = 'nav-item';
+          adminBtn.href = 'admin.html';
+          adminBtn.style.color = '#F43F75';
+          adminBtn.style.backgroundColor = 'rgba(244, 63, 117, 0.1)';
+          adminBtn.innerHTML = '<span class="nav-icon">👑</span> Süper Admin';
+          const navSection = document.querySelector('.nav-section');
+          if (navSection) navSection.after(adminBtn);
+        }
+
         // ── Supabase'den gerçek veriler (paralel) ──
         const uid = user.id
         const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
