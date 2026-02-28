@@ -139,7 +139,7 @@ async function handleInstagramMessage(pageId: string, messaging: Record<string, 
     senderId,
     senderName: senderId,
     content: text,
-    timestamp: timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString(),
+    timestamp: timestamp ? new Date(timestamp).toISOString() : new Date().toISOString(),
     rawPayload: messaging,
     accessToken: platform.access_token,
   })
@@ -194,7 +194,7 @@ async function handleFacebookMessage(pageId: string, messaging: Record<string, u
     senderId,
     senderName,
     content: text,
-    timestamp: timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString(),
+    timestamp: timestamp ? new Date(timestamp).toISOString() : new Date().toISOString(),
     rawPayload: messaging,
     accessToken: activeUser.access_token,
   })
