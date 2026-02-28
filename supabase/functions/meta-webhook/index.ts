@@ -263,17 +263,21 @@ async function processIncomingMessage(params: {
   const { userId, platform, senderId, senderName, content, timestamp, accessToken, phoneNumberId } = params
 
   // 1. Konuşmayı bul veya oluştur
-  let { data: conv } = await supabase
+  console.log(`> Konuşma aranıyor: userId=${userId}, platform=${platform}, senderId=${senderId}`)
+  let { data: conv, error: convErr } = await supabase
     .from('conversations')
     .select('id, status')
     .eq('user_id', userId)
     .eq('platform', platform)
     .eq('sender_id', senderId)
     .eq('status', 'open')
-    .single()
 
-  if (!conv) {
-    const { data: newConv } = await supabase
+  // single() dizi boşsa hata atıyor, o yüzden dizinin ilk elemanını alıyoruz
+  let activeConv = conv && conv.length > 0 ? conv[0] : null
+  console.log(`> Mevcut konuşma durumu:`, activeConv ? 'Bulundu' : 'Bulunamadı, yaratılacak')
+
+  if (!activeConv) {
+    const { data: newConv, error: newErr } = await supabase
       .from('conversations')
       .insert({
         user_id: userId,
@@ -286,21 +290,29 @@ async function processIncomingMessage(params: {
         last_message_at: timestamp,
       })
       .select()
-      .single()
-    conv = newConv
+
+    if (newErr) {
+       console.error(`> YENİ KONUŞMA OLUŞTURMA HATASI:`, newErr)
+    }
+    activeConv = newConv && newConv.length > 0 ? newConv[0] : null
   } else {
     // Mevcut konuşmayı güncelle
-    await supabase
+    const { error: updErr } = await supabase
       .from('conversations')
       .update({ last_message: content, last_message_at: timestamp })
-      .eq('id', conv.id)
+      .eq('id', activeConv.id)
+      
+    if (updErr) console.error(`> KONUŞMA GÜNCELLEME HATASI:`, updErr)
   }
 
-  if (!conv) return
+  if (!activeConv) {
+    console.error('> HATA: İşleme devam edilecek bir Konuşma (activeConv) bulunamadı/oluşturulamadı.')
+    return
+  }
 
   // 2. Kullanıcı mesajını kaydet
-  await supabase.from('messages').insert({
-    conversation_id: conv.id,
+  const { error: msgErr } = await supabase.from('messages').insert({
+    conversation_id: activeConv.id,
     user_id: userId,
     content,
     direction: 'inbound',
@@ -309,9 +321,12 @@ async function processIncomingMessage(params: {
     sender_id: senderId,
     created_at: timestamp,
   })
+  
+  if (msgErr) console.error(`> MESAJ KAYIT(INSERT) HATASI:`, msgErr)
+  else console.log(`> Mesaj başarıyla [messages] tablosuna eklendi!`)
 
   // 3. AI ayarlarını kontrol et
-  const { data: aiSettings } = await supabase
+  const { data: aiSettings, error: aiErr } = await supabase
     .from('ai_settings')
     .select('*')
     .eq('user_id', userId)
@@ -324,9 +339,9 @@ async function processIncomingMessage(params: {
 
   // 4. AI webhook'una ilet (GPT-4 yanıt üretir)
   try {
-    const { data: aiData } = await supabase.functions.invoke('ai-webhook', {
+    const { data: aiData, error: invokeErr } = await supabase.functions.invoke('ai-webhook', {
       body: {
-        conversation_id: conv.id,
+        conversation_id: activeConv.id,
         user_id: userId,
         message: content,
         platform,
@@ -334,6 +349,9 @@ async function processIncomingMessage(params: {
         sender_name: senderName,
       }
     })
+    
+    if (invokeErr) console.error(`> AI-WEBHOOK ÇAĞIRMA HATASI:`, invokeErr)
+    else console.log(`> AI Yanıt verdi:`, aiData?.reply)
 
     if (aiData?.reply) {
       // 5. AI yanıtını platforma geri gönder
@@ -344,6 +362,7 @@ async function processIncomingMessage(params: {
         accessToken,
         phoneNumberId,
       })
+      console.log('> Platforma yanıt başarıyla iletildi.')
     }
   } catch (err) {
     console.error('AI yanıt hatası:', err)
