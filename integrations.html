@@ -770,6 +770,14 @@
             const waStats = document.getElementById('waStats')
             if (waStats) waStats.style.display = 'flex'
           }
+          if (p.platform === 'vapi') {
+            const settingsBtn = document.createElement('button')
+            settingsBtn.className = 'btn-connect'
+            settingsBtn.style.cssText = 'background:rgba(124, 58, 237, 0.1);border:1px solid var(--purple);color:var(--purple-light); margin-top: 10px;'
+            settingsBtn.textContent = '⚙️ Vapi Ayarları'
+            settingsBtn.onclick = () => window.location.href = 'vapi-settings.html'
+            if (card) card.appendChild(settingsBtn)
+          }
         })
 
         supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
