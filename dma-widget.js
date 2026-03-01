@@ -382,8 +382,17 @@ function initAIAssistant() {
     let currentLimit = { total: 0, used: 0 };
     let hasReachedLimit = false;
 
-    // Supabase Import (window._supabase if available)
-    const supabase = window._supabase || null;
+    // Supabase Dynamic Getter
+    async function getSupabase() {
+        if (window._supabase) return window._supabase;
+        try {
+            const m = await import('./supabase.js');
+            window._supabase = m.supabase;
+            return m.supabase;
+        } catch (e) {
+            return null;
+        }
+    }
 
     btn.addEventListener('click', () => {
         win.classList.toggle('open');
@@ -426,6 +435,7 @@ function initAIAssistant() {
         chatBody.appendChild(suggestionsBox);
 
         // Kullanım Limiti Çekme
+        const supabase = await getSupabase();
         if (supabase) {
             await fetchUsage();
             await loadHistory();
@@ -469,6 +479,7 @@ function initAIAssistant() {
         const typingId = 'typing-' + Date.now();
         appendTyping(typingId);
 
+        const supabase = await getSupabase();
         if (!supabase) {
             setTimeout(() => {
                 removeTyping(typingId);
@@ -558,6 +569,8 @@ function initAIAssistant() {
     }
 
     async function fetchUsage() {
+        const supabase = await getSupabase();
+        if (!supabase) return;
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
 
@@ -573,6 +586,8 @@ function initAIAssistant() {
     }
 
     async function loadHistory() {
+        const supabase = await getSupabase();
+        if (!supabase) return;
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
 

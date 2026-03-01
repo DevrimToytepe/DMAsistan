@@ -1,0 +1,2 @@
+CREATE POLICY "admin_select_all_profiles" ON public.profiles FOR SELECT USING (auth.jwt() ->> 'email' = 'devrimtoytepe007@gmail.com');
+CREATE POLICY "admin_select_all_conversations" ON public.conversations FOR SELECT USING (auth.jwt() ->> 'email' = 'devrimtoytepe007@gmail.com');
