@@ -58,8 +58,11 @@ const PUBLIC_PAGES = ['giris.html', 'kayit.html', 'index.html', 'sifre-sifirla.h
     }
 
     // ── Auth state değişikliklerini dinle ──
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, newSession) => {
       if (event === 'SIGNED_OUT') {
+        window.location.replace('giris.html')
+      } else if (newSession && newSession.user.id !== user.id) {
+        alert('Başka bir hesapla işlem yapıldı. Güvenliğiniz için yeniden yönlendiriliyorsunuz.')
         window.location.replace('giris.html')
       }
     })

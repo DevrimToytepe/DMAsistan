@@ -10,50 +10,103 @@
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
+        :root {
+            --bg: #0A0E1A;
+            --bg-2: #0F1428;
+            --purple: #7C3AED;
+            --purple-light: #9B5CF6;
+            --pink: #F43F75;
+            --white: #FFFFFF;
+            --gray: #A1A1AA;
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --gradient: linear-gradient(135deg, #7C3AED, #F43F75);
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --sidebar-w: 248px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: #0A0E1A;
-            color: #fff;
             font-family: 'Inter', sans-serif;
-            display: flex;
+            background: var(--bg);
+            color: var(--white);
             min-height: 100vh;
+            display: flex;
             overflow-x: hidden;
         }
 
-        /* REUSING SIDEBAR AND TOPBAR FROM DASHBOARD */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.07;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .blob-1 {
+            width: 700px;
+            height: 700px;
+            background: var(--purple);
+            top: -300px;
+            left: -100px;
+        }
+
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--pink);
+            bottom: -200px;
+            right: -50px;
+        }
+
         .sidebar {
             width: var(--sidebar-w);
-            background: rgba(10, 14, 26, 0.6);
-            backdrop-filter: blur(20px);
+            flex-shrink: 0;
+            background: var(--bg-2);
             border-right: 1px solid var(--glass-border);
             display: flex;
             flex-direction: column;
-            padding: 24px 20px;
             position: fixed;
             top: 0;
-            bottom: 0;
             left: 0;
+            height: 100vh;
             z-index: 100;
+            padding: 0 12px 20px;
         }
 
         .sidebar-logo {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--white);
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 32px;
-            padding: 0 12px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            padding: 20px 12px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .nav-section {
-            font-size: 0.68rem;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.67rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.35);
+            color: rgba(255, 255, 255, 0.22);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin: 16px 0 6px 12px;
+            letter-spacing: 0.12em;
+            padding: 14px 12px 6px;
         }
 
         .nav-item {
@@ -66,7 +119,7 @@
             font-size: 0.88rem;
             color: var(--gray);
             cursor: pointer;
-            transition: 0.2s;
+            transition: var(--transition);
             text-decoration: none;
         }
 
@@ -80,10 +133,11 @@
             color: var(--white);
         }
 
-        .nav-icon {
+        .nav-item .nav-icon {
             font-size: 1rem;
             width: 22px;
             text-align: center;
+            flex-shrink: 0;
         }
 
         .sidebar-divider {
@@ -107,6 +161,19 @@
             text-decoration: none;
         }
 
+        .user-avatar-sq {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
         .user-info .name {
             font-size: 0.85rem;
             font-weight: 600;
@@ -125,10 +192,16 @@
             color: var(--gray);
             font-size: 1.1rem;
             cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+
+        .logout-btn:hover {
+            color: var(--pink);
         }
 
         .main {
-            margin-left: 260px;
+            margin-left: var(--sidebar-w);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -157,8 +230,14 @@
             font-weight: 700;
         }
 
+        .topbar-sub {
+            font-size: 0.78rem;
+            color: var(--gray);
+            margin-top: 1px;
+        }
+
         .content {
-            padding: 32px;
+            padding: 28px 32px 40px;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -410,7 +489,10 @@
         async function init() {
             const { data: { session } } = await supabase.auth.getSession()
             if (!session) { window.location.replace('giris.html'); return }
-            document.getElementById('sidebarName').textContent = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+            window._supabase = supabase
+            const name = session.user.user_metadata?.full_name || session.user.email.split('@')[0]
+            document.getElementById('sidebarAvatar').textContent = name.charAt(0).toUpperCase()
+            document.getElementById('sidebarName').textContent = name
 
             loadData();
             initTabs();
@@ -446,6 +528,12 @@
                 updateStats();
                 document.getElementById('txModal').style.display = 'none';
                 e.target.reset();
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', async e => {
+                e.preventDefault(); e.stopPropagation()
+                await window._supabase.auth.signOut()
+                window.location.href = 'giris.html'
             });
         }
 
@@ -540,7 +628,6 @@
 
     <aside class="sidebar">
         <div class="sidebar-logo"><span>⚡</span> DMAsistan</div>
-
         <div class="nav-section">Ana Menü</div>
         <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
         <a class="nav-item" href="conversations.html"><span class="nav-icon">💬</span> Konuşmalar</a>
@@ -548,18 +635,20 @@
         <a class="nav-item" href="contacts.html"><span class="nav-icon">👥</span> Kişiler</a>
         <a class="nav-item" href="analytics.html"><span class="nav-icon">📈</span> Analitik</a>
         <a class="nav-item active" href="accounting.html"><span class="nav-icon">💰</span> Muhasebe</a>
-
         <div class="sidebar-divider"></div>
         <div class="nav-section">Ayarlar</div>
         <a class="nav-item" href="integrations.html"><span class="nav-icon">🔗</span> Entegrasyonlar</a>
         <a class="nav-item" href="settings.html"><span class="nav-icon">⚙️</span> Ayarlar</a>
-
+        <a class="nav-item" href="billing.html"><span class="nav-icon">💳</span> Faturalama</a>
+        <div class="sidebar-divider"></div>
         <div class="sidebar-bottom">
             <a class="user-card" href="settings.html">
+                <div class="user-avatar-sq" id="sidebarAvatar">?</div>
                 <div class="user-info">
                     <div class="name" id="sidebarName">Yükleniyor...</div>
                     <div class="plan">🆓 Ücretsiz Plan</div>
                 </div>
+                <button class="logout-btn" id="logoutBtn">⏻</button>
             </a>
         </div>
     </aside>
@@ -568,6 +657,7 @@
         <div class="topbar">
             <div>
                 <div class="topbar-title">Muhasebe & Finans</div>
+                <div class="topbar-sub">Finansal işlemlerinizi ve gelir / giderinizi yönetin</div>
             </div>
         </div>
 
@@ -652,7 +742,7 @@
             </form>
         </div>
     </div>
-    <script src="ai-assistant.js"></script>
+    <script src="dma-widget.js" defer></script>
 </body>
 
 </html>

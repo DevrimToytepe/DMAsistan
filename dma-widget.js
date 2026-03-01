@@ -1,4 +1,6 @@
-export function initAIAssistant() {
+console.log("DMA Widget (AI Assistant) Script Loaded - 1");
+function initAIAssistant() {
+    console.log("DMA Widget Init Called - 2");
     // Sadece bir kez yükle
     if (document.getElementById('dma-ai-wrapper')) return;
 

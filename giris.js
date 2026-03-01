@@ -99,6 +99,9 @@ async function handleLogin(e) {
     return
   }
 
+  // Mevcut session'ı temizle (Çakışmayı önlemek için)
+  await supabase.auth.signOut()
+
   const email = document.getElementById('emailInput')?.value?.trim() ?? ''
   const pass = document.getElementById('passInput')?.value ?? ''
 

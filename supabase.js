@@ -9,7 +9,8 @@ import CONFIG from './config.js'
  */
 export const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
   auth: {
-    persistSession: true,   // Token localStorage'da kalsın
+    storage: window.sessionStorage,
+    persistSession: true,   // Token sessionStorage'da kalsın
     autoRefreshToken: true,   // Token otomatik yenilensin
     detectSessionInUrl: true, // OAuth callback'lerini yakala
   }

@@ -99,6 +99,9 @@ async function handleRegister(e) {
     return
   }
 
+  // Mevcut session'ı temizle (Çakışmayı önlemek için)
+  await supabase.auth.signOut()
+
   const email = document.getElementById('registerEmail')?.value?.trim() ?? ''
   const password = document.getElementById('passwordInput')?.value ?? ''
   const firstName = document.getElementById('firstName')?.value?.trim() ?? ''
