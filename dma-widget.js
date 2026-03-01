@@ -385,13 +385,29 @@ function initAIAssistant() {
     // Supabase Dynamic Getter
     async function getSupabase() {
         if (window._supabase) return window._supabase;
-        try {
-            const m = await import('./supabase.js');
-            window._supabase = m.supabase;
-            return m.supabase;
-        } catch (e) {
-            return null;
-        }
+
+        // Polling fallback mechanism in case dynamic import fails or is slow
+        return new Promise(async (resolve) => {
+            try {
+                const m = await import('./supabase.js');
+                window._supabase = m.supabase;
+                resolve(m.supabase);
+            } catch (e) {
+                console.error("Widget Supabase import error:", e);
+                // IF dynamic import fails (e.g. adblocker, strict MIME), poll window.
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    attempts++;
+                    if (window._supabase) {
+                        clearInterval(interval);
+                        resolve(window._supabase);
+                    } else if (attempts > 30) { // 3 seconds timeout
+                        clearInterval(interval);
+                        resolve(null);
+                    }
+                }, 100);
+            }
+        });
     }
 
     btn.addEventListener('click', () => {

@@ -16,6 +16,9 @@ export const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_K
   }
 })
 
+// Bütün sayfalardan kolay erişim için (özellikle widget vb.) globally set edelim
+window._supabase = supabase;
+
 /**
  * Token expire olunca login sayfasına at.
  * auth-guard.js dışındaki sayfalarda da güvence sağlar.
