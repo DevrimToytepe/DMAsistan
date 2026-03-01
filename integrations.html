@@ -625,6 +625,18 @@
           <button class="btn-connect idle" id="btnFacebook" onclick="connectPlatform('facebook')">👍 Facebook
             Bağla</button>
         </div>
+        <!-- VAPI -->
+        <div class="platform-card" id="cardVapi">
+          <div class="platform-header">
+            <div class="platform-icon-lg" style="background: rgba(124, 58, 237, 0.2); color: #7C3AED;">📞</div>
+            <div>
+              <div class="platform-name-lg">Telefon AI</div>
+              <div class="platform-handle" id="vapiHandle">Bağlı değil</div>
+            </div>
+          </div>
+          <div class="platform-desc">Vapi altyapısıyla çağrılarınıza AI ile yanıt verin.</div>
+          <button class="btn-connect idle" id="btnVapi" onclick="connectVapi()">📞 Telefon AI Bağla</button>
+        </div>
         <!-- TIKTOK -->
         <div class="platform-card soon" id="cardTiktok">
           <div class="soon-badge">Yakında</div>
@@ -831,6 +843,35 @@
       }
       setTimeout(() => window.location.reload(), 1500)
     }
+
+    window.connectVapi = async function () {
+      const { data: { session } } = await window._supabase.auth.getSession()
+      if (!session) { window.location.href = 'giris.html'; return }
+
+      const phoneNumber = prompt("Vapi asistanı oluşturmak için arama yapılacak telefon numaranızı başında +90 olmadan yazın:")
+      if (!phoneNumber) return
+
+      const btn = document.getElementById('btnVapi')
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ Kuruluyor...'; }
+
+      try {
+        const { data, error } = await window._supabase.functions.invoke('vapi-setup', {
+          body: { phone_number: phoneNumber, user_id: session.user.id }
+        })
+
+        if (error || data?.error) throw new Error(data?.error || error.message)
+
+        showToast('📞 Telefon AI (Vapi) kuruldu ve bağlandı!')
+        setTimeout(() => window.location.reload(), 1500)
+      } catch (err) {
+        console.error(err)
+        showToast('Kurulum hatası: ' + err.message, true)
+        if (btn) { btn.disabled = false; btn.textContent = '📞 Telefon AI Bağla'; }
+      }
+    }
+
+    // Modal Events (Native alert/prompt yerine istersen Modal ekleyebilirsin, mock yapıldı prompt ile)
+
 
     function showToast(msg, isError = false) {
       const t = document.getElementById('toast')

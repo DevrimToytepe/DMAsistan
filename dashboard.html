@@ -856,6 +856,31 @@
         </div>
       </div>
 
+      <!-- VAPI MINUTE BALANCE WIDGET -->
+      <div class="panel" id="minuteWidget" style="margin-bottom: 24px;">
+        <div class="panel-head">
+          <div class="panel-title">📞 Telefon AI (Vapi) Dakika Bakiyesi</div>
+          <button class="panel-action" onclick="location.href='billing.html'"
+            style="background:var(--gradient);border:none;color:white;padding:6px 14px;border-radius:100px;font-weight:600;cursor:pointer;">Dakika
+            Yükle</button>
+        </div>
+        <div style="margin-top:12px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:8px;">
+            <span style="color:var(--gray)">Kullanılan: <strong id="usedMinVal" style="color:var(--white)">0</strong>
+              dk</span>
+            <span style="color:var(--gray)">Kalan: <strong id="leftMinVal" style="color:var(--white)">0</strong>
+              dk</span>
+          </div>
+          <div style="height:8px; background:rgba(255,255,255,0.06); border-radius:10px; overflow:hidden;">
+            <div id="minBar" style="height:100%; width:0%; background:var(--gradient); transition:width 0.5s ease;">
+            </div>
+          </div>
+          <div id="minWarning" style="color:#f43f5e; font-size:0.75rem; font-weight:600; margin-top:8px; display:none;">
+            ⚠️ Dikkat: Bakiyeniz %20'nin altına düştü. Kesinti yaşamamak için dakika yükleyin.
+          </div>
+        </div>
+      </div>
+
       <div class="grid-2">
         <div class="panel">
           <div class="panel-head">
@@ -942,12 +967,13 @@
         const thisMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString()
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
 
-        const [convRes, aiRes, platRes, contactRes, chartRes] = await Promise.all([
+        const [convRes, aiRes, platRes, contactRes, chartRes, minRes] = await Promise.all([
           supabase.from('conversations').select('id', { count: 'exact', head: true }).eq('user_id', uid),
           supabase.from('messages').select('id', { count: 'exact', head: true }).eq('user_id', uid).eq('is_ai', true).gte('created_at', thisMonth),
           supabase.from('platforms').select('id, platform', { count: 'exact' }).eq('user_id', uid).eq('is_active', true),
           supabase.from('contacts').select('id', { count: 'exact', head: true }).eq('user_id', uid),
-          supabase.from('conversations').select('created_at').eq('user_id', uid).gte('created_at', sevenDaysAgo)
+          supabase.from('conversations').select('created_at').eq('user_id', uid).gte('created_at', sevenDaysAgo),
+          supabase.from('minute_balance').select('*').eq('user_id', uid).single()
         ])
 
         // Konuşma
@@ -1005,6 +1031,35 @@
           </div>`
 
         document.getElementById('dashPlatformsList').innerHTML = platformListHtml
+
+        // Vapi Dakika Bakiyesi
+        const minuteData = minRes.data || { used_minutes: 0, total_minutes: 0 };
+        const usedMin = minuteData.used_minutes || 0;
+        const totalMin = minuteData.total_minutes || 0;
+        let leftMin = totalMin - usedMin;
+        if (leftMin < 0) leftMin = 0;
+
+        document.getElementById('usedMinVal').textContent = usedMin;
+        document.getElementById('leftMinVal').textContent = leftMin;
+
+        let percent = totalMin > 0 ? (usedMin / totalMin) * 100 : 0;
+        if (percent > 100) percent = 100;
+
+        const minBar = document.getElementById('minBar');
+        if (minBar) {
+          minBar.style.width = percent + '%';
+          if (leftMin > 0 && leftMin <= (totalMin * 0.2)) {
+            minBar.style.background = 'linear-gradient(135deg, #F59E0B, #f43f5e)';
+            document.getElementById('minWarning').style.display = 'block';
+          } else if (leftMin === 0 && totalMin > 0) {
+            minBar.style.background = '#f43f5e';
+            document.getElementById('minWarning').style.display = 'block';
+            document.getElementById('minWarning').textContent = '⚠️ Bakiyeniz tükendi. Vapi asistanınız durduruldu.';
+          } else if (totalMin === 0) {
+            document.getElementById('minWarning').style.display = 'block';
+            document.getElementById('minWarning').innerHTML = 'Henüz dakika paketiniz yok. <a href="billing.html" style="color:#7C3AED;">Satın al</a>';
+          }
+        }
 
 
         // Kişi

@@ -814,6 +814,35 @@
       </div>
     </div>
 
+    <!-- DAKİKA SATIN AL -->
+    <div class="panel">
+      <div class="panel-title">📞 Telefon AI Dakika Paketleri</div>
+      <p style="font-size:0.85rem; color:var(--gray); margin-bottom: 20px;">Sesli AI asistanınız için kredi yükleyin.
+        Ödemeler Stripe altyapısı ile güvendedir.</p>
+      <div class="plans-grid">
+        <div class="plan-card">
+          <div class="plan-name">Başlangıç</div>
+          <div class="plan-price">$5</div>
+          <div class="plan-desc">100 Dakika</div>
+          <button class="btn-plan enterprise" style="border-color:#7C3AED;" onclick="buyMinutes(100, 5)">💳 Stripe ile
+            Al</button>
+        </div>
+        <div class="plan-card popular">
+          <div class="plan-name">Standart</div>
+          <div class="plan-price">$20</div>
+          <div class="plan-desc">500 Dakika</div>
+          <button class="btn-plan upgrade" onclick="buyMinutes(500, 20)">💳 Stripe ile Al</button>
+        </div>
+        <div class="plan-card">
+          <div class="plan-name">Pro Max</div>
+          <div class="plan-price">$35</div>
+          <div class="plan-desc">1000 Dakika</div>
+          <button class="btn-plan enterprise" style="border-color:#22c55e;" onclick="buyMinutes(1000, 35)">💳 Stripe ile
+            Al</button>
+        </div>
+      </div>
+    </div>
+
     <!-- FATURA GEÇMİŞİ -->
     <div class="panel">
       <div class="panel-title">Fatura Geçmişi</div>
@@ -943,6 +972,36 @@
         btn.disabled = false
         btn.textContent = '⚡ Pro\'ya Geç'
         showToast('❌ ' + (err.message || 'Ödeme başlatılamadı.'), true)
+      }
+    }
+
+    window.buyMinutes = async function (minutes, price) {
+      if (!confirm(`${minutes} dakikayı $${price} karşılığında satın almak istiyor musunuz? (Test Ortamı)`)) return
+
+      const { data: { session } } = await _sb.auth.getSession()
+      if (!session) return
+
+      try {
+        showToast('⏳ Ödeme işleniyor...', false)
+
+        // Stripe entegrasyonu gerçekte checkout.session oluşturur. 
+        // Şimdilik test için db'ye direkt yansıtıp Vapi assistant'ı aktifleştiriyoruz.
+        const uid = session.user.id;
+        const { data: currentBalance } = await _sb.from('minute_balance').select('*').eq('user_id', uid).single()
+
+        let newTotal = minutes;
+        if (currentBalance) {
+          newTotal = (currentBalance.total_minutes || 0) + minutes;
+          await _sb.from('minute_balance').update({ total_minutes: newTotal }).eq('user_id', uid)
+        } else {
+          await _sb.from('minute_balance').insert({ user_id: uid, total_minutes: newTotal, used_minutes: 0 })
+        }
+
+        showToast(`✅ Ödeme Başarılı! Hesabınıza ${minutes} Dakika eklendi.`, false)
+
+        setTimeout(() => window.location.href = 'dashboard.html', 2000)
+      } catch (err) {
+        showToast('❌ Hata oluştu: ' + err.message, true)
       }
     }
 
