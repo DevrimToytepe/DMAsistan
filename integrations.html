@@ -496,6 +496,125 @@
       border: 1px solid rgba(34, 197, 94, 0.2);
     }
 
+    /* MODERN VAPI MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .vapi-modal {
+      background: var(--bg-2);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 440px;
+      padding: 28px;
+      position: relative;
+      animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-desc {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .modal-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      transition: var(--transition);
+      outline: none;
+    }
+
+    .modal-input:focus {
+      border-color: var(--purple);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+    }
+
+    .modal-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn-modal {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+    }
+
+    .btn-cancel {
+      background: transparent;
+      color: var(--white);
+    }
+
+    .btn-cancel:hover {
+      background: var(--glass);
+    }
+
+    .btn-confirm {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 15px rgba(244, 63, 117, 0.3);
+    }
+
+    .btn-confirm:hover {
+      box-shadow: 0 6px 20px rgba(244, 63, 117, 0.5);
+      transform: translateY(-1px);
+    }
+
     @media(max-width:900px) {
       .platforms-grid {
         grid-template-columns: 1fr;
@@ -700,6 +819,22 @@
     </div>
   </div>
 
+  <!-- Vapi Telefon Onay Modalı -->
+  <div class="modal-overlay" id="vapiModal">
+    <div class="vapi-modal">
+      <div class="modal-title">📞 Telefon AI Onayı</div>
+      <div class="modal-desc">
+        Vapi asistanı oluşturmak ve arama yanıtlamak için bir telefon numarası girin. Lütfen numarayı başında
+        <strong>+90</strong> gibi ülke kodu <strong>olmadan</strong> yazın.
+      </div>
+      <input type="text" class="modal-input" id="vapiPhoneInput" placeholder="Örn: 5551234567" autocomplete="off" />
+      <div class="modal-actions">
+        <button class="btn-modal btn-cancel" onclick="closeVapiModal()">İptal</button>
+        <button class="btn-modal btn-confirm" id="vapiConfirmBtn" onclick="submitVapiPhone()">Devam Et →</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast"
     style="position:fixed;bottom:24px;right:24px;z-index:9999;padding:13px 20px;border-radius:12px;font-size:0.85rem;font-weight:600;transform:translateY(100px);transition:transform 0.3s;max-width:320px;border:1px solid;">
   </div>
@@ -852,14 +987,32 @@
       setTimeout(() => window.location.reload(), 1500)
     }
 
-    window.connectVapi = async function () {
+    window.connectVapi = function () {
+      document.getElementById('vapiPhoneInput').value = '';
+      document.getElementById('vapiModal').classList.add('active');
+      setTimeout(() => document.getElementById('vapiPhoneInput').focus(), 100);
+    }
+
+    window.closeVapiModal = function () {
+      document.getElementById('vapiModal').classList.remove('active');
+    }
+
+    window.submitVapiPhone = async function () {
+      const phoneNumber = document.getElementById('vapiPhoneInput').value.trim();
+      if (!phoneNumber) {
+        showToast('Lütfen telefon numaranızı girin.', true);
+        return;
+      }
+
       const { data: { session } } = await window._supabase.auth.getSession()
       if (!session) { window.location.href = 'giris.html'; return }
 
-      const phoneNumber = prompt("Vapi asistanı oluşturmak için arama yapılacak telefon numaranızı başında +90 olmadan yazın:")
-      if (!phoneNumber) return
+      const confirmBtn = document.getElementById('vapiConfirmBtn');
+      const originalText = confirmBtn.textContent;
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = '⏳ Kuruluyor...';
 
-      const btn = document.getElementById('btnVapi')
+      const btn = document.getElementById('btnVapi');
       if (btn) { btn.disabled = true; btn.textContent = '⏳ Kuruluyor...'; }
 
       try {
@@ -869,11 +1022,14 @@
 
         if (error || data?.error) throw new Error(data?.error || error.message)
 
+        closeVapiModal();
         showToast('📞 Telefon AI (Vapi) kuruldu ve bağlandı!')
         setTimeout(() => window.location.reload(), 1500)
       } catch (err) {
         console.error(err)
         showToast('Kurulum hatası: ' + err.message, true)
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = originalText;
         if (btn) { btn.disabled = false; btn.textContent = '📞 Telefon AI Bağla'; }
       }
     }
