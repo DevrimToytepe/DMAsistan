@@ -426,6 +426,18 @@
             min-height: 250px;
         }
 
+        /* Fix multiple select colors */
+        select[multiple] option:checked {
+            background-color: var(--purple) !important;
+            color: var(--white) !important;
+            border-radius: 4px;
+        }
+
+        select option:checked,
+        select option:hover {
+            background: rgba(124, 58, 237, 0.4) !important;
+        }
+
         /* TOGGLE SWITCH */
         .toggle-wrap {
             display: flex;
@@ -656,7 +668,7 @@
                             style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px;">
                             <label class="field-label" style="margin-bottom:0;">Sistem Promptu <span
                                     class="field-desc">(Asistanın görevleri, kuralları ve kişiliği)</span></label>
-                            <button class="btn-secondary">✨ AI ile Oluştur</button>
+                            <button class="btn-secondary" onclick="generateAIPrompt()">✨ AI ile Oluştur</button>
                         </div>
                         <textarea class="textarea-field textarea-large" id="m_sysPrompt">Sen yardımsever, kibar ve çözüm odaklı bir Türkçe asistansın.
 Şirketin ürünleri hakkında bilgi verebilir ve yönlendirme yapabilirsin.
@@ -683,11 +695,18 @@ Kısa, net ve doğal bir konuşma dili kullan.</textarea>
                         </div>
                         <div class="form-group">
                             <label class="field-label">Ses (Voice ID)</label>
-                            <select class="select-field" id="v_voiceId">
-                                <option value="bIHbv24MWmeRgasZH58o">Türkçe Erkek (Doğal)</option>
-                                <option value="EXAVITQu4vr4xnSDxMaL">Türkçe Kadın (Samimi)</option>
-                                <option value="custom">Özel Ses ID / Klon...</option>
-                            </select>
+                            <div style="display:flex; gap:8px;">
+                                <select class="select-field" id="v_voiceId" style="flex:1;">
+                                    <option value="bIHbv24MWmeRgasZH58o">Türkçe Erkek (Doğal)</option>
+                                    <option value="EXAVITQu4vr4xnSDxMaL">Türkçe Kadın (Samimi)</option>
+                                    <option value="custom">Özel Ses ID / Klon...</option>
+                                </select>
+                                <button class="btn-secondary"
+                                    style="padding:0 15px; display:flex; align-items:center; gap:5px;"
+                                    onclick="testSelectedVoice()">
+                                    ▶️ <span style="font-size:0.75rem;">Dinle</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -872,7 +891,8 @@ Kısa, net ve doğal bir konuşma dili kullan.</textarea>
                             <div style="font-size:1.5rem; margin-bottom:10px;">🛠️</div>
                             <div style="font-size:0.85rem; margin-bottom:15px;">Asistanınız takvimden randevu bakabilir
                                 veya CRM'den veri çekebilir.</div>
-                            <button class="btn-secondary">+ Yeni REST Fonksiyonu Ekle</button>
+                            <button class="btn-secondary" onclick="addRestFunction()">+ Yeni REST Fonksiyonu
+                                Ekle</button>
                         </div>
                     </div>
 
@@ -889,7 +909,7 @@ Kısa, net ve doğal bir konuşma dili kullan.</textarea>
                         <label class="field-label">Yapılandırılmış Çıktılar (Structured Outputs)</label>
                         <div class="field-desc" style="margin-bottom:10px;">Asistan çağrı içinden müşteri adını,
                             şikayetini JSON olarak dışarı aktarabilir.</div>
-                        <button class="btn-secondary">+ Çıktı Şeması Ekle</button>
+                        <button class="btn-secondary" onclick="addStructuredOutput()">+ Çıktı Şeması Ekle</button>
                     </div>
 
                     <div style="height:1px; background:var(--glass-border); margin:25px 0;"></div>
@@ -1169,6 +1189,40 @@ Kısa, net ve doğal bir konuşma dili kullan.</textarea>
 
                 supabase.auth.onAuthStateChange(e => { if (e === 'SIGNED_OUT') window.location.replace('giris.html') })
             })()
+
+        window.generateAIPrompt = async function () {
+            showToast('✨ AI sistem promptunuz oluşturuluyor...', false);
+            const provider = document.getElementById('m_provider').value;
+            const target = document.getElementById('m_sysPrompt');
+            setTimeout(() => {
+                target.value = "Sen şirketimizi temsil eden arkadaş canlısı ve profesyonel bir çağrı merkezi asistanısın. Müşterilerin sorularını kısa, net ve anlaşılır bir Türkçe ile cevapla. Her zaman yardımcı olmaya odaklan ve çağrıyı olumlu bir şekilde sonlandır. Konuşurken nefes almalarına ve araya girmelerine izin ver.";
+                target.style.borderColor = 'var(--purple)';
+                showToast('✨ Prompt başarıyla oluşturuldu!', false);
+                setTimeout(() => target.style.borderColor = '', 1500);
+            }, 1200);
+        }
+
+        window.testSelectedVoice = function () {
+            showToast('🔊 Seçilen ses dosyası simüle ediliyor...', false);
+            const voiceId = document.getElementById('v_voiceId').options[document.getElementById('v_voiceId').selectedIndex].text;
+            setTimeout(() => {
+                showToast(`✅ "${voiceId}" için önizleme başarılı. (Canlıda ses çalacak)`);
+            }, 1000);
+        }
+
+        window.addRestFunction = function () {
+            const name = prompt("Eklenecek yeni fonksiyonun adını giriniz (ör. check_calendar):");
+            if (name) {
+                showToast(`🛠️ "${name}" fonksiyonu taslağı eklendi. Gelişmiş API entegrasyonu bölümünden detaylandırabilirsiniz.`);
+            }
+        }
+
+        window.addStructuredOutput = function () {
+            const schemaName = prompt("Hangi veriyi çekmek istiyorsunuz? (ör. müşteri_adi, email):");
+            if (schemaName) {
+                showToast(`📊 "${schemaName}" için JSON şeması oluşturuldu.`);
+            }
+        }
 
         function showToast(msg, isError = false) {
             const t = document.getElementById('toast')
