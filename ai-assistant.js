@@ -56,9 +56,9 @@ export function initAIAssistant() {
             right: 0;
             width: 380px;
             height: 520px;
-            background: rgba(15, 20, 40, 0.95);
+            background: var(--bg-2, #0F1428);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
             border-radius: 16px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -220,11 +220,13 @@ export function initAIAssistant() {
 
         .ai-footer {
             padding: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(10, 14, 26, 0.8);
+            border-top: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+            background: var(--bg, #0A0E1A);
             display: flex;
             flex-direction: column;
             gap: 8px;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
         }
 
         .ai-limit-bar {
@@ -583,8 +585,8 @@ export function initAIAssistant() {
             const suggBox = chatBody.querySelector('.ai-suggestions');
             data.reverse().forEach(log => {
                 const wrap = document.createElement('div');
-                wrap.className = \`msg-wrap \${log.role === 'user' ? 'user' : 'bot'}\`;
-                wrap.innerHTML = \`<div class="msg-bubble">\${log.content}</div>\`;
+                wrap.className = `msg-wrap ${log.role === 'user' ? 'user' : 'bot'}`;
+                wrap.innerHTML = `<div class="msg-bubble">${log.content}</div>`;
                 chatBody.insertBefore(wrap, suggBox || chatBody.firstChild);
             });
             chatBody.scrollTop = chatBody.scrollHeight;
@@ -593,7 +595,7 @@ export function initAIAssistant() {
 
     function updateLimitUI() {
         const limitText = document.getElementById('ai-limit-text');
-        limitText.textContent = \`\${currentLimit.used} / \${currentLimit.total} mesaj\`;
+        limitText.textContent = `${currentLimit.used} / ${currentLimit.total} mesaj`;
 
         if (currentLimit.used >= currentLimit.total) {
             handleLimitReached();
@@ -604,11 +606,11 @@ export function initAIAssistant() {
         hasReachedLimit = true;
         inputWrap.style.display = 'none';
         limitWarning.style.display = 'block';
-        limitWarning.innerHTML = \`
+        limitWarning.innerHTML = `
             Bugünlük mesaj limitinize ulaştınız.<br>
             Limiti artırmak için planınızı yükseltin.<br>
             <button onclick="location.href='billing.html'" style="margin-top:8px; background:var(--gradient); border:none; color:white; padding:6px 12px; border-radius:6px; cursor:pointer;">Planı Yükselt ⚡</button>
-        \`;
+        `;
     }
 }
 
